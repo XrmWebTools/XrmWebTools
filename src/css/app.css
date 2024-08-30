@@ -1,0 +1,76 @@
+#app-extension {
+	font-family: Segoe\000020UI,Tahoma,Arial;
+	font-size: 11px;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	clear: both;
+}
+
+.app-extension-sections {
+	position: absolute;
+	top: 50px;
+	display: none;
+	width: 100%;
+/*	background-color: white;
+*/	color: black;
+	padding: 10px 0px;
+	font-size: 14px;
+	box-shadow: 5px 5px 5px #CCC;
+	clear: both;
+	outline: none;
+}
+
+.bg-soft-warning {
+	background-color: #ffe8cc !important;
+}
+
+.bg-soft-primary {
+	background-color: #dedffd !important;
+}
+
+.hidden {
+	display: none;
+}
+
+#overlay {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1000; /* Adjust as needed to ensure it's on top */
+}
+
+circle.outerCircle {
+	stroke: #8957ff;
+	stroke-width: 7.5;
+	fill: none;
+	animation-iteration-count: infinite;
+	animation-duration: 2s;
+	stroke-dasharray: 471;
+	animation-name: rotate;
+	animation-direction: reverse;
+	animation-timing-function: cubic-bezier(.62, .06, .36, .94);
+}
+
+@keyframes rotate {
+	0% {
+		stroke-dashoffset: 471;
+	}
+
+	50% {
+		stroke-dashoffset: 0;
+	}
+
+	100% {
+		stroke-dashoffset: -471;
+	}
+}
+
+
+.testing {
+	background: url("chrome-extension://__MSG_@@extension_id__/src/img/audit48.png");
+}
