@@ -77,7 +77,7 @@
 
 							<hr class="navbar-divider my-5 opacity-70 hidden">
 
-							<hr class="navbar-divider my-5 opacity-70 ">
+							<hr class="navbar-divider my-5 opacity-70 hidden">
 
 							<div class="mt-auto"></div>
 
@@ -171,13 +171,13 @@
 										<a id="id_users_last_login_link" href="#" class="nav-link font-regular">Users Last Login</a>
 									</li>
 
-									<!--<li class="nav-item">
+									<li class="nav-item">
 										<a id="id_advanced_audit_find_link" href="#" target="_blank" class="nav-link font-regular">Advanced Audit Find</a>
 									</li>
 
 
 
-									<li class="nav-item">
+									<!--<li class="nav-item">
 										<a id="id_user_form_link" href="#" target="_blank" class="nav-link font-regular">User Form</a>
 									</li>
 
@@ -292,7 +292,7 @@
 							</div>
 							<div class="card shadow border-0 mb-7">
 								<div class="card-header">
-									<h5 class="mb-0">Audit</h5>
+									<h5 class="mb-0">Audit logs from today without application users</h5>
 								</div>
 								<table class="table table-hover table-striped table-responsive table-sm ">
 									<thead>
@@ -331,7 +331,6 @@
 
 
 
-							<hr class="my-6">
 
 							<div class="row g-5">
 
@@ -411,34 +410,129 @@
 										</div>
 									</div>
 								</div>
-								<hr class="my-6">
 
-								<div class="card shadow border-0 mb-7">
-									<div class="card-header">
-										<h5 id="ID_USERS" class="mb-0">Users Last Login Report</h5>
-									</div>
-									<div class="table-responsive">
-										<table class="table table-hover table-striped table-nowrap">
-											<thead id="panel2_columns" class="thead-light">
+							</div>
+							<hr class="my-6">
 
-											</thead>
-											<tbody id="ID_USERS_MAINLIST">
-											</tbody>
-										</table>
-									</div>
-									<div class="card-footer border-0 py-5">
-										<span id="ID_Getting_Things_Ready" class="text-muted text-sm">Getting things ready . . .</span>
-									</div>
+							<div class="card shadow border-0 mb-7">
+								<div class="card-header">
+									<h5 id="ID_USERS" class="mb-0">Users Last Login Report</h5>
 								</div>
+								<div class="table-responsive">
+									<table class="table table-hover table-striped table-nowrap">
+										<thead id="panel2_columns" class="thead-light">
 
-								<hr class="my-6">
+										</thead>
+										<tbody id="ID_USERS_MAINLIST">
+										</tbody>
+									</table>
+								</div>
+								<div class="card-footer border-0 py-5">
+									<span id="ID_Getting_Things_Ready" class="text-muted text-sm">Getting things ready . . .</span>
+								</div>
+							</div>
+
+							<hr class="my-6">
+
 
 
 						</main>
 
 
 						<main id="id_advanced_audit_find" class="py-6 bg-surface-secondary " style="display:none">
-							<h1 class="text-primary">advanced_audit_find Coming soon...</h1>
+
+							<div class="row g-5">
+
+								<div class="col-lg-8 vstack gap-5">
+
+									<div class="card">
+										<div class="card-body d-flex flex-column">
+
+
+
+											<div class="row align-items-center g-3 ">
+												<div class="col-md-4"><label class="form-label mb-0">1. Record Name</label></div>
+												<div class="col-md-8 col-xl-5">
+													<input type="text" class="form-control">
+												</div>
+											</div>
+											<hr class="my-6">
+
+
+											<div class="row align-items-center g-3">
+												<div class="col-md-4"><label class="form-label mb-0">2. Record Id</label></div>
+												<div class="col-md-8 col-xl-5">
+
+													<input type="text" class="form-control">
+
+
+												</div>
+											</div>
+
+
+
+										</div>
+									</div>
+
+								</div>
+
+
+
+							</div>
+
+
+							<hr class="my-6">
+
+							<div class="row align-items-center">
+								<div class="col-md-2"><label class="form-label">WebApi request:</label></div>
+								<div class="col-md-10 col-xl-5">
+									<div class="">
+										<div class="input-group position-relative">
+											<span class="input-group-text">audits?</span>
+											<input type="email" class="form-control" value="$filter=_objectid_value eq 'undefined' and action eq undefined" aria-label="username">
+											<span class="input-group-text">&$orderby=undefined desc&$top=undefined</span>
+										</div>
+										<span class="mt-2 valid-feedback">Looks good!</span>
+									</div>
+								</div>
+							</div>
+							<hr class="my-6">
+
+
+
+							<div class="card shadow border-0 mb-7">
+								<div class="card-header">
+									<h5 class="mb-0">Advanced Audit Find</h5>
+								</div>
+								<table class="table table-hover table-striped table-responsive table-sm ">
+									<thead>
+										<tr>
+											<th scope="col">
+												<div class="d-flex align-items-center gap-2 ps-1">
+
+													<span>Created On</span>
+												</div>
+											</th>
+											<th scope="col">Event</th>
+											<th scope="col" class="d-none d-xl-table-cell">Changed By</th>
+											<th scope="col" class="d-none d-xl-table-cell">Record Type</th>
+											<th scope="col">Record Name</th>
+											<th scope="col">Changed Data</th>
+
+
+											<th></th>
+										</tr>
+									</thead>
+									<tbody id="id_audits_advanced_find">
+									</tbody>
+								</table>
+
+								<div class="card-footer border-0 py-5">
+									<span id="id_audits_advanced_find_logs" class="text-muted text-sm"></span>
+								</div>
+							</div>
+
+
 						</main>
 
 
