@@ -18,26 +18,17 @@ This Chrome extension provides an improved way to view audit logs within Dynamic
 
 ## Screenshots
 
-![Users Last Login Report](https://github.com/auditengine/auditengine/screenshots/users-last-login.png)
+![Users Last Login Report](https://github.com/auditengine/auditengine/blob/main/Screenshots/users-last-login.png)
 *An example of the Users Last Login Report.*
 
-![Users Last Login Report Dark Mode](https://github.com/auditengine/auditengine/screenshots/users-last-login-dark.png)
+![Users Last Login Report Dark Mode](https://github.com/auditengine/auditengine/blob/main/Screenshots/users-last-login-dark.png)
 *An example of the Users Last Login Report in Dark Mode.*
-
-## Contributing
-
-We welcome contributions from the community! If you have suggestions, bug reports, or feature requests, please open an issue or submit a pull request..
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Support
 
 For any questions, issues, or support, please visit our [GitHub Issues page](https://github.com/auditengine/auditengine/issues) or contact me on discord directly.
 
 ## Roadmap
-
 
 We have exciting plans for future updates, including:
 
