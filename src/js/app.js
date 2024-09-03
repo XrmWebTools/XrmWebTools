@@ -218,10 +218,10 @@
 			// List of button and corresponding content section IDs
 			const tabs = [
 				{ buttonId: "id_audit_today_link", contentId: "id_audit_today" },
-				{ buttonId: "id_advanced_audit_find_link", contentId: "id_advanced_audit_find" },
+				//{ buttonId: "id_advanced_audit_find_link", contentId: "id_advanced_audit_find" },
 				{ buttonId: "id_users_last_login_link", contentId: "id_users_last_login" },
-				{ buttonId: "id_user_form_link", contentId: "id_user_form" },
-				{ buttonId: "id_audit_form_link", contentId: "id_audit_form" },
+				//{ buttonId: "id_user_form_link", contentId: "id_user_form" },
+				//{ buttonId: "id_audit_form_link", contentId: "id_audit_form" },
 				//{ buttonId: "id_playground_link", contentId: "id_playground" },
 
 				//
@@ -361,6 +361,25 @@
 				AuditApp.toggleOverlay(false);
 				app_loadonlineusers.classList.add("hidden");
 			});
+
+			//panel 2
+			document.getElementById("Load_views").addEventListener("click", async function () {
+
+				AuditApp.toggleOverlay(true);
+				await AuditApp.Panel2.RetrieveSystemViews();
+				AuditApp.toggleOverlay(false);
+			});
+
+			//panel 2
+			document.getElementById("addlastlogin").addEventListener("click", async function () {
+
+				AuditApp.toggleOverlay(true);
+				await AuditApp.Panel2.AddLastLogin();
+				AuditApp.toggleOverlay(false);
+			});
+
+
+
 		},
 		Panel1: {
 
@@ -368,6 +387,7 @@
 
 				try {
 					const audits = await AuditApp.WebApi.RetrieveAllAuditsFromTodayWithCustomFilter(0);
+					console.log("Audit Engine: audits of today.", audits);
 					AuditApp.Panel1.PopulateAuditsFromTodaysTable(audits);
 					AuditApp.Panel1.ManageBalloons(audits);
 
@@ -452,7 +472,7 @@
 
 			ManageBalloons: (audits) => {
 				// Initialize counters for different actions
-				let createsCount = 1;
+				let createsCount = 0;
 				let updatesCount = 0;
 				let deletesCount = 0;
 				let loginsCount = 0;
@@ -631,6 +651,286 @@
 
 
 		},
+		Panel2: {
+
+			columns: null,
+			users: null,
+
+			RetrieveSystemViews: async () => {
+				try {
+					const views = await AuditApp.WebApi.RetrieveWithCustomFilter("savedqueries?$filter=returnedtypecode eq 'systemuser'");
+
+					//console.log("Audit Engine: views raw", views);
+
+					const names = views.value.map(view => ({
+						name: view.name,
+						savedqueryid: view.savedqueryid,
+						layoutjson: extractColumnHeaders(view.layoutjson)
+					}));
+
+					//console.log("Audit Engine: SystemViews", names);
+
+					await AuditApp.Panel2.appendViewsToDropdown(names);
+				} catch (error) {
+					console.error('Error retrieving system views:', error);
+				}
+
+				function extractColumnHeaders(jsonString) {
+					// Parse the JSON string into an object
+					const data = JSON.parse(jsonString);
+
+					// Check if the data structure is as expected
+					if (data && data.Rows && data.Rows.length > 0 && data.Rows[0].Cells) {
+						// Extract the column headers
+						const headers = data.Rows[0].Cells.map(cell => cell.Name);
+						const updatedHeaders = ["Last_Login", ...headers];
+
+						return updatedHeaders;
+					} else {
+						// Return an empty array if the structure is not as expected
+						return [];
+					}
+				}
+
+			},
+
+			appendViewsToDropdown: async (views) => {
+				const dropdownMenu = document.getElementById('listofviews');
+				dropdownMenu.innerHTML = ''; // Clear existing items
+
+				views.forEach(view => {
+					// Create a new anchor element
+					const viewLink = document.createElement('a');
+					viewLink.className = 'dropdown-item d-flex gap-3 align-items-center position-relative';
+					viewLink.id = `view_${view.savedqueryid}`; // Use savedqueryid for unique ID
+
+					// Create a span for the view name
+					const viewNameSpan = document.createElement('span');
+					viewNameSpan.textContent = view.name;
+
+					// Append the span to the anchor
+					viewLink.appendChild(viewNameSpan);
+
+					// Add a click event listener to the anchor
+					viewLink.addEventListener('click', async () => {
+						await AuditApp.Panel2.onViewClick(view.savedqueryid, view.name, view.layoutjson);
+					});
+
+					// Append the anchor to the dropdown menu
+					dropdownMenu.appendChild(viewLink);
+				});
+
+
+
+
+				const enabled = views.filter(v => v.name == "Enabled Users");
+				if (enabled.length > -1) {
+					await AuditApp.Panel2.onViewClick(enabled[0].savedqueryid, enabled[0].name, enabled[0].layoutjson);
+
+				} else {
+					// Optionally, display the dropdown menu (if it's hidden)
+					dropdownMenu.style.display = 'block';
+				}
+			},
+
+			onViewClick: async (viewId, viewName, columns) => {
+
+
+				AuditApp.toggleOverlay(true);
+
+				// Perform your async operations here
+				console.log('Audit Engine Selected viewId:', viewId);
+				console.log('Audit Engine Selected viewName:', viewName);
+				console.log('Audit Engine Selected Colums:', columns);
+
+				const systemUsers = await AuditApp.WebApi.RetrieveWithCustomFilter(`systemusers?savedQuery=${viewId}`);
+				console.log('Audit Engine Selected systemUsers:', systemUsers.value);
+
+				//"9fc346b8-8bec-ec11-bb3d-0022489fb40d"
+
+				const lastLoginYenthe = await AuditApp.WebApi.RetrieveWithCustomFilter(`audits?$filter=_objectid_value%20eq%20%279fc346b8-8bec-ec11-bb3d-0022489fb40d%27%20and%20action%20eq%2064&$orderby=createdon%20desc&$top=1`)
+				console.log('Audit Engine Selected lastLoginYenthe:', lastLoginYenthe);
+
+				// Process each item
+				const users = systemUsers.value.map(item => {
+					// Map each raw item to the desired format
+					return AuditApp.Panel2.mapDataToObject(item, columns);
+				});
+
+				AuditApp.Panel2.columns = columns;
+				AuditApp.Panel2.users = users;
+
+
+				// Update the UI based on the async operation results
+				const dropdownMenu = document.getElementById('listofviews');
+				dropdownMenu.style.display = 'none';
+
+				document.getElementById("userDropdownMenuButton").innerHTML = viewName;
+
+
+
+				AuditApp.Panel2.updateTableHeaders(columns);
+				AuditApp.Panel2.updateUsers(users, columns);
+
+				AuditApp.toggleOverlay(false);
+
+			},
+
+			mapDataToObject: (data, expectedProperties) => {
+				const result = {};
+
+				// Iterate through the keys in the data object
+				for (const key in data) {
+					if (data.hasOwnProperty(key)) {
+						// Skip empty string keys
+						if (key === "") continue;
+
+						// Extract the base key (handle formatted values)
+						const baseKey = key.split('@')[0];
+
+						// Always include systemuserid if present
+						if (baseKey === "systemuserid") {
+							result[baseKey] = data[key];
+							continue;
+						}
+
+						// Only include properties that are in the expected properties list
+						if (expectedProperties.includes(baseKey)) {
+							// Check for formatted value key
+							const formattedValueKey = `${baseKey}@OData.Community.Display.V1.FormattedValue`;
+
+							// Assign the formatted value if available, otherwise use the raw value
+							if (data.hasOwnProperty(formattedValueKey)) {
+								result[baseKey] = data[formattedValueKey];
+							} else {
+								result[baseKey] = data[key];
+							}
+						}
+					}
+				}
+
+				// Handle properties that are in the expected list but not present in the data
+				expectedProperties.forEach(prop => {
+					if (!result.hasOwnProperty(prop)) {
+						result[prop] = ' - ';
+					}
+				});
+
+				return result;
+			},
+
+			updateTableHeaders: (headersArray) => {
+				// Get the table header element by its ID
+				const theadElement = document.getElementById('panel2_columns');
+
+				// Clear any existing headers
+				theadElement.innerHTML = '';
+
+				// Create a table row element
+				const row = document.createElement('tr');
+
+				// Loop through the headers array and create a header cell for each item
+				headersArray.forEach(header => {
+					const th = document.createElement('th');
+					th.setAttribute('scope', 'col'); // Set scope attribute for accessibility
+					th.textContent = header; // Set the text content of the header cell
+					row.appendChild(th); // Append the header cell to the row
+				});
+
+				// Append the row to the thead element
+				theadElement.appendChild(row);
+			},
+
+			updateUsers: (users, headersArray) => {
+				const container = document.getElementById('ID_USERS_MAINLIST');
+				container.innerHTML = "";
+
+				users.forEach(user => {
+					const row = document.createElement('tr');
+					row.id = `ID_USER_${user.systemuserid}`;
+
+					headersArray.forEach(header => {
+
+						row.innerHTML += `
+			
+						<td>
+						${user[header]}
+						</td>`;
+					})
+
+
+					container.appendChild(row);
+				});
+
+				//document.getElementById("ID_MH_Cloud_Flows").innerHTML = "MH Cloud Flows - Loaded";
+				document.getElementById("ID_Getting_Things_Ready").innerHTML = `Showing ${users.length}Users`;
+			},
+
+
+
+			AddLastLogin: async () => {
+				try {
+					console.log("AddLastLogin columns", AuditApp.Panel2.columns);
+					console.log("AddLastLogin columns", AuditApp.Panel2.users);
+
+					const yyy = await AuditApp.WebApi.RetrieveWithCustomFilter(`audits?$filter=_objectid_value eq '9fc346b8-8bec-ec11-bb3d-0022489fb40d' and action eq 64&$orderby=createdon desc&$top=1`);
+					console.log("AddLastLogin yyy", yyy);
+
+
+					const promises = AuditApp.Panel2.users.map(async (user) => {
+						const userId = user["systemuserid"];
+						if (userId) {
+							const LastLoginRecords = await AuditApp.WebApi.RetrieveWithCustomFilter(`audits?$filter=_objectid_value eq '${userId}' and action eq 64&$orderby=createdon desc&$top=1`);
+							//console.log("AddLastLogin retrieve for " + userId, LastLoginRecords);
+
+							if (LastLoginRecords.value && LastLoginRecords.value[0] && LastLoginRecords.value[0]["createdon@OData.Community.Display.V1.FormattedValue"]) {
+								user["Last_Login"] = LastLoginRecords.value[0]["createdon@OData.Community.Display.V1.FormattedValue"];
+								user["Last_Login_Date"] = LastLoginRecords.value[0]["createdon"];
+
+							}
+						}
+					});
+
+					await Promise.all(promises)
+						.then(() => {
+
+							// Sort the users after all promises have resolved
+							AuditApp.Panel2.users.sort((a, b) => {
+								const dateA = a["Last_Login_Date"] && a["Last_Login_Date"].trim() !== '-' ? new Date(a["Last_Login_Date"]) : null;
+								const dateB = b["Last_Login_Date"] && b["Last_Login_Date"].trim() !== '-' ? new Date(b["Last_Login_Date"]) : null;
+
+								if (dateA === null) return 1;
+								if (dateB === null) return -1;
+
+								return dateB - dateA; // Newest date first
+							});
+
+							console.log("After Sorting:", AuditApp.Panel2.users);
+
+
+							AuditApp.Panel2.updateUsers(AuditApp.Panel2.users, AuditApp.Panel2.columns);
+
+
+						})
+						.catch(error => {
+							console.error("Error processing users:", error);
+						});
+
+				} catch (e) {
+					alert(e.message);
+				}
+
+
+
+
+
+			},
+
+
+
+
+		}
+
 	};
 
 	AuditApp.RegisterjQueryExtensions();
