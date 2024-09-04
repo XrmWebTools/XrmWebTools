@@ -1,7 +1,7 @@
 ﻿<div id="app-extension" data-bs-theme="light">
 	<div class="app-extension-sections" tabindex="9999">
 		<!--<html lang="en" data-bs-theme="dark">-->
-		<a id="app_info_message" class="btn w-full btn-primary text-truncate rounded-0 py-2 border-0 position-relative" style="z-index: 1000;width:100%; display:none">
+		<a id="app_info_message" class="btn w-full btn-primary text-truncate rounded-0 py-2 border-0 position-relative text-muted" style="z-index: 1000; width: 100%; display: none">
 			<strong>Type</strong>
 			Message
 		</a>
@@ -172,7 +172,7 @@
 									</li>
 
 									<li class="nav-item">
-										<a id="id_advanced_audit_find_link" href="#" target="_blank" class="nav-link font-regular">Advanced Audit Find</a>
+										<a id="id_advanced_audit_find_link" href="#" target="_blank" class="nav-link font-regular">Advanced Find</a>
 									</li>
 
 
@@ -195,13 +195,25 @@
 
 						<main id="id_audit_today" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8">
 
-							<div class="d-flex align-items-end justify-content-between">
-
-								<div class="d-none d-md-flex gap-2">
-									<!--<button id="app_try_it_out" type="button" class="btn btn-sm btn-neutral">Try it out</button>-->
-									<button id="id_pane1_searchauditsfromtoday" type="submit" class="btn btn-sm btn-primary">Search Audits From Today</button>
+							<header class="py-4 border-bottom">
+								<div class="row align-items-center">
+									<div class="col">
+										<div class="d-flex align-items-center gap-4">
+											<div><button id="id_pane1_searchauditsfromtoday" type="button" class="btn btn-sm btn-primary rounded-pill" aria-label="Close"><span>Search</span></button></div>
+											<div class="vr opacity-20 my-1"></div>
+											<h1 class="h4 ls-tight text-muted">Search audit from today</h1>
+										</div>
+									</div>
+									<div class="col-auto d-none d-md-block">
+										<div class="hstack gap-2 justify-content-end">
+											<a href="#!" class="text-sm text-muted text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Need help?</span> </a>
+											<button type="button" class="btn btn-sm btn-neutral"><span>Open results in WebApi</span></button>
+										</div>
+									</div>
 								</div>
-							</div>
+							</header>
+
+
 							<div class="card border-0 py-5">
 								<div class="row row-cols-xl-4 row-cols-md-2 g-6">
 
@@ -290,13 +302,18 @@
 
 								</div>
 							</div>
+
+							<hr class="my-6">
+
 							<div class="card shadow border-0 mb-7">
 								<div class="card-header">
-									<h5 class="mb-0">Audit logs from today without application users</h5>
+									<h5 class="mb-0 text-muted">Audit logs from today without application users</h5>
 								</div>
 								<table class="table table-hover table-striped table-responsive table-sm ">
 									<thead>
 										<tr>
+											<th scope="col"></th>
+
 											<th scope="col">
 												<div class="d-flex align-items-center gap-2 ps-1">
 
@@ -391,7 +408,7 @@
 										<div class="card-body py-4">
 											<div class="d-flex flex-wrap align-items-center justify-content-between mb-5">
 												<div class="flex-1">
-													<h6 class="h5 text-limit fw-semibold mb-1">Users Last Login report</h6>
+													<h6 class="h5 text-limit fw-semibold mb-1 text-muted">Users Last Login report</h6>
 													<p class="text-sm text-muted d-none d-sm-block">
 														It's easy as
 														1 2 3.
@@ -416,7 +433,7 @@
 
 							<div class="card shadow border-0 mb-7">
 								<div class="card-header">
-									<h5 id="ID_USERS" class="mb-0">Users Last Login Report</h5>
+									<h5 id="ID_USERS" class="mb-0 text-muted">Users Last Login Report</h5>
 								</div>
 								<div class="table-responsive">
 									<table class="table table-hover table-striped table-nowrap">
@@ -428,7 +445,7 @@
 									</table>
 								</div>
 								<div class="card-footer border-0 py-5">
-									<span id="ID_Getting_Things_Ready" class="text-muted text-sm">Getting things ready . . .</span>
+									<span id="ID_Getting_Things_Ready" class="text-muted text-sm">No users retrieved yet.</span>
 								</div>
 							</div>
 
@@ -441,68 +458,45 @@
 
 						<main id="id_advanced_audit_find" class="py-6 bg-surface-secondary " style="display:none">
 
-							<div class="row g-5">
-
-								<div class="col-lg-8 vstack gap-5">
-
-									<div class="card">
-										<div class="card-body d-flex flex-column">
-
-
-
-											<div class="row align-items-center g-3 ">
-												<div class="col-md-4"><label class="form-label mb-0">1. Record Name</label></div>
-												<div class="col-md-8 col-xl-5">
-													<input type="text" class="form-control">
-												</div>
-											</div>
-											<hr class="my-6">
-
-
-											<div class="row align-items-center g-3">
-												<div class="col-md-4"><label class="form-label mb-0">2. Record Id</label></div>
-												<div class="col-md-8 col-xl-5">
-
-													<input type="text" class="form-control">
-
-
-												</div>
-											</div>
-
-
-
+							<header class="py-4 border-bottom">
+								<div class="row align-items-center">
+									<div class="col">
+										<div class="d-flex align-items-center gap-4">
+											<div><button id="pane3_advancedaudit" type="button" class="btn btn-sm btn-primary rounded-pill" aria-label="Close"><span>Search</span></button></div>
+											<div class="vr opacity-20 my-1"></div>
+											<h1 class="h4 ls-tight text-muted">Search audit by table, record id and/or user</h1>
 										</div>
 									</div>
-
-								</div>
-
-
-
-							</div>
-
-
-							<hr class="my-6">
-
-							<div class="row align-items-center">
-								<div class="col-md-2"><label class="form-label">WebApi request:</label></div>
-								<div class="col-md-10 col-xl-5">
-									<div class="">
-										<div class="input-group position-relative">
-											<span class="input-group-text">audits?</span>
-											<input type="email" class="form-control" value="$filter=_objectid_value eq 'undefined' and action eq undefined" aria-label="username">
-											<span class="input-group-text">&$orderby=undefined desc&$top=undefined</span>
+									<div class="col-auto d-none d-md-block">
+										<div class="hstack gap-2 justify-content-end">
+											<a href="#!" class="text-sm text-muted text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Need help?</span> </a>
+											<button type="button" class="btn btn-sm btn-neutral"><span>Open results in WebApi</span></button>
 										</div>
-										<span class="mt-2 valid-feedback">Looks good!</span>
 									</div>
 								</div>
+							</header>
+							<div class="row align-items-center g-3 mt-6">
+								<div class="col-md-2"><label class="form-label mb-0 text-muted">Table</label></div>
+								<div class="col-md-8 col-xl-5"><input id="pane3_advancedaudit_table" type="text" class="form-control" placeholder="account"></div>
 							</div>
 							<hr class="my-6">
 
+							<div class="row align-items-center g-3 mt-6">
+								<div class="col-md-2"><label class="form-label mb-0 text-muted">Record ID</label></div>
+								<div class="col-md-8 col-xl-5"><input id="pane3_advancedaudit_recordid" type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"></div>
+							</div>
+							<hr class="my-6">
 
+							<div class="row align-items-center g-3 mt-6">
+								<div class="col-md-2"><label class="form-label mb-0 text-muted">User ID</label></div>
+								<div class="col-md-8 col-xl-5"><input id="pane3_advancedaudit_userid" type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"></div>
+							</div>
+
+							<hr class="my-6">
 
 							<div class="card shadow border-0 mb-7">
 								<div class="card-header">
-									<h5 class="mb-0">Advanced Audit Find</h5>
+									<h5 class="mb-0 text-muted">Advanced Audit Find</h5>
 								</div>
 								<table class="table table-hover table-striped table-responsive table-sm ">
 									<thead>

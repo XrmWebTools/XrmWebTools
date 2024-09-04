@@ -137,7 +137,36 @@
 				}
 
 				return allAudits;
+			},
+			RetrieveAllAuditsWithCustomFilter: async function (filter = "") {
+				const clientUrl = Xrm.Page.context.getClientUrl();
+				let nextLink = `${clientUrl}/api/data/v9.1/audits?$filter=${filter}&$orderby=createdon desc`;
+				let allAudits = [];
+
+				while (nextLink) {
+					const auditResponse = await fetch(nextLink, {
+						headers: {
+							"OData-MaxVersion": "4.0",
+							"OData-Version": "4.0",
+							"Accept": "application/json",
+							"Content-Type": "application/json; charset=utf-8",
+							"Prefer": 'odata.include-annotations="OData.Community.Display.V1.FormattedValue"',
+
+						}
+					});
+
+					if (!auditResponse.ok) {
+						throw new Error(`Error retrieving audits: ${auditResponse.statusText}`);
+					}
+
+					const auditData = await auditResponse.json();
+					allAudits = allAudits.concat(auditData.value);
+					nextLink = auditData['@odata.nextLink'] || null;
+				}
+
+				return allAudits;
 			}
+
 
 
 
@@ -198,22 +227,25 @@
 		SayHi: function () {
 			alert("HI")
 		},
-		toggleOverlay: function (show, message = "", type = "") {
+		toggleOverlay: function (show, type = "", message = "") {
 			const overlay = document.getElementById('overlay');
 			const messageElement = document.getElementById('app_info_message');
 
 			if (show) {
-				overlay.classList.remove('hidden');
+				overlay.style.display = 'block';  // Show the overlay
 
 				if (message && type) {
 					messageElement.innerHTML = `<strong>${type}:</strong> ${message}`;
-					messageElement.classList.remove('hidden');
+					messageElement.style.display = 'block';  // Show the message element
+				} else {
+					messageElement.style.display = 'none';  // Hide the message element if no message/type
 				}
-			} else if (overlay && messageElement) {
-				overlay.classList.add('hidden');
-				messageElement.classList.add('hidden');
+			} else {
+				overlay.style.display = 'none';  // Hide the overlay
+				messageElement.style.display = 'none';  // Hide the message element
 			}
 		},
+
 		ManageTabs: function () {
 			// List of button and corresponding content section IDs
 			const tabs = [
@@ -343,14 +375,14 @@
 		RegisterEvents: function () {
 			// Panel 1
 			document.getElementById("id_pane1_searchauditsfromtoday").addEventListener("click", async function () {
-				AuditApp.toggleOverlay(true);
+				AuditApp.toggleOverlay(true, "Retrieving", "Audits from today");
 				await AuditApp.Panel1.ButtonClick_SearchAuditsFromToday();
 				AuditApp.toggleOverlay(false);
 			});
 
 			// Sidebar
 			document.getElementById("app_loadonlineusers").addEventListener("click", async function () {
-				AuditApp.toggleOverlay(true);
+				AuditApp.toggleOverlay(true, "Retrieving", "Online Users");
 				await AuditApp.Sidebar.getOnlineUsers();
 				AuditApp.toggleOverlay(false);
 				document.getElementById("app_loadonlineusers").classList.add("hidden");
@@ -358,17 +390,32 @@
 
 			// Panel 2 - Load views
 			document.getElementById("Load_views").addEventListener("click", async function () {
-				AuditApp.toggleOverlay(true);
+				AuditApp.toggleOverlay(true, "Retrieving", "systemuser views");
 				await AuditApp.Panel2.RetrieveSystemViews();
 				AuditApp.toggleOverlay(false);
 			});
 
 			// Panel 2 - Add last login
 			document.getElementById("addlastlogin").addEventListener("click", async function () {
-				AuditApp.toggleOverlay(true);
+				AuditApp.toggleOverlay(true, "Retrieving", "Users Last Login");
 				await AuditApp.Panel2.AddLastLogin();
 				AuditApp.toggleOverlay(false);
 			});
+
+
+			// Panel 3 - Advanced audit
+			document.getElementById("pane3_advancedaudit").addEventListener("click", async function () {
+
+				AuditApp.toggleOverlay(true, "Retrieving", "Advanced Audit");
+
+				await AuditApp.Panel3.AdvancedAudit();
+				AuditApp.toggleOverlay(false);
+
+
+
+			});
+
+
 		},
 		Panel1: {
 
@@ -401,19 +448,57 @@
 			},
 
 			// Function to populate the table with audits from today
-			PopulateAuditsFromTodaysTable: (audits) => {
-				const tableBody = document.getElementById('id_audits_from_today');
+			PopulateAuditsFromTodaysTable: (audits, tableBodyId = "id_audits_from_today") => {
+
+				const appplyButton = tableBodyId == "id_audits_from_today";
+				const tableBody = document.getElementById(tableBodyId);
 
 				// Clear existing rows in the table
 				tableBody.innerHTML = '';
 
 				// Iterate over each audit and create table rows
 				audits.forEach(data => {
+
 					const createdOnFormatted = data["createdon@OData.Community.Display.V1.FormattedValue"] || AuditApp.Panel1.formatDateString(data.createdon);
 					const objectIdFormatted = data["_objectid_value@OData.Community.Display.V1.FormattedValue"] || data["_objectid_value"];
 					const userIdFormatted = data["_userid_value@OData.Community.Display.V1.FormattedValue"] || data["_userid_value"];
 					const actionFormatted = data["action@OData.Community.Display.V1.FormattedValue"] || data.action;
 					const objectTypeCodeFormatted = data["objecttypecode@OData.Community.Display.V1.FormattedValue"] || data.objecttypecode;
+					const recordTypeFormatted = data["objecttypecode@OData.Community.Display.V1.FormattedValue"] || '-';
+
+					const menu = `
+  <td class="text-end">
+    <a 
+      href="#" 
+      class="btn btn-xxs btn-primary text-muted"
+      onclick="
+        event.preventDefault();
+        var menu = document.getElementById('${data.auditid}_${tableBodyId}_menu');
+        var isOpen = menu.style.display === 'block';
+        menu.style.display = isOpen ? 'none' : 'block';
+      "
+    >
+      Open
+    </a>
+    <div 
+      id="${data.auditid}_${tableBodyId}_menu" 
+      class="dropdown-menu dropdown-menu-end" 
+      style="display: none;"
+    >
+      <a class="dropdown-item" onclick="document.getElementById('pane3_advancedaudit_table').value = '${data.objecttypecode}';document.getElementById('pane3_advancedaudit_recordid').value = '${data._objectid_value}';document.getElementById('pane3_advancedaudit_userid').value = '';document.getElementById('id_advanced_audit_find_link').click();document.getElementById('pane3_advancedaudit').click();">Open all logs for this record in Advanced Find</a>
+	        <a class="dropdown-item" onclick="document.getElementById('pane3_advancedaudit_table').value = '${data.objecttypecode}';document.getElementById('pane3_advancedaudit_recordid').value = '${data._objectid_value}';document.getElementById('pane3_advancedaudit_userid').value = '${data._userid_value}';document.getElementById('id_advanced_audit_find_link').click();document.getElementById('pane3_advancedaudit').click();">Open all logs for this record changed by this user in Advanced Find</a>
+	  	  <a class="dropdown-item" target="_blank" href="${Xrm.Page.context.getClientUrl()}/main.aspx?pagetype=entityrecord&etn=${data.objecttypecode}&id=${data._objectid_value}">Open current record in CRM</a>
+	  	  <a class="dropdown-item" target="_blank" href="${Xrm.Page.context.getClientUrl()}/api/data/v9.2/${data.objecttypecode}s(${data._objectid_value})#p">Open current record in Web Api</a>
+	  	  <a class="dropdown-item" target="_blank" href="${Xrm.Page.context.getClientUrl()}/api/data/v9.2/audits(${data.auditid})#p">Open current audit log in Web Api</a>
+
+    </div>
+  </td>
+`;
+
+
+					//
+
+
 
 					// Create a new table row
 					const row = document.createElement('tr');
@@ -430,7 +515,7 @@
 					const objectTypeCodeCell = `<td class="d-none d-xl-table-cell">${objectTypeCodeFormatted}</td>`;
 					const changedDataCell = `<td class="text-xs">${data.changedata}</td>`;
 					const auditIdCell = `<td class="d-none d-xl-table-cell">${data.auditid || '-'}</td>`;
-					const recordType = `<td>${data["objecttypecode@OData.Community.Display.V1.FormattedValue"] || '-'}</td>`;
+					const recordType = `<td>${recordTypeFormatted}</td>`;
 
 					// Display value with link if available
 					const displayValue = data["_objectid_value@OData.Community.Display.V1.FormattedValue"] || '-';
@@ -443,8 +528,14 @@
 						changedBy = `<td class="d-none d-xl-table-cell">${displayValue}</td>`;
 					}
 
+					if (appplyButton) {
+						row.innerHTML = menu + createdOnCell + actionCell + changedBy + recordType + recordName + changedDataCell;
+
+					} else {
+						row.innerHTML = createdOnCell + actionCell + changedBy + recordType + recordName + changedDataCell;
+
+					}
 					// Combine all cells into a single row and append it to the table body
-					row.innerHTML = createdOnCell + actionCell + changedBy + recordType + recordName + changedDataCell;
 					tableBody.appendChild(row);
 				});
 			},
@@ -517,7 +608,15 @@
 						badgeElement.className = 'badge bg-success bg-opacity-25 text-success';
 					}
 				});
-			}
+			},
+
+			OpenInAdvancedFind: (auditid) => {
+				alert("OpenInAdvancedFind " + auditid);
+			},
+
+			OpenInWebApi: (auditid) => {
+				alert("OpenInWebApi " + auditid);
+			},
 		},
 		Sidebar: {
 
@@ -754,7 +853,7 @@
 			onViewClick: async (viewId, viewName, columns) => {
 				AuditApp.toggleOverlay(true);
 
-				try {					
+				try {
 					// Retrieve system users based on selected view
 					const systemUsers = await AuditApp.WebApi.RetrieveWithCustomFilter(`systemusers?savedQuery=${viewId}`);
 
@@ -844,7 +943,7 @@
 
 			// Asynchronous function to add last login information to users
 			AddLastLogin: async () => {
-				try {		
+				try {
 					// Fetch last login information for each user
 					const promises = AuditApp.Panel2.users.map(async (user) => {
 						const userId = user["systemuserid"];
@@ -876,6 +975,80 @@
 				}
 			},
 		},
+		Panel3: {
+			AdvancedAudit: async () => {
+				// Get the table value from the input field
+				const table = document.getElementById("pane3_advancedaudit_table").value;
+
+				// Check if the table is filled in
+				if (!table) {
+					alert("Table must be filled in.");
+					return;
+				}
+
+				// Get the record ID and user ID values from the input fields
+				const recordid = document.getElementById("pane3_advancedaudit_recordid").value;
+				const userId = document.getElementById("pane3_advancedaudit_userid").value;
+
+				// Check if at least one of Record ID or User ID is filled in
+				if (!recordid && !userId) {
+					alert("Record ID and/or User ID must be filled in.");
+					return;
+				}
+
+				// Validate the Record ID if it is provided
+				if (recordid && !AuditApp.Panel3.ValidateRecordID(recordid)) {
+					alert("Record ID is not valid (00000000-0000-0000-0000-000000000000).");
+					return;
+				}
+
+				// Validate the User ID if it is provided
+				if (userId && !AuditApp.Panel3.ValidateRecordID(userId)) {
+					alert("User ID is not valid (00000000-0000-0000-0000-000000000000).");
+					return;
+				}
+				let filter = `objecttypecode eq '${table}'`;
+
+				if (recordid) { filter += ` and _objectid_value eq '${recordid}'`; }
+
+				if (userId) { filter += ` and _userid_value eq '${userId}'`; }
+
+				try {
+					const audits = await AuditApp.WebApi.RetrieveAllAuditsWithCustomFilter(filter);
+					console.log("panel3", audits)
+					// If all checks pass, alert that everything is good to go
+
+					AuditApp.Panel1.PopulateAuditsFromTodaysTable(audits, "id_audits_advanced_find");
+				} catch (e) {
+					document.getElementById("id_audits_advanced_find").innerHTML = '';
+
+					alert(`The entity with a name = '${table}' with namemapping = 'Logical' was not found`);
+
+				}
+
+
+				//alert(filter);
+				//await AuditApp.WebApi.RetrieveAllAuditsWithCustomFilter()
+
+			}
+			,
+
+			ValidateRecordID: (recordID) => {
+				// Remove all dashes and convert to lowercase
+				let cleanedID = recordID.replace(/-/g, '').toLowerCase();
+
+				// Check if the cleaned ID is 32 characters long
+				if (cleanedID.length === 32) {
+					return true;
+					// Optionally, you can return it in the original format or without dashes
+					// Return it with dashes in the UUID format
+					//return cleanedID.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, '$1-$2-$3-$4-$5');
+				} else {
+					return false;
+				}
+			}
+
+		}
 
 	};
 
