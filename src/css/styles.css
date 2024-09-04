@@ -11,6 +11,7 @@ app-extension {
 	text-align: center;
 	padding: 1em 0;
 }
+
 #app-extension main {
 	padding: 2em;
 }
@@ -202,6 +203,23 @@ app-extension {
 	--x-form-invalid-border-color: #ff85a3
 }
 
+[data-bs-theme=light] .my-6 {
+	color: black;
+}
+
+[data-bs-theme=dark] .my-6 {
+	color: white;
+}
+
+[data-bs-theme=light] .my-1 {
+	color: black;
+}
+
+[data-bs-theme=dark] .my-1 {
+	color: white;
+}
+
+
 :root, [data-bs-theme=light] {
 	--x-font-display: Satoshi,sans-serif,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,Liberation Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
 	--x-font-serif: ui-serif,Georgia,Cambria,"Times New Roman",Times,serif
@@ -285,8 +303,8 @@ app-extension {
 }
 
 	#app-extension hr {
-		color: inherit;
-		border: 0;
+/*		color: inherit;
+*/		border: 0;
 		border-top: var(--x-border-width) solid;
 		opacity: .1;
 		margin: 1rem 0;
@@ -3423,6 +3441,12 @@ app-extension {
 	--x-btn-padding-x: .75rem;
 	--x-btn-font-size: .875rem
 }
+.btn-xxs {
+	--x-btn-padding-y: .125rem; /* Smaller vertical padding */
+	--x-btn-padding-x: .5rem; /* Smaller horizontal padding */
+	--x-btn-font-size: .75rem; /* Smaller font size */
+}
+
 
 .btn-square {
 	--x-btn-size: 2.75rem;
