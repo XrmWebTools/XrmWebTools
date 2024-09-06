@@ -102,6 +102,7 @@
 					req.send(JSON.stringify(parameters));
 				});
 			},
+
 			RetrieveAllAuditsFromTodayWithCustomFilter: async function (hour = 3, filter = "", top = "", retrieveAll = true) {
 				const clientUrl = Xrm.Page.context.getClientUrl();
 				const startOfToday = new Date();
@@ -117,8 +118,13 @@
 
 				let nextLink = `${clientUrl}/api/data/v9.1/audits?$filter=createdon gt ${filterDate}${filter}&$orderby=createdon desc${top}`;
 				let allAudits = [];
+				let nextLinkRetrievalCount = 0; // Counter to track nextLink retrievals
+				const maxRetrievals = 5; // Limit the number of nextLink retrievals to 5
 
-				while (nextLink) {
+				while (nextLink && nextLinkRetrievalCount < maxRetrievals) {
+					console.log(`Retrieving audits from: ${nextLink}`); // Log the current nextLink
+					nextLinkRetrievalCount++; // Increment the counter
+
 					const auditResponse = await fetch(nextLink, {
 						headers: {
 							"OData-MaxVersion": "4.0",
@@ -139,8 +145,15 @@
 					nextLink = retrieveAll ? (auditData['@odata.nextLink'] || null) : null;
 				}
 
+				// Log the total number of times nextLink was retrieved
+				console.log(`Total nextLink retrievals: ${nextLinkRetrievalCount}`);
+
 				return allAudits;
-			},
+			}
+
+			,
+
+			//Todo: remove this one and expand above method!
 			RetrieveAllAuditsWithCustomFilter: async function (filter = "") {
 				const clientUrl = Xrm.Page.context.getClientUrl();
 				let nextLink = `${clientUrl}/api/data/v9.1/audits?$filter=${filter}`;
@@ -169,10 +182,6 @@
 
 				return allAudits;
 			}
-
-
-
-
 		},
 		RegisterjQueryExtensions: function () {
 			$.fn.bindFirst = function (name, fn) {
@@ -388,7 +397,7 @@
 				AuditApp.toggleOverlay(true, "Retrieving", "Online Users");
 				await AuditApp.Sidebar.getOnlineUsers();
 				AuditApp.toggleOverlay(false);
-			//	document.getElementById("app_loadonlineusers").classList.add("hidden");
+				//	document.getElementById("app_loadonlineusers").classList.add("hidden");
 			});
 
 			// Panel 2 - Load views
@@ -428,54 +437,51 @@
 			// Asynchronous function to handle the click event for searching audits from today
 			ButtonClick_SearchAuditsFromToday: async () => {
 				try {
-					let top = ""
-					let filter = "action ne 64";
+					// Initialize variables
+					let top = "";  // This will hold the value of the top count input if checked
+					let filter = "action ne 64";  // Default filter value to exclude action web access
+
+					// Check if the "top count" checkbox is checked
 					const topcountbool = document.getElementById("topcountcheckbox").checked;
 					if (topcountbool) {
-						top =  document.getElementById("topcountinput").value;
-					
+						// If checked, get the value from the input field
+						const topInputValue = document.getElementById("topcountinput").value;
 
+						// Convert the value to an integer and validate if it's a number greater than 0
+						const topValue = parseInt(topInputValue, 10); // Base 10
+
+						if (!isNaN(topValue) && topValue > 0) {
+							top = topValue;  // Assign valid value to the 'top' variable
+						} else {
+							// Handle invalid input, e.g., notify the user or set a default value
+							alert("Invalid input: Top count must be a number greater than 0.");
+							return;
+						}
 					}
+
+
+					// Check if the "show web access" option is checked
 					const showWebAccess = document.getElementById("today_showwebaccess").checked;
 					if (showWebAccess) {
+						// If checked, clear the filter to show all actions including web access
 						filter = "";
 					}
 
-					
-
 					// Fetch audits from today with a custom filter
-					const audits = await AuditApp.WebApi.RetrieveAllAuditsFromTodayWithCustomFilter(0, filter,top);
-
-					
-				
-
-
-					
-
-					//const noapplicationusers = document.getElementById("sidebar_onlineusers_noapplicationusers").checked;
-					//let applicationUsers = [];
-
-					// Fetch application users with a custom filter
-					//const applicationUsers = await AuditApp.WebApi.RetrieveWithCustomFilter(
-					//	"systemusers?$filter=isdisabled ne true and applicationid ne null&$select=applicationid"
-					//);
-
-					//// Extract systemuserid values where applicationid is not null
-					//const userIdsWithApplicationId = applicationUsers.value
-					//	.filter(user => user.applicationid !== null)
-					//	.map(user => user.systemuserid);
-
-					//// Filter audits to exclude those whose _objectid_value is in userIdsWithApplicationId
-					//const filteredAudits = audits.filter(audit => !userIdsWithApplicationId.includes(audit._objectid_value));
-
-					// Populate the table and manage balloons with the filtered audits
+					const audits = await AuditApp.WebApi.RetrieveAllAuditsFromTodayWithCustomFilter(0, filter, top);
+					console.log("audits today", audits);
+					// Populate the table with the filtered audits
 					AuditApp.Panel1.PopulateAuditsFromTodaysTable(audits);
+
+					// Manage the notification balloons based on the audits fetched
 					AuditApp.Panel1.ManageBalloons(audits);
 
 				} catch (error) {
+					// Handle any errors that occur during the process
 					console.error("Error in ButtonClick_SearchAuditsFromToday:", error);
 				}
-			},
+			}
+			,
 
 			// Function to populate the table with audits from today
 			PopulateAuditsFromTodaysTable: (audits, tableBodyId = "id_audits_from_today") => {
@@ -639,14 +645,6 @@
 					}
 				});
 			},
-
-			OpenInAdvancedFind: (auditid) => {
-				alert("OpenInAdvancedFind " + auditid);
-			},
-
-			OpenInWebApi: (auditid) => {
-				alert("OpenInWebApi " + auditid);
-			},
 		},
 		Sidebar: {
 
@@ -654,7 +652,7 @@
 			getOnlineUsers: async () => {
 				try {
 					// Fetch audits from today with a specific filter
-					const audits = await AuditApp.WebApi.RetrieveAllAuditsFromTodayWithCustomFilter(0, "action eq 64", "",false);
+					const audits = await AuditApp.WebApi.RetrieveAllAuditsFromTodayWithCustomFilter(0, "action eq 64", "", false);
 
 					const noapplicationusers = document.getElementById("sidebar_onlineusers_noapplicationusers").checked;
 					let applicationUsers = [];
@@ -667,7 +665,6 @@
 
 						applicationUsers = applicationUsersData.value;
 					}
-					
 
 					// Organize audits by user
 					const userAudits = AuditApp.Sidebar.organizeAuditsByUser(audits);
@@ -716,7 +713,7 @@
 						const user = users.find(x => x["systemuserid"] === audit["_objectid_value"]);
 						applicationUser = user && user["applicationid"];
 					}
-					
+
 
 					if (!applicationUser) {
 						userDetails.push({
@@ -1082,7 +1079,7 @@
 				}
 
 				try {
-					
+
 					// Make the API call to retrieve audits with the constructed filter
 					const audits = await AuditApp.WebApi.RetrieveAllAuditsWithCustomFilter(filter + `&$orderby=createdon desc&$top=${top}`);
 					console.log("panel3", audits);
