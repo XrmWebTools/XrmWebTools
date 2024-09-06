@@ -379,8 +379,8 @@
 				});
 			}
 
-			updateTime();
-			setUserName();
+			updateTime();			
+			setTimeout(setUserName, 2000);
 			userpanel();
 
 		},
