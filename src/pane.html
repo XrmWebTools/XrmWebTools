@@ -53,7 +53,7 @@
 							</ul>
 
 							<hr class="navbar-divider my-5 opacity-70">
-
+							
 							<ul id="ID_USERLIST" class="navbar-nav mb-md-4">
 								<li>
 									<div class="nav-link text-xs font-semibold text-uppercase text-muted ls-wide">
@@ -64,16 +64,23 @@
 									</div>
 								</li>
 
-								<!--<li id="ID_USERLIST_123aaa0f-dfe5-ee11-904c-6045bd941382"></li>-->
 
 							</ul>
 							<hr class="my-6">
 
-							<button id="app_loadonlineusers"
-									type="button"
-									class="btn btn-xs btn-primary rounded-pill text-nowrap">
-								Load Online Users
-							</button>
+							<div class="card  border-0 mt-5 mb-3">
+								<div class="card-body">
+									<div class="vstack gap-4">
+										<i class="bi bi-rocket-takeoff-fill text-main text-2xl"></i>
+										<p class="text-sm text-main text-opacity-70">Clicking the button will load online users from today in the sidebar! Performance Issues ? uncheck the following:</p>
+										<div><input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" checked id="sidebar_onlineusers_noapplicationusers"> <a href="#offcanvasCreate" class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas">no application users</a></div>
+
+
+										<a id="app_loadonlineusers" class="btn btn-sm btn-primary text-white">Load online users</a>
+
+									</div>
+								</div>
+							</div>
 
 							<hr class="navbar-divider my-5 opacity-70 hidden">
 
@@ -199,14 +206,14 @@
 								<div class="row align-items-center">
 									<div class="col">
 										<div class="d-flex align-items-center gap-4">
-											<div><button id="id_pane1_searchauditsfromtoday" type="button" class="btn btn-sm btn-primary rounded-pill" aria-label="Close"><span>Search</span></button></div>
+											<div><button id="id_pane1_searchauditsfromtoday" type="button" class="btn btn-sm btn-primary rounded-pill" aria-label="Close"><span>Load audits</span></button></div>
 											<div class="vr opacity-20 my-1"></div>
-											<h1 class="h4 ls-tight text-muted">Search audit from today</h1>
+											<h1 class="h4 ls-tight">Today</h1>
 										</div>
 									</div>
 									<div class="col-auto d-none d-md-block">
 										<div class="hstack gap-2 justify-content-end">
-											<a href="#!" class="text-sm text-muted text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Need help?</span> </a>
+											<a target="_blank" href="https://github.com/auditengine/auditengine/issues" class="text-sm text-main text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Report an issue?</span> </a>
 											<button type="button" class="btn btn-sm btn-neutral"><span>Open results in WebApi</span></button>
 										</div>
 									</div>
@@ -298,8 +305,61 @@
 												<div id="card_logins_today_count" class="d-block text-xs fw-bold">Count: 0</div>
 											</div>
 										</div>
+
+
 									</div>
 
+								</div>
+							</div>
+
+							<div class="card">
+								<div class="card-header py-3">
+									<div class="d-flex align-items-center">
+										<h5 class="text-main">Extra filters?</h5>
+										<div class="hstack gap-3 ms-auto"><a href="#" class="p-1 text-muted"><i class="bi bi-calendar-event"></i> </a><a href="#" class="p-1 text-muted"><i class="bi bi-three-dots"></i></a></div>
+									</div>
+								</div>
+								<div class="card-body py-0">
+									<div class="list-group list-group-flush mb-5">
+										<div class="list-group-item py-3">
+											<div class="row g-3 align-items-center">
+												<div class="col-sm-6 col-12 d-flex">
+													<div class="form-check form-check-linethrough d-flex align-items-center gap-1">
+														<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="topcountcheckbox"
+															   onclick="document.getElementById('topcountrequired').classList.toggle('hidden', !this.checked)">
+														<a href="#offcanvasCreate" class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas">Top Count: Only retrieve x latest audits of today</a>
+													</div>
+												</div>
+												<div class="col-sm-auto col-12 ms-sm-auto">
+													<div class="hstack gap-5 justify-content-end">
+														<input id="topcountinput" class="form-control" type="text" value="500" />
+														<div>
+															<span id="topcountrequired" class="badge bg-success-subtle text-success hidden">Good for performance</span>
+														</div>
+													</div>
+												</div>
+											</div>
+
+										</div>
+										<div class="list-group-item py-3">
+											<div class="row g-3 align-items-center">
+												<div class="col-sm-6 col-12 d-flex">
+													<div class="form-check form-check-linethrough d-flex align-items-center gap-1">
+													<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="today_showwebaccess"
+														   onclick="document.getElementById('today_showwebaccess_label').classList.toggle('hidden', !this.checked)"> 
+													<a " class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas"> Show Web Access</a></div>
+												</div>
+												<div class="col-sm-auto col-12 ms-sm-auto">
+													<div class="hstack gap-5 justify-content-end">
+														<div><span class="badge bg--subtle text-muted">Filter out Web Access audits from the underlying view</span></div>
+														<div>
+															<span id="today_showwebaccess_label"  class="badge bg-warning-subtle text-warning hidden">Might impact performance</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 
@@ -307,7 +367,7 @@
 
 							<div class="card shadow border-0 mb-7">
 								<div class="card-header">
-									<h5 class="mb-0 text-muted">Audit logs from today without application users</h5>
+									<h5 class="mb-0 text-muted">Audit logs from today</h5>
 								</div>
 								<table class="table table-hover table-striped table-responsive table-sm ">
 									<thead>
@@ -470,27 +530,66 @@
 									<div class="col-auto d-none d-md-block">
 										<div class="hstack gap-2 justify-content-end">
 											<a href="#!" class="text-sm text-muted text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Need help?</span> </a>
-											<button type="button" class="btn btn-sm btn-neutral"><span>Open results in WebApi</span></button>
+											<button type="button" class="btn btn-sm btn-neutral"><span id="pane3_webapi">Open results in WebApi</span></button>
 										</div>
 									</div>
 								</div>
 							</header>
-							<div class="row align-items-center g-3 mt-6">
-								<div class="col-md-2"><label class="form-label mb-0 text-muted">Table</label></div>
-								<div class="col-md-8 col-xl-5"><input id="pane3_advancedaudit_table" type="text" class="form-control" placeholder="account"></div>
-							</div>
-							<hr class="my-6">
 
-							<div class="row align-items-center g-3 mt-6">
-								<div class="col-md-2"><label class="form-label mb-0 text-muted">Record ID</label></div>
-								<div class="col-md-8 col-xl-5"><input id="pane3_advancedaudit_recordid" type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"></div>
-							</div>
-							<hr class="my-6">
 
-							<div class="row align-items-center g-3 mt-6">
-								<div class="col-md-2"><label class="form-label mb-0 text-muted">User ID</label></div>
-								<div class="col-md-8 col-xl-5"><input id="pane3_advancedaudit_userid" type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"></div>
+
+							<div class="row g-5">
+								<div class="col-lg-4 ">
+
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">Table</label></div>
+										<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_table" type="text" class="form-control" value="account"></div>
+									</div>
+									<hr class="my-6">
+
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">Record ID</label></div>
+										<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_recordid" type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"></div>
+									</div>
+									<hr class="my-6">
+
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">User ID</label></div>
+										<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_userid" type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"></div>
+									</div>
+								</div>
+
+								<div class="col-lg-4 ">
+
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">From (00:00)</label></div>
+										<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_from" type="date" class="form-control"></div>
+									</div>
+									<hr class="my-6">
+
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">Until (23:59)</label></div>
+										<div class="col-md-8 col-xl-8">
+											<input id="pane3_advancedaudit_until" type="date" class="form-control"
+												   value="">
+										</div>
+									</div>
+
+
+								</div>
+								<div class="col-lg-4 ">
+
+
+
+
+
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">Top</label></div>
+										<div class="col-md-4 col-xl-4"><input id="pane3_advancedaudit_top" type="text" class="form-control" value="250"></div>
+									</div>
+								</div>
 							</div>
+
 
 							<hr class="my-6">
 

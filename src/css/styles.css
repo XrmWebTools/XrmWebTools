@@ -187,7 +187,7 @@ app-extension {
 	--x-danger-border-subtle: #991f3d;
 	--x-light-border-subtle: #334155;
 	--x-dark-border-subtle: #1e293b;
-	--x-heading-color: inherit;
+	--x-heading-color: white;
 	--x-link-color: #b89aff;
 	--x-link-hover-color: #c6aeff;
 	--x-link-color-rgb: 184,154,255;
@@ -216,6 +216,14 @@ app-extension {
 }
 
 [data-bs-theme=dark] .my-1 {
+	color: white;
+}
+
+[data-bs-theme=light] .text-main {
+	color: black;
+}
+
+[data-bs-theme=dark] .text-main {
 	color: white;
 }
 

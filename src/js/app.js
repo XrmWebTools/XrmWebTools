@@ -102,7 +102,7 @@
 					req.send(JSON.stringify(parameters));
 				});
 			},
-			RetrieveAllAuditsFromTodayWithCustomFilter: async function (hour = 3, filter = "", expand = "") {
+			RetrieveAllAuditsFromTodayWithCustomFilter: async function (hour = 3, filter = "", top = "", retrieveAll = true) {
 				const clientUrl = Xrm.Page.context.getClientUrl();
 				const startOfToday = new Date();
 				startOfToday.setHours(hour, 0, 0, 0); // Set time to 3:00 AM today
@@ -111,8 +111,11 @@
 				if (filter) {
 					filter = ` and ${filter}`;
 				}
+				if (top) {
+					top = `&$top=${top}`;
+				}
 
-				let nextLink = `${clientUrl}/api/data/v9.1/audits?$filter=createdon gt ${filterDate}${filter}&$orderby=createdon desc${expand}`;
+				let nextLink = `${clientUrl}/api/data/v9.1/audits?$filter=createdon gt ${filterDate}${filter}&$orderby=createdon desc${top}`;
 				let allAudits = [];
 
 				while (nextLink) {
@@ -133,14 +136,14 @@
 
 					const auditData = await auditResponse.json();
 					allAudits = allAudits.concat(auditData.value);
-					nextLink = auditData['@odata.nextLink'] || null;
+					nextLink = retrieveAll ? (auditData['@odata.nextLink'] || null) : null;
 				}
 
 				return allAudits;
 			},
 			RetrieveAllAuditsWithCustomFilter: async function (filter = "") {
 				const clientUrl = Xrm.Page.context.getClientUrl();
-				let nextLink = `${clientUrl}/api/data/v9.1/audits?$filter=${filter}&$orderby=createdon desc`;
+				let nextLink = `${clientUrl}/api/data/v9.1/audits?$filter=${filter}`;
 				let allAudits = [];
 
 				while (nextLink) {
@@ -385,7 +388,7 @@
 				AuditApp.toggleOverlay(true, "Retrieving", "Online Users");
 				await AuditApp.Sidebar.getOnlineUsers();
 				AuditApp.toggleOverlay(false);
-				document.getElementById("app_loadonlineusers").classList.add("hidden");
+			//	document.getElementById("app_loadonlineusers").classList.add("hidden");
 			});
 
 			// Panel 2 - Load views
@@ -415,6 +418,9 @@
 
 			});
 
+			//var today = new Date().toISOString().split('T')[0];
+			//document.getElementById('pane3_advancedaudit_until').value = today;
+			//document.getElementById('pane3_advancedaudit_from').value = today;
 
 		},
 		Panel1: {
@@ -422,25 +428,49 @@
 			// Asynchronous function to handle the click event for searching audits from today
 			ButtonClick_SearchAuditsFromToday: async () => {
 				try {
+					let top = ""
+					let filter = "action ne 64";
+					const topcountbool = document.getElementById("topcountcheckbox").checked;
+					if (topcountbool) {
+						top =  document.getElementById("topcountinput").value;
+					
+
+					}
+					const showWebAccess = document.getElementById("today_showwebaccess").checked;
+					if (showWebAccess) {
+						filter = "";
+					}
+
+					
+
 					// Fetch audits from today with a custom filter
-					const audits = await AuditApp.WebApi.RetrieveAllAuditsFromTodayWithCustomFilter(0);
+					const audits = await AuditApp.WebApi.RetrieveAllAuditsFromTodayWithCustomFilter(0, filter,top);
+
+					
+				
+
+
+					
+
+					//const noapplicationusers = document.getElementById("sidebar_onlineusers_noapplicationusers").checked;
+					//let applicationUsers = [];
 
 					// Fetch application users with a custom filter
-					const applicationUsers = await AuditApp.WebApi.RetrieveWithCustomFilter(
-						"systemusers?$filter=isdisabled ne true and applicationid ne null&$select=applicationid"
-					);
+					//const applicationUsers = await AuditApp.WebApi.RetrieveWithCustomFilter(
+					//	"systemusers?$filter=isdisabled ne true and applicationid ne null&$select=applicationid"
+					//);
 
-					// Extract systemuserid values where applicationid is not null
-					const userIdsWithApplicationId = applicationUsers.value
-						.filter(user => user.applicationid !== null)
-						.map(user => user.systemuserid);
+					//// Extract systemuserid values where applicationid is not null
+					//const userIdsWithApplicationId = applicationUsers.value
+					//	.filter(user => user.applicationid !== null)
+					//	.map(user => user.systemuserid);
 
-					// Filter audits to exclude those whose _objectid_value is in userIdsWithApplicationId
-					const filteredAudits = audits.filter(audit => !userIdsWithApplicationId.includes(audit._objectid_value));
+					//// Filter audits to exclude those whose _objectid_value is in userIdsWithApplicationId
+					//const filteredAudits = audits.filter(audit => !userIdsWithApplicationId.includes(audit._objectid_value));
 
 					// Populate the table and manage balloons with the filtered audits
-					AuditApp.Panel1.PopulateAuditsFromTodaysTable(filteredAudits);
-					AuditApp.Panel1.ManageBalloons(filteredAudits);
+					AuditApp.Panel1.PopulateAuditsFromTodaysTable(audits);
+					AuditApp.Panel1.ManageBalloons(audits);
 
 				} catch (error) {
 					console.error("Error in ButtonClick_SearchAuditsFromToday:", error);
@@ -624,18 +654,26 @@
 			getOnlineUsers: async () => {
 				try {
 					// Fetch audits from today with a specific filter
-					const audits = await AuditApp.WebApi.RetrieveAllAuditsFromTodayWithCustomFilter(0, "action eq 64");
+					const audits = await AuditApp.WebApi.RetrieveAllAuditsFromTodayWithCustomFilter(0, "action eq 64", "",false);
 
-					// Fetch application users with a filter to exclude disabled users and include only those with an application ID
-					const applicationUsers = await AuditApp.WebApi.RetrieveWithCustomFilter(
-						"systemusers?$filter=isdisabled ne true and applicationid ne null&$select=applicationid"
-					);
+					const noapplicationusers = document.getElementById("sidebar_onlineusers_noapplicationusers").checked;
+					let applicationUsers = [];
+
+					if (noapplicationusers) {
+						// Fetch application users with a filter to exclude disabled users and include only those with an application ID
+						const applicationUsersData = await AuditApp.WebApi.RetrieveWithCustomFilter(
+							"systemusers?$filter=isdisabled ne true and applicationid ne null&$select=applicationid"
+						);
+
+						applicationUsers = applicationUsersData.value;
+					}
+					
 
 					// Organize audits by user
 					const userAudits = AuditApp.Sidebar.organizeAuditsByUser(audits);
 
 					// Fetch user details based on organized audits and application users
-					const userDetails = AuditApp.Sidebar.fetchUserDetails(userAudits, applicationUsers.value);
+					const userDetails = AuditApp.Sidebar.fetchUserDetails(userAudits, applicationUsers);
 
 					// Display the online users in the sidebar
 					AuditApp.Sidebar.displayOnlineUsers(userDetails);
@@ -672,9 +710,13 @@
 					const audit = result[ID][0]; // Assuming there is at least one audit per user
 					const timestamp = AuditApp.Sidebar.formatTime(audit.createdon);
 
-					// Check if the user is an application user
-					const user = users.find(x => x["systemuserid"] === audit["_objectid_value"]);
-					const applicationUser = user && user["applicationid"];
+					let applicationUser = false;
+					if (users) {
+						// Check if the user is an application user
+						const user = users.find(x => x["systemuserid"] === audit["_objectid_value"]);
+						applicationUser = user && user["applicationid"];
+					}
+					
 
 					if (!applicationUser) {
 						userDetails.push({
@@ -977,60 +1019,86 @@
 		},
 		Panel3: {
 			AdvancedAudit: async () => {
-				// Get the table value from the input field
+				// Retrieve input values from the HTML form
 				const table = document.getElementById("pane3_advancedaudit_table").value;
-
-				// Check if the table is filled in
-				if (!table) {
-					alert("Table must be filled in.");
-					return;
-				}
-
-				// Get the record ID and user ID values from the input fields
 				const recordid = document.getElementById("pane3_advancedaudit_recordid").value;
 				const userId = document.getElementById("pane3_advancedaudit_userid").value;
+				let from = document.getElementById("pane3_advancedaudit_from").value;
+				let until = document.getElementById("pane3_advancedaudit_until").value;
+				const top = document.getElementById("pane3_advancedaudit_top").value;
 
-				// Check if at least one of Record ID or User ID is filled in
-				if (!recordid && !userId) {
-					alert("Record ID and/or User ID must be filled in.");
-					return;
+				// Format 'from' date if provided
+				if (from) {
+					const fromDate = new Date(from);
+					fromDate.setHours(0, 0, 0, 0); // Set time to the start of the day
+					from = `createdon gt ${fromDate.toISOString()}`; // Format as ISO date
 				}
 
-				// Validate the Record ID if it is provided
+				// Format 'until' date if provided
+				if (until) {
+					const untilDate = new Date(until);
+					untilDate.setHours(23, 59, 59, 999); // Set time to the end of the day
+					until = `createdon le ${untilDate.toISOString()}`; // Format as ISO date
+				}
+
+				// Validate the Record ID if provided
 				if (recordid && !AuditApp.Panel3.ValidateRecordID(recordid)) {
-					alert("Record ID is not valid (00000000-0000-0000-0000-000000000000).");
+					alert("Record ID is not valid (must be in GUID format: 00000000-0000-0000-0000-000000000000).");
 					return;
 				}
 
-				// Validate the User ID if it is provided
+				// Validate the User ID if provided
 				if (userId && !AuditApp.Panel3.ValidateRecordID(userId)) {
-					alert("User ID is not valid (00000000-0000-0000-0000-000000000000).");
+					alert("User ID is not valid (must be in GUID format: 00000000-0000-0000-0000-000000000000).");
 					return;
 				}
-				let filter = `objecttypecode eq '${table}'`;
 
-				if (recordid) { filter += ` and _objectid_value eq '${recordid}'`; }
+				// Build the filter query
+				let filter = "";
 
-				if (userId) { filter += ` and _userid_value eq '${userId}'`; }
+				// Add table filter if 'table' is provided
+				if (table) {
+					filter += `objecttypecode eq '${table}'`;
+				}
+
+				// Add record ID filter if 'recordid' is provided
+				if (recordid) {
+					filter += (filter ? " and " : "") + `_objectid_value eq '${recordid}'`;
+				}
+
+				// Add user ID filter if 'userId' is provided
+				if (userId) {
+					filter += (filter ? " and " : "") + `_userid_value eq '${userId}'`;
+				}
+
+				// Add 'from' date filter if 'from' is provided
+				if (from) {
+					filter += (filter ? " and " : "") + from;
+				}
+
+				// Add 'until' date filter if 'until' is provided
+				if (until) {
+					filter += (filter ? " and " : "") + until;
+				}
 
 				try {
-					const audits = await AuditApp.WebApi.RetrieveAllAuditsWithCustomFilter(filter);
-					console.log("panel3", audits)
-					// If all checks pass, alert that everything is good to go
+					
+					// Make the API call to retrieve audits with the constructed filter
+					const audits = await AuditApp.WebApi.RetrieveAllAuditsWithCustomFilter(filter + `&$orderby=createdon desc&$top=${top}`);
+					console.log("panel3", audits);
 
+					// Populate the UI with the retrieved audits
 					AuditApp.Panel1.PopulateAuditsFromTodaysTable(audits, "id_audits_advanced_find");
 				} catch (e) {
+					// Clear the audits table in case of an error
 					document.getElementById("id_audits_advanced_find").innerHTML = '';
 
+					// Display an error message for the table entity not being found
 					alert(`The entity with a name = '${table}' with namemapping = 'Logical' was not found`);
-
 				}
 
-
-				//alert(filter);
-				//await AuditApp.WebApi.RetrieveAllAuditsWithCustomFilter()
-
 			}
+
 			,
 
 			ValidateRecordID: (recordID) => {
@@ -1047,6 +1115,7 @@
 					return false;
 				}
 			}
+
 
 		}
 
