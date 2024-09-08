@@ -53,7 +53,7 @@
 							</ul>
 
 							<hr class="navbar-divider my-5 opacity-70">
-							
+
 							<ul id="ID_USERLIST" class="navbar-nav mb-md-4">
 								<li>
 									<div class="nav-link text-xs font-semibold text-uppercase text-muted ls-wide">
@@ -136,7 +136,7 @@
 
 						<div class="d-xxl-flex align-items-center gap-4 px-4 scrollable-x">
 							<div class="d-flex gap-2 text-xs">
-								<span class="text-xl fw-bold text-primary ">
+								<span class="text-xl fw-bold text-main ">
 									Audit Engine for Microsoft Dynamics 365
 								</span>
 							</div>
@@ -171,15 +171,15 @@
 								<!-- Nav -->
 								<ul class="nav nav-tabs mt-4 overflow-x border-0" style="margin-bottom: 0px;padding-left: 0px;">
 									<li class="nav-item ">
-										<a id="id_audit_today_link" href="#" class="nav-link active">Today</a>
+										<a id="id_audit_today_link" href="#" class="nav-link active font-semibold">Today</a>
 									</li>
 
 									<li class="nav-item">
-										<a id="id_users_last_login_link" href="#" class="nav-link font-regular">Users Last Login</a>
+										<a id="id_users_last_login_link" href="#" class="nav-link font-semibold">Users Last Login</a>
 									</li>
 
 									<li class="nav-item">
-										<a id="id_advanced_audit_find_link" href="#" target="_blank" class="nav-link font-regular">Advanced Find</a>
+										<a id="id_advanced_audit_find_link" href="#" class="nav-link font-semibold">Advanced Find</a>
 									</li>
 
 
@@ -238,6 +238,17 @@
 													<div class="hstack gap-2">
 														<span id="card_creates_today_badge" class="badge bg-danger bg-opacity-25 text-danger">Not Loaded</span>
 													</div>
+
+
+
+
+
+
+
+
+
+
+
 												</div>
 
 												<div id="card_creates_today_account" class="d-block text-xs fw-bold">Count: 0</div>
@@ -345,15 +356,16 @@
 											<div class="row g-3 align-items-center">
 												<div class="col-sm-6 col-12 d-flex">
 													<div class="form-check form-check-linethrough d-flex align-items-center gap-1">
-													<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="today_showwebaccess"
-														   onclick="document.getElementById('today_showwebaccess_label').classList.toggle('hidden', !this.checked)"> 
-													<a " class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas"> Show Web Access</a></div>
+														<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="today_showwebaccess"
+															   onclick="document.getElementById('today_showwebaccess_label').classList.toggle('hidden', !this.checked)">
+														<a " class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas"> Show Web Access</a>
+													</div>
 												</div>
 												<div class="col-sm-auto col-12 ms-sm-auto">
 													<div class="hstack gap-5 justify-content-end">
 														<div><span class="badge bg--subtle text-muted">Filter out Web Access audits from the underlying view</span></div>
 														<div>
-															<span id="today_showwebaccess_label"  class="badge bg-warning-subtle text-warning hidden">Might impact performance</span>
+															<span id="today_showwebaccess_label" class="badge bg-warning-subtle text-warning hidden">Might impact performance</span>
 														</div>
 													</div>
 												</div>

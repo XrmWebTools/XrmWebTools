@@ -427,6 +427,13 @@
 
 			});
 
+			//// Get the background color of the top bar
+			//const myDivObjBgColor = window.getComputedStyle(window.top.document.getElementById('topBar')).backgroundColor;
+			////alert(myDivObjBgColor);
+			//document.getElementById("id_pane1_searchauditsfromtoday").style.backgroundColor = myDivObjBgColor;
+			//document.getElementById("id_pane1_searchauditsfromtoday").style.borderColor = myDivObjBgColor;
+
+
 			//var today = new Date().toISOString().split('T')[0];
 			//document.getElementById('pane3_advancedaudit_until').value = today;
 			//document.getElementById('pane3_advancedaudit_from').value = today;
@@ -506,7 +513,7 @@
   <td class="text-end">
     <a 
       href="#" 
-      class="btn btn-xxs btn-primary text-muted"
+      class="btn btn-xxs btn-primary text-white"
       onclick="
         event.preventDefault();
         var menu = document.getElementById('${data.auditid}_${tableBodyId}_menu');
@@ -521,11 +528,11 @@
       class="dropdown-menu dropdown-menu-end" 
       style="display: none;"
     >
-      <a class="dropdown-item" onclick="document.getElementById('pane3_advancedaudit_table').value = '${data.objecttypecode}';document.getElementById('pane3_advancedaudit_recordid').value = '${data._objectid_value}';document.getElementById('pane3_advancedaudit_userid').value = '';document.getElementById('id_advanced_audit_find_link').click();document.getElementById('pane3_advancedaudit').click();">Open all logs for this record in Advanced Find</a>
-	        <a class="dropdown-item" onclick="document.getElementById('pane3_advancedaudit_table').value = '${data.objecttypecode}';document.getElementById('pane3_advancedaudit_recordid').value = '${data._objectid_value}';document.getElementById('pane3_advancedaudit_userid').value = '${data._userid_value}';document.getElementById('id_advanced_audit_find_link').click();document.getElementById('pane3_advancedaudit').click();">Open all logs for this record changed by this user in Advanced Find</a>
-	  	  <a class="dropdown-item" target="_blank" href="${Xrm.Page.context.getClientUrl()}/main.aspx?pagetype=entityrecord&etn=${data.objecttypecode}&id=${data._objectid_value}">Open current record in CRM</a>
-	  	  <a class="dropdown-item" target="_blank" href="${Xrm.Page.context.getClientUrl()}/api/data/v9.2/${data.objecttypecode}s(${data._objectid_value})#p">Open current record in Web Api</a>
-	  	  <a class="dropdown-item" target="_blank" href="${Xrm.Page.context.getClientUrl()}/api/data/v9.2/audits(${data.auditid})#p">Open current audit log in Web Api</a>
+      <a class="dropdown-item" style="color: black;" onclick="document.getElementById('pane3_advancedaudit_table').value = '${data.objecttypecode}';document.getElementById('pane3_advancedaudit_recordid').value = '${data._objectid_value}';document.getElementById('pane3_advancedaudit_userid').value = '';document.getElementById('id_advanced_audit_find_link').click();document.getElementById('pane3_advancedaudit').click();">Open all logs for this record in Advanced Find</a>
+	        <a class="dropdown-item" style="color: black;" onclick="document.getElementById('pane3_advancedaudit_table').value = '${data.objecttypecode}';document.getElementById('pane3_advancedaudit_recordid').value = '${data._objectid_value}';document.getElementById('pane3_advancedaudit_userid').value = '${data._userid_value}';document.getElementById('id_advanced_audit_find_link').click();document.getElementById('pane3_advancedaudit').click();">Open all logs for this record changed by this user in Advanced Find</a>
+	  	  <a class="dropdown-item" style="color: black;" target="_blank" href="${Xrm.Page.context.getClientUrl()}/main.aspx?pagetype=entityrecord&etn=${data.objecttypecode}&id=${data._objectid_value}">Open current record in CRM</a>
+	  	  <a class="dropdown-item" style="color: black;" target="_blank" href="${Xrm.Page.context.getClientUrl()}/api/data/v9.2/${data.objecttypecode}s(${data._objectid_value})#p">Open current record in Web Api</a>
+	  	  <a class="dropdown-item" style="color: black;" target="_blank" href="${Xrm.Page.context.getClientUrl()}/api/data/v9.2/audits(${data.auditid})#p">Open current audit log in Web Api</a>
 
     </div>
   </td>
@@ -627,7 +634,7 @@
 				document.getElementById('card_creates_today_account').textContent = `Count: ${createsCount}`;
 				document.getElementById('card_updates_today_account').textContent = `Count: ${updatesCount}`;
 				document.getElementById('card_deletes_today_account').textContent = `Count: ${deletesCount}`;
-				document.getElementById('card_logins_today_count').textContent = `Unique Count: ${loginsCount}`;
+				document.getElementById('card_logins_today_count').textContent = `Count: ${loginsCount}`;
 
 				// Update badges to indicate loading status
 				const badgeElements = [
