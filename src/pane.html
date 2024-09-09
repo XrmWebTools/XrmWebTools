@@ -10,7 +10,74 @@
 				<circle cx="150" cy="150" r="75" class="outerCircle"></circle>
 			</svg>
 		</div>
+		<div id="auditform" class="modal fade show" tabindex="-1" a aria-modal="true" role="dialog" style="display: none;">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content overflow-hidden">
+					<div class="modal-header pb-0 border-0">
+						<h1  class="modal-title h4" id="auditform_id">Audit Details</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+								onclick="document.getElementById('auditform').style.display='none';"></button>
+					</div>
 
+					<hr class="my-6" />
+					<div class="modal-body">
+						<div class="row row-cols-md-2 g-0 g-md-10 g-xl-16">
+							<div class="col">
+								<div class="list-group list-group-flush">
+									<div class="list-group-item d-flex align-items-center px-0">
+										<div class="flex-fill"><a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Created On</a> <span id="auditform_createdon" class="d-block text-sm text-muted"></span></div>
+									</div>
+									<div class="list-group-item d-flex align-items-center px-0">
+										<div class="flex-fill">
+											<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Record</a>
+											<span id="auditform_record" class="d-block text-sm text-muted"></span>
+											<span id="auditform_recordid" class="d-block text-sm text-muted"></span>
+
+										</div>
+										<div class="ms-auto text-end"><a id="auditform_record_openincrm" target="_blank" href="#" class="btn btn-sm btn-neutral">Open Record In CRM</a></div>
+									</div>
+								</div>
+							</div>
+							<hr class="my-0 d-md-none">
+							<div class="col">
+								<div class="list-group list-group-flush">
+									<div class="list-group-item d-flex align-items-center px-0">
+										<div class="flex-fill">
+											<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Event</a> <span id="auditform_event" class="d-block text-sm text-muted"></span>
+											<div class="d-flex mx-n1"></div>
+										</div>
+									</div>
+
+									<div class="list-group-item d-flex align-items-center px-0">
+										<div class="flex-fill">
+											<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Changed By</a>
+											<span id="auditform_user" class="d-block text-sm text-muted"></span>
+											<span id="auditform_userid" class="d-block text-sm text-muted"></span>
+											<div class="d-flex mx-n1"></div>
+
+										</div>
+										<div class="ms-auto text-end"><a id="auditform_user_openincrm"  href="#" target="_blank" class="btn btn-sm btn-neutral">Open User In CRM</a></div>
+									</div>
+
+								</div>
+							</div>
+						</div>
+						<div class=""><label class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Changed Data</label> <textarea id="auditform_changeddata" class="form-control" rows="8"></textarea></div>
+						<div class="text-xs text-muted mt-6">Would you like to open this audit in the Web Api ?  <a id="auditform_openinwebapi" href="#" target="_blank" class="fw-bold">Open In WebApi</a></div>
+					</div>
+
+					<!--<div class="offcanvas-footer d-flex gap-2 justify-content-end py-4 px-6 border-top" style="display:none">
+
+						<button type="button" class="btn btn-sm btn-primary">Open all logs for this record</button>
+						<button type="button" class="btn btn-sm btn-primary">Open all logs for this record changed by this user</button>
+
+						<button type="button" class="btn btn-sm btn-primary">Open audit In Web Api</button>
+						<button type="button" class="btn btn-sm btn-neutral" data-bs-dismiss="offcanvas">Close</button>
+
+					</div>-->
+				</div>
+			</div>
+		</div>
 
 		<div id="audithistory_app" class="bg-body-tertiary">
 
@@ -72,7 +139,7 @@
 								<div class="card-body">
 									<div class="vstack gap-4">
 										<i class="bi bi-rocket-takeoff-fill text-main text-2xl"></i>
-										<p class="text-sm text-main text-opacity-70">Clicking the button will load online users from today in the sidebar! Performance Issues ? uncheck the following:</p>
+										<p id="sidebar_onlineusers_info" class="text-sm text-main text-opacity-70">Clicking the button will load online users from today in the sidebar! Performance Issues ? uncheck the following:</p>
 										<div><input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" checked id="sidebar_onlineusers_noapplicationusers"> <a href="#offcanvasCreate" class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas">no application users</a></div>
 
 
@@ -214,7 +281,10 @@
 									<div class="col-auto d-none d-md-block">
 										<div class="hstack gap-2 justify-content-end">
 											<a target="_blank" href="https://github.com/auditengine/auditengine/issues" class="text-sm text-main text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Report an issue?</span> </a>
-											<button type="button" class="btn btn-sm btn-neutral"><span>Open results in WebApi</span></button>
+											<button type="button" class="btn btn-sm btn-neutral" onclick="document.getElementById('panel1_card_extrafilters').classList.toggle('hidden');">
+												<span>Add Extra Filters</span>
+											</button>
+
 										</div>
 									</div>
 								</div>
@@ -323,7 +393,7 @@
 								</div>
 							</div>
 
-							<div class="card">
+							<div id="panel1_card_extrafilters" class="card hidden">
 								<div class="card-header py-3">
 									<div class="d-flex align-items-center">
 										<h5 class="text-main">Extra filters?</h5>
@@ -358,7 +428,7 @@
 													<div class="form-check form-check-linethrough d-flex align-items-center gap-1">
 														<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="today_showwebaccess"
 															   onclick="document.getElementById('today_showwebaccess_label').classList.toggle('hidden', !this.checked)">
-														<a " class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas"> Show Web Access</a>
+														<a  class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas"> Show Web Access</a>
 													</div>
 												</div>
 												<div class="col-sm-auto col-12 ms-sm-auto">
@@ -648,7 +718,7 @@
 
 						</main>
 
-						<main id="id_audit_form" style="display:none" ">
+						<main id="id_audit_form" style="display:none" >
 							<h1 class="text-primary">audit_form Coming soon...</h1>
 
 						</main>

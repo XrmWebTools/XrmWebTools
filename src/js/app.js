@@ -236,8 +236,37 @@
 			}
 
 		},
-		SayHi: function () {
-			alert("HI")
+		StringHelpers: {
+			formatIfJson: function formatIfJson(str) {
+				try {
+					// Attempt to parse the string as JSON
+					const jsonObject = JSON.parse(str);
+
+					// If it's valid JSON, return a formatted (pretty-printed) version
+					return JSON.stringify(jsonObject, null, 4);  // 4 spaces indentation for readability
+				} catch (e) {
+					// If the string is not valid JSON, return the original string
+					return str;
+				}
+			},
+			// Function to format the date string into a readable format
+			formatDateString: (dateString) => {
+				// Parse the input string into a Date object
+				const date = new Date(dateString);
+
+				// Define month names
+				const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+				const month = monthNames[date.getMonth()];
+
+				// Get day and time portions
+				const day = date.getDate();
+				const time = dateString.split('T')[1].split('Z')[0];
+
+				// Return formatted date string
+				return `${month} ${day}, ${time}`;
+			},
+
+
 		},
 		toggleOverlay: function (show, type = "", message = "") {
 			const overlay = document.getElementById('overlay');
@@ -379,7 +408,7 @@
 				});
 			}
 
-			updateTime();			
+			updateTime();
 			setTimeout(setUserName, 2000);
 			userpanel();
 
@@ -438,6 +467,7 @@
 			//document.getElementById('pane3_advancedaudit_until').value = today;
 			//document.getElementById('pane3_advancedaudit_from').value = today;
 
+
 		},
 		Panel1: {
 
@@ -483,6 +513,8 @@
 					// Manage the notification balloons based on the audits fetched
 					AuditApp.Panel1.ManageBalloons(audits);
 
+					//document.getElementById("pane1_openinwebapi").removeAttribute("disabled");
+
 				} catch (error) {
 					// Handle any errors that occur during the process
 					console.error("Error in ButtonClick_SearchAuditsFromToday:", error);
@@ -502,103 +534,87 @@
 				// Iterate over each audit and create table rows
 				audits.forEach(data => {
 
-					const createdOnFormatted = data["createdon@OData.Community.Display.V1.FormattedValue"] || AuditApp.Panel1.formatDateString(data.createdon);
-					const objectIdFormatted = data["_objectid_value@OData.Community.Display.V1.FormattedValue"] || data["_objectid_value"];
-					const userIdFormatted = data["_userid_value@OData.Community.Display.V1.FormattedValue"] || data["_userid_value"];
+
+					const entityMap = {
+						'&': '&amp;',
+						'<': '&lt;',
+						'>': '&gt;',
+						'"': '&quot;',
+						"'": '&#39;',
+						'/': '&#x2F;',
+						'': '&#x60;',
+						'=': '&#x3D;'
+					};
+
+					function escapeHtml(string) {
+						return String(string).replace(/[&<>"'=/]/g, function (s) {
+							return entityMap[s];
+						});
+					}
+
+					const auditId = data["auditid"];
+					const createdOnFormatted = data["createdon@OData.Community.Display.V1.FormattedValue"] || AuditApp.StringHelpers.formatDateString(data.createdon);
+					const objectId = data["_objectid_value"];
+					const objectIdFormatted = data["_objectid_value@OData.Community.Display.V1.FormattedValue"] || objectId;
+					const objectIdFormattedSanitized = escapeHtml(objectIdFormatted);
+					const userId = data["_userid_value"];
+					const userName = data["_userid_value@OData.Community.Display.V1.FormattedValue"] || '-';
 					const actionFormatted = data["action@OData.Community.Display.V1.FormattedValue"] || data.action;
-					const objectTypeCodeFormatted = data["objecttypecode@OData.Community.Display.V1.FormattedValue"] || data.objecttypecode;
+					const objectTypeCode = data.objecttypecode;
+					const objectTypeCodeFormatted = data["objecttypecode@OData.Community.Display.V1.FormattedValue"] || objectTypeCode;
 					const recordTypeFormatted = data["objecttypecode@OData.Community.Display.V1.FormattedValue"] || '-';
-
-					const menu = `
-  <td class="text-end">
-    <a 
-      href="#" 
-      class="btn btn-xxs btn-primary text-white"
-      onclick="
-        event.preventDefault();
-        var menu = document.getElementById('${data.auditid}_${tableBodyId}_menu');
-        var isOpen = menu.style.display === 'block';
-        menu.style.display = isOpen ? 'none' : 'block';
-      "
-    >
-      Open
-    </a>
-    <div 
-      id="${data.auditid}_${tableBodyId}_menu" 
-      class="dropdown-menu dropdown-menu-end" 
-      style="display: none;"
-    >
-      <a class="dropdown-item" style="color: black;" onclick="document.getElementById('pane3_advancedaudit_table').value = '${data.objecttypecode}';document.getElementById('pane3_advancedaudit_recordid').value = '${data._objectid_value}';document.getElementById('pane3_advancedaudit_userid').value = '';document.getElementById('id_advanced_audit_find_link').click();document.getElementById('pane3_advancedaudit').click();">Open all logs for this record in Advanced Find</a>
-	        <a class="dropdown-item" style="color: black;" onclick="document.getElementById('pane3_advancedaudit_table').value = '${data.objecttypecode}';document.getElementById('pane3_advancedaudit_recordid').value = '${data._objectid_value}';document.getElementById('pane3_advancedaudit_userid').value = '${data._userid_value}';document.getElementById('id_advanced_audit_find_link').click();document.getElementById('pane3_advancedaudit').click();">Open all logs for this record changed by this user in Advanced Find</a>
-	  	  <a class="dropdown-item" style="color: black;" target="_blank" href="${Xrm.Page.context.getClientUrl()}/main.aspx?pagetype=entityrecord&etn=${data.objecttypecode}&id=${data._objectid_value}">Open current record in CRM</a>
-	  	  <a class="dropdown-item" style="color: black;" target="_blank" href="${Xrm.Page.context.getClientUrl()}/api/data/v9.2/${data.objecttypecode}s(${data._objectid_value})#p">Open current record in Web Api</a>
-	  	  <a class="dropdown-item" style="color: black;" target="_blank" href="${Xrm.Page.context.getClientUrl()}/api/data/v9.2/audits(${data.auditid})#p">Open current audit log in Web Api</a>
-
-    </div>
-  </td>
-`;
-
-
-					//
-
-
-
+					const menu = '<td class="text-end"><a href="#" class="btn btn-xxs btn-neutral">...</a></td>';
+					const changedData = data.changedata;
+					const changedDataSanitized = escapeHtml(changedData);
+					const record_openincrm = `${Xrm.Page.context.getClientUrl()}/main.aspx?pagetype=entityrecord&etn=${objectTypeCode}&id=${objectId}`;
+					const user_openincrm = `${Xrm.Page.context.getClientUrl()}/main.aspx?pagetype=entityrecord&etn=systemuser&id=${userId}`;
+					const auditform_openinwebapi = `${Xrm.Page.context.getClientUrl()}/api/data/v9.2/audits(${auditId})#p`;
+					const changeDataJSON = AuditApp.StringHelpers.formatIfJson(data.changedata);
 					// Create a new table row
 					const row = document.createElement('tr');
+					row.onclick = function () {
+						document.getElementById('auditform_id').textContent = `Audit Details: ${auditId}`;
+						document.getElementById('auditform_createdon').textContent = createdOnFormatted;
+						document.getElementById('auditform_event').textContent = actionFormatted;
+						document.getElementById('auditform_record').textContent = `${objectTypeCode} : ${objectIdFormatted}`;
+						document.getElementById('auditform_recordid').textContent = objectId;
+						document.getElementById('auditform_record_openincrm').setAttribute('href', record_openincrm);
+						document.getElementById('auditform_user').textContent = userName;
+						document.getElementById('auditform_userid').textContent = userId;
+						document.getElementById('auditform_user_openincrm').setAttribute('href', user_openincrm);
+						document.getElementById('auditform_changeddata').textContent = changeDataJSON;
+						document.getElementById('auditform').style.display = 'block';
+						document.getElementById('auditform_openinwebapi').setAttribute('href', auditform_openinwebapi);
 
+						console.log("opened audit: ", data)
+
+					};
 					// Create each cell with proper formatting
 					const createdOnCell = `<td>${createdOnFormatted}</td>`;
-					const objectIdCell = `<td class="d-none d-xl-table-cell">${objectIdFormatted}</td>`;
-					const userIdCell = `<td class="d-none d-xl-table-cell">${userIdFormatted}</td>`;
 					const actionCell = `<td class="${actionFormatted === 'Delete' ? 'text-danger' :
 						actionFormatted === 'Create' ? 'text-success' :
 							actionFormatted === 'User Access via Web' ? 'text-primary' :
 								actionFormatted === 'Update' ? 'text-warning' : ''
 						} d-none d-xl-table-cell">${actionFormatted}</td>`;
 					const objectTypeCodeCell = `<td class="d-none d-xl-table-cell">${objectTypeCodeFormatted}</td>`;
-					const changedDataCell = `<td class="text-xs">${data.changedata}</td>`;
-					const auditIdCell = `<td class="d-none d-xl-table-cell">${data.auditid || '-'}</td>`;
+					const changedDataCell = `<td class="text-xs">${changedDataSanitized}</td>`;
 					const recordType = `<td>${recordTypeFormatted}</td>`;
-
-					// Display value with link if available
-					const displayValue = data["_objectid_value@OData.Community.Display.V1.FormattedValue"] || '-';
-					const recordName = `<td class="d-none d-xl-table-cell" ${displayValue !== '-' ? `style="color: blue; text-decoration: underline; cursor: pointer;" onclick="alert('Coming soon...')"` : ''
-						}>${displayValue}</td>`;
-
-					// Conditional cell for changedBy based on action
-					let changedBy = `<td class="d-none d-xl-table-cell">${data["_userid_value@OData.Community.Display.V1.FormattedValue"] || '-'}</td>`;
-					if (actionFormatted === 'User Access via Web') {
-						changedBy = `<td class="d-none d-xl-table-cell">${displayValue}</td>`;
-					}
+					const displayValue = objectIdFormattedSanitized;
+					const recordName = `<td class="d-none d-xl-table-cell" ${displayValue !== '-' ? `style="text-decoration: underline; cursor: pointer;"` : ''}>${displayValue}</td>`;
+					let changedBy = `<td class="d-none d-xl-table-cell">${userName}</td>`;
+					if (actionFormatted === 'User Access via Web') {changedBy = `<td class="d-none d-xl-table-cell">${displayValue}</td>`;}
 
 					if (appplyButton) {
 						row.innerHTML = menu + createdOnCell + actionCell + changedBy + recordType + recordName + changedDataCell;
-
 					} else {
 						row.innerHTML = createdOnCell + actionCell + changedBy + recordType + recordName + changedDataCell;
-
 					}
 					// Combine all cells into a single row and append it to the table body
 					tableBody.appendChild(row);
 				});
 			},
 
-			// Function to format the date string into a readable format
-			formatDateString: (dateString) => {
-				// Parse the input string into a Date object
-				const date = new Date(dateString);
 
-				// Define month names
-				const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-				const month = monthNames[date.getMonth()];
-
-				// Get day and time portions
-				const day = date.getDate();
-				const time = dateString.split('T')[1].split('Z')[0];
-
-				// Return formatted date string
-				return `${month} ${day}, ${time}`;
-			},
 
 			// Function to manage balloon statistics based on the audits
 			ManageBalloons: (audits) => {
@@ -681,6 +697,8 @@
 
 					// Display the online users in the sidebar
 					AuditApp.Sidebar.displayOnlineUsers(userDetails);
+
+					document.getElementById("sidebar_onlineusers_info").classList.add("hidden");
 
 				} catch (error) {
 					console.error("Error retrieving online users:", error);
