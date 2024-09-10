@@ -1,6 +1,6 @@
 ﻿<div id="app-extension" data-bs-theme="light">
 	<div class="app-extension-sections" tabindex="9999">
-		<!--<html lang="en" data-bs-theme="dark">-->
+		<!--#region Overlay  -->
 		<a id="app_info_message" class="btn w-full btn-primary text-truncate rounded-0 py-2 border-0 position-relative text-muted" style="z-index: 1000; width: 100%; display: none">
 			<strong>Type</strong>
 			Message
@@ -10,31 +10,35 @@
 				<circle cx="150" cy="150" r="75" class="outerCircle"></circle>
 			</svg>
 		</div>
+		<!--#endregion Overlay -->
+		<!--#region Model Audit Form -->
 		<div id="auditform" class="modal fade show" tabindex="-1" a aria-modal="true" role="dialog" style="display: none;">
 			<div class="modal-dialog modal-dialog-centered">
 				<div class="modal-content overflow-hidden">
 					<div class="modal-header pb-0 border-0">
-						<h1  class="modal-title h4" id="auditform_id">Audit Details</h1>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-								onclick="document.getElementById('auditform').style.display='none';"></button>
+						<h1 class="modal-title h4" id="auditform_id">Audit Details</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.getElementById('auditform').style.display='none';"></button>
 					</div>
-
 					<hr class="my-6" />
 					<div class="modal-body">
 						<div class="row row-cols-md-2 g-0 g-md-10 g-xl-16">
 							<div class="col">
 								<div class="list-group list-group-flush">
 									<div class="list-group-item d-flex align-items-center px-0">
-										<div class="flex-fill"><a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Created On</a> <span id="auditform_createdon" class="d-block text-sm text-muted"></span></div>
+										<div class="flex-fill">
+											<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Created On</a>
+											<span id="auditform_createdon" class="d-block text-sm text-muted"></span>
+										</div>
 									</div>
 									<div class="list-group-item d-flex align-items-center px-0">
 										<div class="flex-fill">
 											<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Record</a>
 											<span id="auditform_record" class="d-block text-sm text-muted"></span>
 											<span id="auditform_recordid" class="d-block text-sm text-muted"></span>
-
 										</div>
-										<div class="ms-auto text-end"><a id="auditform_record_openincrm" target="_blank" href="#" class="btn btn-sm btn-neutral">Open Record In CRM</a></div>
+										<div class="ms-auto text-end">
+											<a id="auditform_record_openincrm" target="_blank" href="#" class="btn btn-sm btn-neutral">Open Record In CRM</a>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -43,7 +47,8 @@
 								<div class="list-group list-group-flush">
 									<div class="list-group-item d-flex align-items-center px-0">
 										<div class="flex-fill">
-											<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Event</a> <span id="auditform_event" class="d-block text-sm text-muted"></span>
+											<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Event</a>
+											<span id="auditform_event" class="d-block text-sm text-muted"></span>
 											<div class="d-flex mx-n1"></div>
 										</div>
 									</div>
@@ -54,30 +59,33 @@
 											<span id="auditform_user" class="d-block text-sm text-muted"></span>
 											<span id="auditform_userid" class="d-block text-sm text-muted"></span>
 											<div class="d-flex mx-n1"></div>
-
 										</div>
-										<div class="ms-auto text-end"><a id="auditform_user_openincrm"  href="#" target="_blank" class="btn btn-sm btn-neutral">Open User In CRM</a></div>
+										<div class="ms-auto text-end">
+											<a id="auditform_user_openincrm" href="#" target="_blank" class="btn btn-sm btn-neutral">Open User In CRM</a>
+										</div>
 									</div>
-
 								</div>
 							</div>
 						</div>
-						<div class=""><label class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Changed Data</label> <textarea id="auditform_changeddata" class="form-control" rows="8"></textarea></div>
-						<div class="text-xs text-muted mt-6">Would you like to open this audit in the Web Api ?  <a id="auditform_openinwebapi" href="#" target="_blank" class="fw-bold">Open In WebApi</a></div>
+						<div class="">
+							<label class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Changed Data</label>
+							<textarea id="auditform_changeddata" class="form-control" rows="8"></textarea>
+						</div>
+						<div class="text-xs text-muted mt-6">
+							Would you like to open this audit in the Web Api ?
+							<a id="auditform_openinwebapi" href="#" target="_blank" class="fw-bold">Open In WebApi</a>
+						</div>
 					</div>
-
 					<!--<div class="offcanvas-footer d-flex gap-2 justify-content-end py-4 px-6 border-top" style="display:none">
-
 						<button type="button" class="btn btn-sm btn-primary">Open all logs for this record</button>
 						<button type="button" class="btn btn-sm btn-primary">Open all logs for this record changed by this user</button>
-
 						<button type="button" class="btn btn-sm btn-primary">Open audit In Web Api</button>
 						<button type="button" class="btn btn-sm btn-neutral" data-bs-dismiss="offcanvas">Close</button>
-
 					</div>-->
 				</div>
 			</div>
 		</div>
+		<!--#endregion Model Audit Form -->
 
 		<div id="audithistory_app" class="bg-body-tertiary">
 
@@ -85,9 +93,7 @@
 
 				<!--#region SIDEBAR -->
 				<nav class="flex-none navbar navbar-vertical navbar-expand-lg show vh-lg-100 px-0 py-2 navbar-dark bg-transparent" id="sidebar">
-
 					<div class="container-fluid px-3 px-md-4 px-lg-6">
-
 						<button class="navbar-toggler ms-n2"
 								type="button"
 								data-bs-toggle="collapse"
@@ -97,18 +103,12 @@
 								aria-label="Toggle navigation">
 							<span class="navbar-toggler-icon"></span>
 						</button>
-
 						<a class="navbar-brand d-inline-block py-lg-1 mb-lg-5" href="#">
 							<img id="app_img_logo_lightmode" class="logo-dark h-rem-8 h-rem-md-10" alt="...">
 							<img id="app_img_logo_darkmode" class="logo-light h-rem-8 h-rem-md-10" alt="...">
 						</a>
-
-						<div class="navbar-user d-lg-none">
-
-						</div>
-
+						<div class="navbar-user d-lg-none"></div>
 						<div id="sidebarCollapse" class="collapse navbar-collapse overflow-x">
-
 							<ul class="navbar-nav" style="display:none">
 								<li class="nav-item my-1">
 									<a class="nav-link d-flex align-items-center rounded-pill" href="#">
@@ -118,9 +118,7 @@
 									</a>
 								</li>
 							</ul>
-
 							<hr class="navbar-divider my-5 opacity-70">
-
 							<ul id="ID_USERLIST" class="navbar-nav mb-md-4">
 								<li>
 									<div class="nav-link text-xs font-semibold text-uppercase text-muted ls-wide">
@@ -130,34 +128,26 @@
 										</span>
 									</div>
 								</li>
-
-
 							</ul>
 							<hr class="my-6">
-
 							<div class="card  border-0 mt-5 mb-3">
 								<div class="card-body">
 									<div class="vstack gap-4">
 										<i class="bi bi-rocket-takeoff-fill text-main text-2xl"></i>
 										<p id="sidebar_onlineusers_info" class="text-sm text-main text-opacity-70">Clicking the button will load online users from today in the sidebar! Performance Issues ? uncheck the following:</p>
-										<div><input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" checked id="sidebar_onlineusers_noapplicationusers"> <a href="#offcanvasCreate" class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas">no application users</a></div>
-
-
+										<div>
+											<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" checked id="sidebar_onlineusers_noapplicationusers">
+											<a href="#" class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas">No application users</a>
+										</div>
 										<a id="app_loadonlineusers" class="btn btn-sm btn-primary text-white">Load online users</a>
-
 									</div>
 								</div>
 							</div>
-
 							<hr class="navbar-divider my-5 opacity-70 hidden">
-
 							<hr class="navbar-divider my-5 opacity-70 hidden">
-
 							<div class="mt-auto"></div>
-
 							<div class="my-4 px-lg-6 position-relative">
 								<div class="dropup w-full">
-
 									<div id="systemdropdown" style=" top:-80px" class="dropdown-menu  w-full">
 										<a id="app_opensystemform" class="dropdown-item" href="#">
 											<i class="bi bi-house me-3"></i>
@@ -182,14 +172,9 @@
 											<i class="bi bi-chevron-expand text-white text-opacity-70"></i>
 										</span>
 									</button>
-
-
 								</div>
 							</div>
-
-
 							<hr class="my-6">
-
 						</div>
 					</div>
 				</nav>
@@ -198,28 +183,21 @@
 				<div class="flex-lg-fill overflow-x-auto ps-lg-1 vstack vh-lg-100 position-relative">
 
 					<!--#region HEADER-->
-
 					<div class="d-lg-flex py-3">
-
 						<div class="d-xxl-flex align-items-center gap-4 px-4 scrollable-x">
 							<div class="d-flex gap-2 text-xs">
-								<span class="text-xl fw-bold text-main ">
+								<span id="title" class="text-xl fw-bold text-main ">
 									Audit Engine for Microsoft Dynamics 365
 								</span>
 							</div>
 						</div>
-
 						<div class="d-lg-none d-xxl-flex align-items-center gap-4 px-4 scrollable-x">
 							<div class="d-flex gap-2 text-xs">
 								<!--<span class="text-heading fw-semibold">Time:</span>-->
 								<span id="app_time" class="text-muted">00:00:00</span>
 							</div>
-
 						</div>
-
 						<div class="hstack flex-fill justify-content-end flex-nowrap gap-6 ms-auto px-6 px-xxl-8">
-
-
 							<div class="form-check form-switch">
 								<input style="cursor: pointer;" id="toggle_light_dark" class="form-check-input" type="checkbox"
 									   onchange="document.getElementById('app-extension').setAttribute('data-bs-theme', this.checked ? 'dark' : 'light'); localStorage.setItem('theme', this.checked ? 'dark' : 'light')">
@@ -228,36 +206,23 @@
 								</label>
 							</div>
 						</div>
+						<span id="auditengine_opened" style="display:none"/>
 					</div>
 					<!--#endregion HEADER-->
 					<!--#region NAVIGATION-->
 					<header class="bg-surface-primary " style="padding-bottom: 0px; padding-top: 0px;">
 						<div class="container-fluid" style="padding-left:0px;">
 							<div class="mb-npx">
-
-								<!-- Nav -->
 								<ul class="nav nav-tabs mt-4 overflow-x border-0" style="margin-bottom: 0px;padding-left: 0px;">
 									<li class="nav-item ">
 										<a id="id_audit_today_link" href="#" class="nav-link active font-semibold">Today</a>
 									</li>
-
 									<li class="nav-item">
 										<a id="id_users_last_login_link" href="#" class="nav-link font-semibold">Users Last Login</a>
 									</li>
-
 									<li class="nav-item">
 										<a id="id_advanced_audit_find_link" href="#" class="nav-link font-semibold">Advanced Find</a>
 									</li>
-
-
-
-									<!--<li class="nav-item">
-										<a id="id_user_form_link" href="#" target="_blank" class="nav-link font-regular">User Form</a>
-									</li>
-
-									<li class="nav-item">
-										<a id="id_audit_form_link" href="#" target="_blank" class="nav-link font-regular">Audit Form</a>
-									</li>-->
 								</ul>
 							</div>
 						</div>
@@ -266,9 +231,7 @@
 
 					<div class="flex-fill overflow-y-lg-auto scrollbar bg-body  border-top border-lg shadow-2">
 
-
 						<main id="id_audit_today" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8">
-
 							<header class="py-4 border-bottom">
 								<div class="row align-items-center">
 									<div class="col">
@@ -284,16 +247,12 @@
 											<button type="button" class="btn btn-sm btn-neutral" onclick="document.getElementById('panel1_card_extrafilters').classList.toggle('hidden');">
 												<span>Add Extra Filters</span>
 											</button>
-
 										</div>
 									</div>
 								</div>
 							</header>
-
-
 							<div class="card border-0 py-5">
 								<div class="row row-cols-xl-4 row-cols-md-2 g-6">
-
 									<div class="col">
 										<div id="card_creates_today" class="card bg-success bg-opacity-10 border-success border-opacity-40">
 											<div class="p-5">
@@ -308,24 +267,11 @@
 													<div class="hstack gap-2">
 														<span id="card_creates_today_badge" class="badge bg-danger bg-opacity-25 text-danger">Not Loaded</span>
 													</div>
-
-
-
-
-
-
-
-
-
-
-
 												</div>
-
 												<div id="card_creates_today_account" class="d-block text-xs fw-bold">Count: 0</div>
 											</div>
 										</div>
 									</div>
-
 									<div class="col">
 										<div id="card_updates_today" class="card bg-warning bg-opacity-10 border-warning border-opacity-40">
 											<div class="p-5">
@@ -341,12 +287,10 @@
 														<span id="card_updates_today_badge" class="badge bg-danger bg-opacity-25 text-danger">Not Loaded</span>
 													</div>
 												</div>
-
 												<div id="card_updates_today_account" class="d-block text-xs fw-bold">Count: 0</div>
 											</div>
 										</div>
 									</div>
-
 									<div class="col">
 										<div id="card_deletes_today" class="card bg-danger bg-opacity-10 border-danger border-opacity-40">
 											<div class="p-5">
@@ -362,12 +306,10 @@
 														<span id="card_deletes_today_badge" class="badge bg-danger bg-opacity-25 text-danger">Not Loaded</span>
 													</div>
 												</div>
-
 												<div id="card_deletes_today_account" class="d-block text-xs fw-bold">Count: 0</div>
 											</div>
 										</div>
 									</div>
-
 									<div class="col">
 										<div id="card_logins_today" class="card bg-primary bg-opacity-10 border-solid border-opacity-40">
 											<div class="p-5">
@@ -386,13 +328,9 @@
 												<div id="card_logins_today_count" class="d-block text-xs fw-bold">Count: 0</div>
 											</div>
 										</div>
-
-
 									</div>
-
 								</div>
 							</div>
-
 							<div id="panel1_card_extrafilters" class="card hidden">
 								<div class="card-header py-3">
 									<div class="d-flex align-items-center">
@@ -420,7 +358,6 @@
 													</div>
 												</div>
 											</div>
-
 										</div>
 										<div class="list-group-item py-3">
 											<div class="row g-3 align-items-center">
@@ -428,7 +365,7 @@
 													<div class="form-check form-check-linethrough d-flex align-items-center gap-1">
 														<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="today_showwebaccess"
 															   onclick="document.getElementById('today_showwebaccess_label').classList.toggle('hidden', !this.checked)">
-														<a  class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas"> Show Web Access</a>
+														<a class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas"> Show Web Access</a>
 													</div>
 												</div>
 												<div class="col-sm-auto col-12 ms-sm-auto">
@@ -444,9 +381,7 @@
 									</div>
 								</div>
 							</div>
-
 							<hr class="my-6">
-
 							<div class="card shadow border-0 mb-7">
 								<div class="card-header">
 									<h5 class="mb-0 text-muted">Audit logs from today</h5>
@@ -467,39 +402,23 @@
 											<th scope="col" class="d-none d-xl-table-cell">Record Type</th>
 											<th scope="col">Record Name</th>
 											<th scope="col">Changed Data</th>
-
-
 											<th></th>
 										</tr>
 									</thead>
 									<tbody id="id_audits_from_today">
 									</tbody>
 								</table>
-
 								<div class="card-footer border-0 py-5">
 									<span id="ID_logs" class="text-muted text-sm"></span>
 								</div>
 							</div>
-
 						</main>
 
 						<main id="id_users_last_login" style="display:none">
-
-
-
-
-
-
-
 							<div class="row g-5">
-
 								<div class="col-lg-4 vstack gap-5">
-
 									<div class="card">
 										<div class="card-body d-flex flex-column">
-
-
-
 											<div class="row align-items-center g-3 ">
 												<div class="col-md-4"><label class="form-label mb-0">1. Load User Views</label></div>
 												<div class="col-md-6 col-xl-5">
@@ -507,12 +426,9 @@
 												</div>
 											</div>
 											<hr class="my-6">
-
-
 											<div class="row align-items-center g-3">
 												<div class="col-md-4"><label class="form-label mb-0">2. Choose User View</label></div>
 												<div class="col-md-6 col-xl-5">
-
 													<div class="dropdown">
 														<button class="btn btn-neutral dropdown-toggle" type="button" id="userDropdownMenuButton" onclick="var dropdownMenu = document.getElementById('listofviews'); dropdownMenu.style.display = (dropdownMenu.style.display === 'block') ? 'none' : 'block';">
 															User Views not loaded
@@ -523,29 +439,19 @@
 															</a>
 														</div>
 													</div>
-
-
-
 												</div>
 											</div>
-
-
 											<hr class="my-6">
-
 											<div class="row align-items-center g-3 ">
 												<div class="col-md-4"><label class="form-label mb-0">3. Add last login</label></div>
 												<div class="col-md-6 col-xl-5">
 													<button id="addlastlogin" type="submit" class="btn btn-sm btn-primary">Add Last Login</button>
 												</div>
 											</div>
-
 										</div>
 									</div>
-
 								</div>
-
 								<div class="col-lg-8 vstack gap-5">
-
 									<div class="card hidden">
 										<div class="card-body py-4">
 											<div class="d-flex flex-wrap align-items-center justify-content-between mb-5">
@@ -569,10 +475,8 @@
 										</div>
 									</div>
 								</div>
-
 							</div>
 							<hr class="my-6">
-
 							<div class="card shadow border-0 mb-7">
 								<div class="card-header">
 									<h5 id="ID_USERS" class="mb-0 text-muted">Users Last Login Report</h5>
@@ -590,16 +494,10 @@
 									<span id="ID_Getting_Things_Ready" class="text-muted text-sm">No users retrieved yet.</span>
 								</div>
 							</div>
-
 							<hr class="my-6">
-
-
-
 						</main>
 
-
 						<main id="id_advanced_audit_find" class="py-6 bg-surface-secondary " style="display:none">
-
 							<header class="py-4 border-bottom">
 								<div class="row align-items-center">
 									<div class="col">
@@ -617,64 +515,44 @@
 									</div>
 								</div>
 							</header>
-
-
-
 							<div class="row g-5">
 								<div class="col-lg-4 ">
-
 									<div class="row align-items-center g-3 mt-6">
 										<div class="col-md-4"><label class="form-label mb-0 text-muted">Table</label></div>
 										<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_table" type="text" class="form-control" value="account"></div>
 									</div>
 									<hr class="my-6">
-
 									<div class="row align-items-center g-3 mt-6">
 										<div class="col-md-4"><label class="form-label mb-0 text-muted">Record ID</label></div>
 										<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_recordid" type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"></div>
 									</div>
 									<hr class="my-6">
-
 									<div class="row align-items-center g-3 mt-6">
 										<div class="col-md-4"><label class="form-label mb-0 text-muted">User ID</label></div>
 										<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_userid" type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"></div>
 									</div>
 								</div>
-
 								<div class="col-lg-4 ">
-
 									<div class="row align-items-center g-3 mt-6">
 										<div class="col-md-4"><label class="form-label mb-0 text-muted">From (00:00)</label></div>
 										<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_from" type="date" class="form-control"></div>
 									</div>
 									<hr class="my-6">
-
 									<div class="row align-items-center g-3 mt-6">
 										<div class="col-md-4"><label class="form-label mb-0 text-muted">Until (23:59)</label></div>
 										<div class="col-md-8 col-xl-8">
-											<input id="pane3_advancedaudit_until" type="date" class="form-control"
-												   value="">
+											<input id="pane3_advancedaudit_until" type="date" class="form-control" value="">
 										</div>
 									</div>
-
-
 								</div>
 								<div class="col-lg-4 ">
-
-
-
-
-
 									<div class="row align-items-center g-3 mt-6">
 										<div class="col-md-4"><label class="form-label mb-0 text-muted">Top</label></div>
 										<div class="col-md-4 col-xl-4"><input id="pane3_advancedaudit_top" type="text" class="form-control" value="250"></div>
 									</div>
 								</div>
 							</div>
-
-
 							<hr class="my-6">
-
 							<div class="card shadow border-0 mb-7">
 								<div class="card-header">
 									<h5 class="mb-0 text-muted">Advanced Audit Find</h5>
@@ -693,34 +571,16 @@
 											<th scope="col" class="d-none d-xl-table-cell">Record Type</th>
 											<th scope="col">Record Name</th>
 											<th scope="col">Changed Data</th>
-
-
 											<th></th>
 										</tr>
 									</thead>
 									<tbody id="id_audits_advanced_find">
 									</tbody>
 								</table>
-
 								<div class="card-footer border-0 py-5">
 									<span id="id_audits_advanced_find_logs" class="text-muted text-sm"></span>
 								</div>
 							</div>
-
-
-						</main>
-
-
-						<main style="display:none" id="id_user_form">
-
-
-							<h1 class="text-primary">user_form Coming soon...</h1>
-
-						</main>
-
-						<main id="id_audit_form" style="display:none" >
-							<h1 class="text-primary">audit_form Coming soon...</h1>
-
 						</main>
 
 					</div>
@@ -728,9 +588,8 @@
 			</div>
 		</div>
 
+		<!--<hr class="my-6">
 		<hr class="my-6">
-		<hr class="my-6">
-		<hr class="my-6">
-
+		<hr class="my-6">-->
 	</div>
 </div>

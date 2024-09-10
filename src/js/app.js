@@ -10,11 +10,45 @@
 			NotificationTimer: null
 		},
 		UI: {
+			setTitleColor: function () {
+				const topBar = window.top.document.getElementById('topBar');
+				if (topBar) {
+					const topBar_color = window.getComputedStyle(topBar).backgroundColor;			
+					document.getElementById("app_time").style.color = topBar_color;
+					//document.getElementById("id_audit_today_link").style.color = topBar_color;
+					//document.getElementById("id_users_last_login_link").style.color = topBar_color;
+					//document.getElementById("id_advanced_audit_find_link").style.color = topBar_color;
+					//document.getElementById("id_pane1_searchauditsfromtoday").style.backgroundColor = topBar_color;
+					////document.getElementById("id_pane1_searchauditsfromtoday").style.borderColor = topBar_color;
+					//document.getElementById("app_loadonlineusers").style.backgroundColor = topBar_color;
+					//document.getElementById("sidebar_onlineusers_noapplicationusers").style.backgroundColor = topBar_color;
+				}
+			},
+			setDateTimes: function () {
+				var today = new Date().toISOString().split('T')[0];
+				document.getElementById('pane3_advancedaudit_until').value = today;
+				document.getElementById('pane3_advancedaudit_from').value = today;
+			},
+			clearAdvancedFindParams: function () {
+				document.getElementById('pane3_advancedaudit_table').value = null;
+				document.getElementById('pane3_advancedaudit_recordid').value = null;
+				document.getElementById('pane3_advancedaudit_userid').value = null;
+				document.getElementById('pane3_advancedaudit_until').value = null;
+				document.getElementById('pane3_advancedaudit_from').value = null;
+			},
+			setAdvancedFindWithFormEntity: function (entityName, entityId) {
+				if (!entityName || !entityId) {return;}
+				entityId = entityId.replace(/[{}]/g, "").toLowerCase();
+				document.getElementById("pane3_advancedaudit_table").value = entityName;
+				document.getElementById("pane3_advancedaudit_recordid").value = entityId;
+				document.getElementById("id_advanced_audit_find_link").click();
+				document.getElementById("pane3_advancedaudit").click();
+			}
 		},
 		CONFIG: {
-			baseUrl: '',
+			baseUrl: 'https://github.com/auditengine/',
 			getUrl_naam: () => {
-
+				return `${AuditApp.CONFIG.baseUrl}auditengine/issues`;
 			}
 		},
 		WebApi: {
@@ -47,7 +81,6 @@
 				}
 			},
 
-			// Method to retrieve data for a specific entity
 			Retrieve: function (entityName, id, cols = null, keyAttribute = null) {
 				if (!keyAttribute) {
 					keyAttribute = entityName + "id";
@@ -149,14 +182,12 @@
 				console.log(`Total nextLink retrievals: ${nextLinkRetrievalCount}`);
 
 				return allAudits;
-			}
-
-			,
+			},
 
 			//Todo: remove this one and expand above method!
 			RetrieveAllAuditsWithCustomFilter: async function (filter = "") {
 				const clientUrl = Xrm.Page.context.getClientUrl();
-				let nextLink = `${clientUrl}/api/data/v9.1/audits?$filter=${filter}`;
+				let nextLink = `${clientUrl}/api/data/v9.1/audits?${filter}`;
 				let allAudits = [];
 
 				while (nextLink) {
@@ -182,16 +213,6 @@
 
 				return allAudits;
 			}
-		},
-		RegisterjQueryExtensions: function () {
-			$.fn.bindFirst = function (name, fn) {
-				this.on(name, fn);
-				this.each(function () {
-					var handlers = $._data(this, 'events')[name.split('.')[0]];
-					var handler = handlers.pop();
-					handlers.splice(0, 0, handler);
-				});
-			};
 		},
 		TargetFrame: {
 			GetApplicationType: function () {
@@ -234,7 +255,6 @@
 			ExecutionError: function () {
 				alert("Error");
 			}
-
 		},
 		StringHelpers: {
 			formatIfJson: function formatIfJson(str) {
@@ -264,9 +284,7 @@
 
 				// Return formatted date string
 				return `${month} ${day}, ${time}`;
-			},
-
-
+			}
 		},
 		toggleOverlay: function (show, type = "", message = "") {
 			const overlay = document.getElementById('overlay');
@@ -286,21 +304,12 @@
 				messageElement.style.display = 'none';  // Hide the message element
 			}
 		},
-
 		ManageTabs: function () {
 			// List of button and corresponding content section IDs
 			const tabs = [
 				{ buttonId: "id_audit_today_link", contentId: "id_audit_today" },
 				{ buttonId: "id_users_last_login_link", contentId: "id_users_last_login" },
 				{ buttonId: "id_advanced_audit_find_link", contentId: "id_advanced_audit_find" },
-
-				//{ buttonId: "id_user_form_link", contentId: "id_user_form" },
-				//{ buttonId: "id_audit_form_link", contentId: "id_audit_form" },
-				//{ buttonId: "id_playground_link", contentId: "id_playground" },
-
-				//
-
-
 			];
 
 			// Function to handle tab switching
@@ -324,7 +333,6 @@
 				});
 			}
 
-
 			// Add event listeners to all buttons
 			tabs.forEach(tab => {
 				document.getElementById(tab.buttonId).addEventListener("click", function (event) {
@@ -333,6 +341,8 @@
 			});
 		},
 		startTime: function () {
+			console.log("auditengine: startTime");
+
 			function checkTime(i) {
 				if (i < 10) { i = "0" + i };  // add zero in front of numbers < 10
 				return i;
@@ -364,7 +374,6 @@
 					document.getElementById('app_user_initialen').innerHTML = "TU";
 				}
 			}
-
 
 			function getInitials(fullname) {
 
@@ -414,6 +423,9 @@
 
 		},
 		RegisterEvents: function () {
+
+			console.log("auditengine: RegisterEvents");
+
 			// Panel 1
 			document.getElementById("id_pane1_searchauditsfromtoday").addEventListener("click", async function () {
 				AuditApp.toggleOverlay(true, "Retrieving", "Audits from today");
@@ -426,7 +438,6 @@
 				AuditApp.toggleOverlay(true, "Retrieving", "Online Users");
 				await AuditApp.Sidebar.getOnlineUsers();
 				AuditApp.toggleOverlay(false);
-				//	document.getElementById("app_loadonlineusers").classList.add("hidden");
 			});
 
 			// Panel 2 - Load views
@@ -446,28 +457,25 @@
 
 			// Panel 3 - Advanced audit
 			document.getElementById("pane3_advancedaudit").addEventListener("click", async function () {
-
 				AuditApp.toggleOverlay(true, "Retrieving", "Advanced Audit");
-
 				await AuditApp.Panel3.AdvancedAudit();
 				AuditApp.toggleOverlay(false);
-
-
-
 			});
 
-			//// Get the background color of the top bar
-			//const myDivObjBgColor = window.getComputedStyle(window.top.document.getElementById('topBar')).backgroundColor;
-			////alert(myDivObjBgColor);
-			//document.getElementById("id_pane1_searchauditsfromtoday").style.backgroundColor = myDivObjBgColor;
-			//document.getElementById("id_pane1_searchauditsfromtoday").style.borderColor = myDivObjBgColor;
-
-
-			//var today = new Date().toISOString().split('T')[0];
-			//document.getElementById('pane3_advancedaudit_until').value = today;
-			//document.getElementById('pane3_advancedaudit_from').value = today;
-
-
+			document.getElementById("auditengine_opened").addEventListener("click", async function () {
+				console.log("auditengine: Opening recieved");
+				try {
+					if (Xrm && Xrm.Page && Xrm.Page.data && Xrm.Page.data.entity) {
+						console.log("auditengine: Opening recieved while on an entity form");
+						AuditApp.UI.clearAdvancedFindParams();
+						const entityName = Xrm.Page.data.entity.getEntityName();
+						const entityId = Xrm.Page.data.entity.getId().replace(/[{}]/g, "").toLowerCase();
+						AuditApp.UI.setAdvancedFindWithFormEntity(entityName, entityId);		
+					}
+				} catch (e) {
+					console.log("auditengine: opened error")
+				}
+			});
 		},
 		Panel1: {
 
@@ -602,7 +610,7 @@
 					const displayValue = objectIdFormattedSanitized;
 					const recordName = `<td class="d-none d-xl-table-cell" ${displayValue !== '-' ? `style="text-decoration: underline; cursor: pointer;"` : ''}>${displayValue}</td>`;
 					let changedBy = `<td class="d-none d-xl-table-cell">${userName}</td>`;
-					if (actionFormatted === 'User Access via Web') {changedBy = `<td class="d-none d-xl-table-cell">${displayValue}</td>`;}
+					if (actionFormatted === 'User Access via Web') { changedBy = `<td class="d-none d-xl-table-cell">${displayValue}</td>`; }
 
 					if (appplyButton) {
 						row.innerHTML = menu + createdOnCell + actionCell + changedBy + recordType + recordName + changedDataCell;
@@ -613,8 +621,6 @@
 					tableBody.appendChild(row);
 				});
 			},
-
-
 
 			// Function to manage balloon statistics based on the audits
 			ManageBalloons: (audits) => {
@@ -1047,7 +1053,12 @@
 				const userId = document.getElementById("pane3_advancedaudit_userid").value;
 				let from = document.getElementById("pane3_advancedaudit_from").value;
 				let until = document.getElementById("pane3_advancedaudit_until").value;
-				const top = document.getElementById("pane3_advancedaudit_top").value;
+				let top = document.getElementById("pane3_advancedaudit_top").value;
+				if (!top) {
+					top = 5000;
+					document.getElementById("pane3_advancedaudit_top").value = 5000;
+
+				}
 
 				// Format 'from' date if provided
 				if (from) {
@@ -1076,38 +1087,41 @@
 				}
 
 				// Build the filter query
-				let filter = "";
+				let filter = "$filter=";
 
 				// Add table filter if 'table' is provided
 				if (table) {
 					filter += `objecttypecode eq '${table}'`;
 				}
-
 				// Add record ID filter if 'recordid' is provided
 				if (recordid) {
-					filter += (filter ? " and " : "") + `_objectid_value eq '${recordid}'`;
+					filter += (filter != "$filter=" ? " and " : "") + `_objectid_value eq '${recordid}'`;
 				}
 
 				// Add user ID filter if 'userId' is provided
 				if (userId) {
-					filter += (filter ? " and " : "") + `_userid_value eq '${userId}'`;
+					filter += (filter != "$filter=" ? " and " : "") + `_userid_value eq '${userId}'`;
 				}
 
 				// Add 'from' date filter if 'from' is provided
 				if (from) {
-					filter += (filter ? " and " : "") + from;
+					filter += (filter != "$filter=" ? " and " : "") + from;
 				}
 
 				// Add 'until' date filter if 'until' is provided
 				if (until) {
-					filter += (filter ? " and " : "") + until;
+					filter += (filter != "$filter=" ? " and " : "") + until;
 				}
 
+				if (filter == "$filter=") {
+					filter = `$orderby=createdon desc&$top=${top}`;
+				} else {
+					filter += `&$orderby=createdon desc&$top=${top}`;
+				}
 				try {
 
 					// Make the API call to retrieve audits with the constructed filter
-					const audits = await AuditApp.WebApi.RetrieveAllAuditsWithCustomFilter(filter + `&$orderby=createdon desc&$top=${top}`);
-					console.log("panel3", audits);
+					const audits = await AuditApp.WebApi.RetrieveAllAuditsWithCustomFilter(filter);
 
 					// Populate the UI with the retrieved audits
 					AuditApp.Panel1.PopulateAuditsFromTodaysTable(audits, "id_audits_advanced_find");
@@ -1116,7 +1130,7 @@
 					document.getElementById("id_audits_advanced_find").innerHTML = '';
 
 					// Display an error message for the table entity not being found
-					alert(`The entity with a name = '${table}' with namemapping = 'Logical' was not found`);
+					alert(e.message);
 				}
 
 			}
@@ -1140,16 +1154,11 @@
 
 
 		}
-
 	};
 
-	AuditApp.RegisterjQueryExtensions();
 	AuditApp.RegisterEvents();
 	AuditApp.startTime();
 	AuditApp.ManageTabs();
-
-
-
+	AuditApp.UI.setTitleColor();
+	AuditApp.UI.setDateTimes();
 });
-
-

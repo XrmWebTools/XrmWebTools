@@ -5,11 +5,10 @@ if (typeof browser === "undefined") {
 
 // Handle the click event on the extension icon
 browser.action.onClicked.addListener(() => {
-    console.log('Extension icon clicked');
 
     // Define a function to toggle the visibility of the element
     const toggleElement = () => {
-        console.log('Executing script');
+
 
         const pane = document.querySelector(".app-extension-sections");
 
@@ -41,6 +40,9 @@ browser.action.onClicked.addListener(() => {
 
                 // Expand the element to the natural height
                 pane.style.height = `${height}px`;
+                console.log("auditengine: Opening triggered");
+                document.getElementById("auditengine_opened").click();
+
             }
         } else {
             console.error("Element with class 'app-extension-sections' not found.");

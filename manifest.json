@@ -2,7 +2,7 @@
 	"manifest_version": 3,
 	"name": "Audit Engine 365",
 	"short_name": "Audit Engine 365",
-	"version": "1.6",
+	"version": "1.8",
 	"description": "Audit Engine for Microsoft Dynamics 365",
 	"content_security_policy": {
 		"script-src": "self",
