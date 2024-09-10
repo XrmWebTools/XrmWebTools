@@ -13,7 +13,7 @@
 			setTitleColor: function () {
 				const topBar = window.top.document.getElementById('topBar');
 				if (topBar) {
-					const topBar_color = window.getComputedStyle(topBar).backgroundColor;			
+					const topBar_color = window.getComputedStyle(topBar).backgroundColor;
 					document.getElementById("app_time").style.color = topBar_color;
 					//document.getElementById("id_audit_today_link").style.color = topBar_color;
 					//document.getElementById("id_users_last_login_link").style.color = topBar_color;
@@ -37,7 +37,7 @@
 				document.getElementById('pane3_advancedaudit_from').value = null;
 			},
 			setAdvancedFindWithFormEntity: function (entityName, entityId) {
-				if (!entityName || !entityId) {return;}
+				if (!entityName || !entityId) { return; }
 				entityId = entityId.replace(/[{}]/g, "").toLowerCase();
 				document.getElementById("pane3_advancedaudit_table").value = entityName;
 				document.getElementById("pane3_advancedaudit_recordid").value = entityId;
@@ -310,6 +310,8 @@
 				{ buttonId: "id_audit_today_link", contentId: "id_audit_today" },
 				{ buttonId: "id_users_last_login_link", contentId: "id_users_last_login" },
 				{ buttonId: "id_advanced_audit_find_link", contentId: "id_advanced_audit_find" },
+				{ buttonId: "id_plugintraces_link", contentId: "id_plugintraces" },
+
 			];
 
 			// Function to handle tab switching
@@ -470,11 +472,19 @@
 						AuditApp.UI.clearAdvancedFindParams();
 						const entityName = Xrm.Page.data.entity.getEntityName();
 						const entityId = Xrm.Page.data.entity.getId().replace(/[{}]/g, "").toLowerCase();
-						AuditApp.UI.setAdvancedFindWithFormEntity(entityName, entityId);		
+						AuditApp.UI.setAdvancedFindWithFormEntity(entityName, entityId);
 					}
 				} catch (e) {
 					console.log("auditengine: opened error")
 				}
+			});
+
+
+
+			document.getElementById("pane4_plugintraces").addEventListener("click", async function () {
+				AuditApp.toggleOverlay(true, "Retrieving", "Plugin Traces");
+				await AuditApp.Panel4.PluginTraces();
+				AuditApp.toggleOverlay(false);
 			});
 		},
 		Panel1: {
@@ -1153,6 +1163,79 @@
 			}
 
 
+		},
+		Panel4: {
+			PluginTraces: async () => {
+
+				const top = 5000
+
+
+
+
+				try {
+
+					const plugintraces = await AuditApp.WebApi.RetrieveWithCustomFilter(
+						"plugintracelogs?$top=5000&$orderby=createdon desc"
+					);
+					console.log("plugintraces", plugintraces);
+					AuditApp.Panel4.renderPluginLogs(plugintraces.value)
+
+
+
+
+				} catch (e) {
+
+					alert(e.message);
+				}
+
+			},
+			renderPluginLogs: (data) => {
+
+				function formatDate(dateString) {
+					if (!dateString) return 'N/A';
+					const date = new Date(dateString);
+					return date.toLocaleString();
+				}
+				// Get references to the necessary DOM elements
+				const mainList = document.getElementById('ID_PLUGINLOGS_MAINLIST');
+				const countElement = document.getElementById('ID_PLUGINLOGS_COUNT');
+
+				// Check if data exists and is an array
+				if (!data || !Array.isArray(data)) {
+					console.error('Invalid data format');
+					return;
+				}
+
+				// Clear existing table rows
+				mainList.innerHTML = '';
+
+
+				// Iterate over the array and create table rows
+				data.forEach(item => {
+					const row = document.createElement('tr');
+
+					// Create and append table cells
+					row.innerHTML = `
+            <td>${formatDate(item.performanceconstructorstarttime)}</td>
+            <td>${item.performanceexecutionduration || 'N/A'}</td>
+            <td class="d-none d-xl-table-cell">${item["operationtype@OData.Community.Display.V1.FormattedValue"] || 'N/A'
+						}</td >
+            <td class="d-none d-xl-table-cell">${item.typename || 'N/A'}</td>
+            <td>${item.messagename || 'N/A'}</td>
+            <td>${item.depth || 'N/A'}</td>
+            <td>${item["mode@OData.Community.Display.V1.FormattedValue"] || 'N/A'}</td>
+            <td>'-'</td>
+            <td>'-'</td>
+            <td>${item.messageblock || 'N/A'}</td>
+            <td>${item.exceptiondetails || 'N/A'}</td>
+        `;
+
+					mainList.appendChild(row);
+				});
+
+				countElement.textContent = data.length ? `${data.length} plugin logs retrieved.` : '0 plugin logs found';
+
+			}
 		}
 	};
 

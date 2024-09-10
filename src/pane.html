@@ -223,6 +223,9 @@
 									<li class="nav-item">
 										<a id="id_advanced_audit_find_link" href="#" class="nav-link font-semibold">Advanced Find</a>
 									</li>
+									<li class="nav-item">
+										<a id="id_plugintraces_link" href="#" class="nav-link font-semibold">Plugin Traces</a>
+									</li>
 								</ul>
 							</div>
 						</div>
@@ -583,6 +586,69 @@
 							</div>
 						</main>
 
+						<main id="id_plugintraces" class="py-6 bg-surface-secondary " style="display:none">
+							<header class="py-4 border-bottom">
+								<div class="row align-items-center">
+									<div class="col">
+										<div class="d-flex align-items-center gap-4">
+											<div><button id="pane4_plugintraces" type="button" class="btn btn-sm btn-primary rounded-pill" aria-label="Close"><span>Search</span></button></div>
+											<div class="vr opacity-20 my-1"></div>
+											<h1 class="h4 ls-tight text-muted">Plugin Traces</h1>
+										</div>
+									</div>
+									<div class="col-auto d-none d-md-block">
+										<div class="hstack gap-2 justify-content-end">
+											<a href="#!" class="text-sm text-muted text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">This is still a work in progress. More filters are coming soon</span> </a>
+											<!--<button type="button" class="btn btn-sm btn-neutral"><span id="pane4_webapi">Open results in WebApi</span></button>-->
+										</div>
+									</div>
+								</div>
+							</header>
+
+						
+
+
+
+
+							<hr class="my-6">
+							<div class="card shadow border-0 mb-7">
+								<div class="card-header">
+									<h5 id="ID_PLUGINLOGS" class="mb-0 text-muted">Plugin Traces</h5>
+								</div>
+								<div class="table-responsive">
+									<table class="table table-hover table-striped table-nowrap">
+										<thead>
+											<tr>
+												<th scope="col">
+													<div class="d-flex align-items-center gap-2 ps-1">
+
+														<span>Start</span>
+													</div>
+												</th>
+												<th scope="col">Duration</th>
+												<th scope="col" class="d-none d-xl-table-cell">Operation</th>
+												<th scope="col" class="d-none d-xl-table-cell">Plugin</th>
+												<th scope="col">Step</th>
+												<th scope="col">Depth</th>
+												<th scope="col">Mode</th>
+												<th scope="col">Stage</th>
+												<th scope="col">Rank</th>
+												<th scope="col">Message</th>
+												<th scope="col">Exception</th>
+
+												<th></th>
+											</tr>
+										</thead>
+										<tbody id="ID_PLUGINLOGS_MAINLIST">
+										</tbody>
+									</table>
+								</div>
+								<div class="card-footer border-0 py-5">
+									<span id="ID_PLUGINLOGS_COUNT" class="text-muted text-sm">No plugin logs retrieved yet.</span>
+								</div>
+							</div>
+							<hr class="my-6">
+						</main>
 					</div>
 				</div>
 			</div>
