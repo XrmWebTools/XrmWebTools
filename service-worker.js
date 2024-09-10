@@ -18,7 +18,7 @@ browser.action.onClicked.addListener(() => {
 
             // Apply transition for slide effect
             pane.style.transition = "height 0.3s ease, opacity 0.3s ease";
-            pane.style.overflow = "hidden";
+           pane.style.overflow = "auto";
             pane.style.opacity = isVisible ? 0 : 1;
 
             if (isVisible) {
