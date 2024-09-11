@@ -49,7 +49,9 @@
 			baseUrl: 'https://github.com/auditengine/',
 			getUrl_naam: () => {
 				return `${AuditApp.CONFIG.baseUrl}auditengine/issues`;
-			}
+			},
+			organizationid: "",
+			currenttracelogsetting: "",
 		},
 		WebApi: {
 			// Method to retrieve data with a custom filter
@@ -212,6 +214,34 @@
 				}
 
 				return allAudits;
+			},
+
+			UpdateAsync: async function (urlEnding, entity) {
+				return new Promise((resolve, reject) => {
+					const req = new XMLHttpRequest();
+					const clientURL = Xrm.Page.context.getClientUrl();
+					const fullUrl = `${clientURL}/api/data/v9.2/${urlEnding}`;
+
+					req.open("PATCH", fullUrl, true);
+					req.setRequestHeader("OData-MaxVersion", "4.0");
+					req.setRequestHeader("OData-Version", "4.0");
+					req.setRequestHeader("Accept", "application/json");
+					req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+
+					req.onreadystatechange = function () {
+						if (req.readyState === 4) {
+							if (req.status === 204) {
+								// Success - No Return Data
+								resolve(true);
+							} else {
+								// Error - Reject with response text
+								reject(req.responseText);
+							}
+						}
+					};
+
+					req.send(JSON.stringify(entity));
+				});
 			}
 		},
 		TargetFrame: {
@@ -1189,7 +1219,7 @@
 
 				// Construct filter based on user input
 				if (plugintracelog_message_exceptiononly) {
-					filter += (filter !== "$filter=" ? " and " : "") + "exceptiondetails ne null";
+					filter += (filter !== "$filter=" ? " and " : "") + "exceptiondetails ne ''";
 				}
 				if (plugintracelog_entity) {
 					filter += (filter !== "$filter=" ? " and " : "") + `primaryentity eq '${plugintracelog_entity}'`;
@@ -1332,21 +1362,54 @@
 
 				// Check if the content of the element with ID 'pane4_setting' is "Set"
 				if (document.getElementById("pane4_setting").innerHTML === "Set") {
-					// Alert the user that the feature is not implemented yet
-					alert("Not implemented Yet");
-					// Exit the function early
+
+
+					const settingddl_value = document.getElementById('pane4_settingddl').value;
+					//alert(settingddl_value)
+					if (settingddl_value == AuditApp.CONFIG.currenttracelogsetting) {
+						alert("This is already the current setting");
+						return;
+					}
+					let setting = -1;
+					switch (settingddl_value) {
+						case "Off":
+							 setting = 0;
+							break;
+						case "Exception":
+							setting = 1;
+							break;
+						case "All":
+							setting = 2;
+							break;
+					}
+
+					if (setting == -1) {
+						alert("Setting value is not set to 'Off' or 'Exception' or 'All'");
+						return;
+					}
+					if (!AuditApp.CONFIG.organizationid) {
+						alert("organizationid is not set");
+						return;
+					}
+
+
+					await AuditApp.WebApi.UpdateAsync(`organizations(${AuditApp.CONFIG.organizationid})`, { "plugintracelogsetting": setting, });
+
+					AuditApp.CONFIG.currenttracelogsetting = settingddl_value;
 					return;
 				}
 
 				// Retrieve data from the web API with a custom filter
 				const orgs = await AuditApp.WebApi.RetrieveWithCustomFilter(
-					`organizations?$select=bingmapsapikey,plugintracelogsetting`
+					`organizations?$select=plugintracelogsetting`
 				);
 
 				// Check if the retrieved data is valid and contains at least one item
 				if (orgs && orgs.value && orgs.value[0]) {
 					// Extract the formatted value of 'plugintracelogsetting'
 					const plugintracelogsetting = orgs.value[0]["plugintracelogsetting@OData.Community.Display.V1.FormattedValue"];
+					AuditApp.CONFIG.organizationid = orgs.value[0]["organizationid"];
+					AuditApp.CONFIG.currenttracelogsetting = plugintracelogsetting;
 
 					// Check if 'plugintracelogsetting' is defined
 					if (plugintracelogsetting) {
