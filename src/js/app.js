@@ -486,6 +486,13 @@
 				await AuditApp.Panel4.PluginTraces();
 				AuditApp.toggleOverlay(false);
 			});
+
+			document.getElementById("pane4_setting").addEventListener("click", async function () {
+				AuditApp.toggleOverlay(true, "Retrieving", "Setting");
+				await AuditApp.Panel4.Setting();
+				AuditApp.toggleOverlay(false);
+			});
+			//pane4_settingddl
 		},
 		Panel1: {
 
@@ -1165,31 +1172,36 @@
 
 		},
 		Panel4: {
-			PluginTraces: async () => {
+			/**
+			 * Retrieves plugin traces based on user input and applies filters.
+			 */
+			PluginTraces: async () => {			
+				const top = 5000; // Maximum number of records to retrieve
+				let filter = "$filter="; // Initialize filter string
 
-				const top = 5000;
-				let filter = "$filter=";
-
+				// Retrieve user input values
 				let from = document.getElementById("plugintracelog_from").value;
 				const plugintracelog_message_create = document.getElementById("plugintracelog_message_create").checked;
 				const plugintracelog_message_update = document.getElementById("plugintracelog_message_update").checked;
 				const plugintracelog_message_associate = document.getElementById("plugintracelog_message_associate").checked;
 				let plugintracelog_entity = document.getElementById("plugintracelog_entity").value;
 				const plugintracelog_message_exceptiononly = document.getElementById("plugintracelog_message_exceptiononly").checked;
+
+				// Construct filter based on user input
 				if (plugintracelog_message_exceptiononly) {
-					filter += (filter != "$filter=" ? " and " : "") + "exceptiondetails ne null";
+					filter += (filter !== "$filter=" ? " and " : "") + "exceptiondetails ne null";
 				}
 				if (plugintracelog_entity) {
-					filter += (filter != "$filter=" ? " and " : "") + `primaryentity eq '${plugintracelog_entity}'`;
-				}		
+					filter += (filter !== "$filter=" ? " and " : "") + `primaryentity eq '${plugintracelog_entity}'`;
+				}
 				if (plugintracelog_message_create) {
-					filter += (filter != "$filter=" ? " and " : "") + "messagename eq 'Create'";
+					filter += (filter !== "$filter=" ? " and " : "") + "messagename eq 'Create'";
 				}
 				if (plugintracelog_message_update) {
-					filter += (filter != "$filter=" ? " and " : "") + "messagename eq 'Update'";
+					filter += (filter !== "$filter=" ? " and " : "") + "messagename eq 'Update'";
 				}
 				if (plugintracelog_message_associate) {
-					filter += (filter != "$filter=" ? " and " : "") + "messagename eq 'Associate'";
+					filter += (filter !== "$filter=" ? " and " : "") + "messagename eq 'Associate'";
 				}
 				if (from) {
 					const fromDate = new Date(from);
@@ -1197,49 +1209,61 @@
 					from = `createdon gt ${fromDate.toISOString()}`; // Format as ISO date
 				}
 				if (from) {
-					filter += (filter != "$filter=" ? " and " : "") + from;
+					filter += (filter !== "$filter=" ? " and " : "") + from;
 				}
 
-				if (filter == "$filter=") {
-					filter = ``;
-				} else {
-					filter += `&`;
-				}
+				// Adjust filter if no conditions are applied
+				filter = filter === "$filter=" ? "" : filter + "&";
+
 				try {
-
+					// Retrieve plugin traces with applied filters
 					const plugintraces = await AuditApp.WebApi.RetrieveWithCustomFilter(
-						`plugintracelogs?${filter}$top=5000&$orderby=performanceconstructorstarttime desc`
+						`plugintracelogs?${filter}$top=${top}&$orderby=performanceconstructorstarttime desc`
 					);
 					console.log("plugintraces", plugintraces);
-					AuditApp.Panel4.renderPluginLogs(plugintraces.value)
+					AuditApp.Panel4.renderPluginLogs(plugintraces.value);
 				} catch (e) {
-
+					// Handle and display errors
 					alert(e.message);
 				}
-
 			},
-			renderPluginLogs: (data) => {
 
+			/**
+			 * Renders the retrieved plugin logs into the table.
+			 * @param {Array} data - Array of plugin log objects to be displayed.
+			 */
+			renderPluginLogs: (data) => {
+				/**
+				 * Formats a date string into a more readable format.
+				 * @param {string} dateString - ISO date string to format.
+				 * @returns {string} - Formatted date string.
+				 */
 				function formatDate(dateString) {
 					if (!dateString) return 'N/A';
 					const date = new Date(dateString);
 					return date.toLocaleString();
 				}
 
+				/**
+				 * Shortens a string to a specified length and appends ellipsis if necessary.
+				 * @param {string} input - String to be shortened.
+				 * @returns {string} - Shortened string with ellipsis.
+				 */
 				function shortenString(input) {
-					if (input.length > 62) {
-						return input.slice(0, 62) + '...';
-					}
-					return input;
+					return input.length > 62 ? input.slice(0, 62) + '...' : input;
 				}
 
+				/**
+				 * Extracts useful information from an error message.
+				 * @param {string} errorMessage - Full error message.
+				 * @returns {string} - Extracted useful information.
+				 */
 				function extractUsefulInfo(errorMessage) {
-					// Regular expression to match the message after 'Message:' and capture until the next period or closing parenthesis
+					// Regular expression to capture the useful part of the error message
 					const regex = /System\.ServiceModel\.FaultException`1\[Microsoft\.Xrm\.Sdk\.OrganizationServiceFault\]:\s*(.*?)\s*\(Fault Detail is equal to Exception details:/s;
 					const match = errorMessage.match(regex);
 					return match ? match[1].trim() : errorMessage;
 				}
-
 
 				// Get references to the necessary DOM elements
 				const mainList = document.getElementById('ID_PLUGINLOGS_MAINLIST');
@@ -1254,41 +1278,86 @@
 				// Clear existing table rows
 				mainList.innerHTML = '';
 
-
 				// Iterate over the array and create table rows
 				data.forEach(item => {
 					const row = document.createElement('tr');
 
-
+					// Extract and format data for each row
 					const startdatetime = formatDate(item.performanceconstructorstarttime);
 					const duration = item.performanceexecutionduration || '';
 					const operation = item["operationtype@OData.Community.Display.V1.FormattedValue"] || 'N/A';
-					let typename = item.typename || '';
-					typename = shortenString(typename);
+					let typename = shortenString(item.typename || '');
 					const messagename = item.messagename || '';
 					const depth = item.depth || '';
 					const mode = item["mode@OData.Community.Display.V1.FormattedValue"] || 'N/A';
-					let exception = item.exceptiondetails || '';
-					exception = extractUsefulInfo(exception);
+					let exception = extractUsefulInfo(item.exceptiondetails || '');
 
+					// Set row content
 					row.innerHTML = `
-            <td>${startdatetime}</td>
-            <td>${duration}</td>
-            <td class="d-none d-xl-table-cell">${operation}</td >
-            <td class="d-none d-xl-table-cell">${typename}</td>
-            <td>${messagename}</td>
-            <td>${depth}</td>
-            <td>${mode}</td>
-			<td>${item.primaryentity}</td>
-            <td>${exception}</td>
-        `;
+                <td>${startdatetime}</td>
+                <td>${duration}</td>
+                <td class="d-none d-xl-table-cell">${operation}</td>
+                <td class="d-none d-xl-table-cell">${typename}</td>
+                <td>${messagename}</td>
+                <td>${depth}</td>
+                <td>${mode}</td>
+                <td>${item.primaryentity}</td>
+                <td>${exception}</td>
+            `;
 
+					// Append the row to the main list
 					mainList.appendChild(row);
 				});
 
+				// Update count element with the number of logs retrieved
 				countElement.textContent = data.length ? `${data.length} plugin logs retrieved.` : '0 plugin logs found';
+			},
 
-			}
+			Setting: async () => {
+
+				// Function to select an option from a dropdown
+				function selectOption(value) {
+					// Find the select element by its ID
+					const selectElement = document.getElementById('pane4_settingddl');
+
+					// Check if the select element exists
+					if (selectElement) {
+						// Set the value of the select element to the provided value
+						selectElement.value = value;
+					} else {
+						// Log an error if the select element is not found
+						console.error('Select element not found.');
+					}
+				}
+
+				// Check if the content of the element with ID 'pane4_setting' is "Set"
+				if (document.getElementById("pane4_setting").innerHTML === "Set") {
+					// Alert the user that the feature is not implemented yet
+					alert("Not implemented Yet");
+					// Exit the function early
+					return;
+				}
+
+				// Retrieve data from the web API with a custom filter
+				const orgs = await AuditApp.WebApi.RetrieveWithCustomFilter(
+					`organizations?$select=bingmapsapikey,plugintracelogsetting`
+				);
+
+				// Check if the retrieved data is valid and contains at least one item
+				if (orgs && orgs.value && orgs.value[0]) {
+					// Extract the formatted value of 'plugintracelogsetting'
+					const plugintracelogsetting = orgs.value[0]["plugintracelogsetting@OData.Community.Display.V1.FormattedValue"];
+
+					// Check if 'plugintracelogsetting' is defined
+					if (plugintracelogsetting) {
+						// Select the option with the value of 'plugintracelogsetting'
+						selectOption(plugintracelogsetting);
+
+						// Update the content of the element with ID 'pane4_setting' to "Set"
+						document.getElementById("pane4_setting").innerHTML = "Set";
+					}
+				}
+			},
 		}
 	};
 

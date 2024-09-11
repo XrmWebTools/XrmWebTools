@@ -586,98 +586,146 @@
 							</div>
 						</main>
 
-						<main id="id_plugintraces" class="py-6 bg-surface-secondary " style="display:none">
+						<main id="id_plugintraces" class="py-6 bg-surface-secondary" style="display:none">
 							<header class="py-4 border-bottom">
 								<div class="row align-items-center">
 									<div class="col">
 										<div class="d-flex align-items-center gap-4">
-											<div><button id="pane4_plugintraces" type="button" class="btn btn-sm btn-primary rounded-pill" aria-label="Close"><span>Search</span></button></div>
+											<div>
+												<button id="pane4_plugintraces" type="button" class="btn btn-sm btn-primary rounded-pill" aria-label="Search">
+													<span>Search</span>
+												</button>
+											</div>
 											<div class="vr opacity-20 my-1"></div>
-											<h1 class="h4 ls-tight text-muted">Plugin Traces</h1>
+											<h1 class="h4 ls-tight text-muted">Plugin Trace WebViewer</h1>
 										</div>
 									</div>
 									<div class="col-auto d-none d-md-block">
 										<div class="hstack gap-2 justify-content-end">
-											<a href="#!" class="text-sm text-muted text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">This is still a work in progress. More filters are coming soon</span> </a>
-											<!--<button type="button" class="btn btn-sm btn-neutral"><span id="pane4_webapi">Open results in WebApi</span></button>-->
+											<button id="pane4_setting" type="button" class="btn btn-sm btn-neutral">
+												<span>Setting</span>
+											</button>
+											<select class="form-select" id="pane4_settingddl">
+												<option>Not retrieved</option>
+												<option>Off</option>
+												<option>Exception</option>
+												<option>All</option>
+											</select>
 										</div>
 									</div>
 								</div>
 							</header>
+
 							<hr class="my-6 d-lg-none">
 
 							<div class="row g-5">
-
+								<!-- Filter Section -->
 								<div class="col-lg-8 vstack gap-5">
+									<!-- Date From -->
 									<div class="row align-items-center g-3 mt-6">
 										<div class="col-md-2">
 											<label class="form-label mb-0 text-main">Date From</label>
 										</div>
 										<div class="col-md-10">
-											<div class="">
-												<input id="plugintracelog_from" type="date" class="form-control">
-											</div>
+											<input id="plugintracelog_from" type="date" class="form-control">
 										</div>
 									</div>
 
+									<!-- Message Type -->
 									<div class="row align-items-center g-3">
-										<div class="col-md-2"><label class="form-label mb-0 text-main">Message</label></div>
+										<div class="col-md-2">
+											<label class="form-label mb-0 text-main">Message</label>
+										</div>
 										<div class="col-md-10">
 											<div class="d-flex gap-3 scrollable-x">
-												<div class="form-item-checkable"><input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_all" checked="checked"> <label class="form-item cursor-pointer" for="plugintracelog_message_all" ><span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted"><i class="bi text-xl"></i> <span class="fw-semibold text-xs">ALL</span></span></label></div>
-												<div class="form-item-checkable"><input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_create"> <label class="form-item cursor-pointer" for="plugintracelog_message_create"><span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted"><i class="bi text-xl"></i> <span class="fw-semibold text-xs">Create</span></span></label></div>
-												<div class="form-item-checkable"><input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_update"> <label class="form-item cursor-pointer" for="plugintracelog_message_update"><span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted"><i class="bi text-xl"></i> <span class="fw-semibold text-xs">Update</span></span></label></div>
-												<div class="form-item-checkable"><input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_associate"> <label class="form-item cursor-pointer" for="plugintracelog_message_associate"><span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted"><i class="bi text-xl"></i> <span class="fw-semibold text-xs">Associate</span></span></label></div>
+												<div class="form-item-checkable">
+													<input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_all" checked>
+													<label class="form-item cursor-pointer" for="plugintracelog_message_all">
+														<span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted">
+															<i class="bi text-xl"></i>
+															<span class="fw-semibold text-xs">ALL</span>
+														</span>
+													</label>
+												</div>
+												<div class="form-item-checkable">
+													<input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_create">
+													<label class="form-item cursor-pointer" for="plugintracelog_message_create">
+														<span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted">
+															<i class="bi text-xl"></i>
+															<span class="fw-semibold text-xs">Create</span>
+														</span>
+													</label>
+												</div>
+												<div class="form-item-checkable">
+													<input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_update">
+													<label class="form-item cursor-pointer" for="plugintracelog_message_update">
+														<span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted">
+															<i class="bi text-xl"></i>
+															<span class="fw-semibold text-xs">Update</span>
+														</span>
+													</label>
+												</div>
+												<div class="form-item-checkable">
+													<input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_associate">
+													<label class="form-item cursor-pointer" for="plugintracelog_message_associate">
+														<span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted">
+															<i class="bi text-xl"></i>
+															<span class="fw-semibold text-xs">Associate</span>
+														</span>
+													</label>
+												</div>
 											</div>
 										</div>
 									</div>
 
-
-									<div class="row align-items-center g-3 "><div class="col-md-2"><label class="form-label mb-0 text-main">Entity</label></div><div class="col-md-10"><div class=""><input id="plugintracelog_entity" type="text" class="form-control"></div></div></div>
-
+									<!-- Entity -->
+									<div class="row align-items-center g-3">
+										<div class="col-md-2">
+											<label class="form-label mb-0 text-main">Entity</label>
+										</div>
+										<div class="col-md-10">
+											<input id="plugintracelog_entity" type="text" class="form-control">
+										</div>
+									</div>
 								</div>
 
+								<!-- Additional Filters -->
 								<div class="col-lg-4 vstack gap-5">
-
-
+									<!-- Exception Only -->
 									<div class="d-flex g-3 mt-6">
 										<div class="me-3">
-											<input class="form-check-input" type="checkbox" name="check_notification_1" id="plugintracelog_message_exceptiononly">
+											<input class="form-check-input" type="checkbox" id="plugintracelog_message_exceptiononly">
 										</div>
 										<div>
-											<label class="form-label mb-0 text-main" >Exception Only</label>
-										</div>
-
-
-									</div>
-
-
-									<div class="d-flex">
-										<div class="me-3">
-											<input disabled checked class="form-check-input" type="checkbox" name="check_notification_1" id="check_notification_1">
-										</div>
-										<div>
-											<label class="form-label mb-0 text-main" for="check_notification_1">Sync</label>
+											<label class="form-label mb-0 text-main">Exception Only</label>
 										</div>
 									</div>
 
-
+									<!-- Sync -->
 									<div class="d-flex">
 										<div class="me-3">
-											<input disabled checked  class="form-check-input" type="checkbox" name="check_notification_1" id="check_notification_1">
+											<input disabled checked class="form-check-input" type="checkbox" id="check_notification_sync">
 										</div>
 										<div>
-											<label class="form-label mb-0 text-main" for="check_notification_1">Async</label>
+											<label class="form-label mb-0 text-main" for="check_notification_sync">Sync</label>
+										</div>
+									</div>
+
+									<!-- Async -->
+									<div class="d-flex">
+										<div class="me-3">
+											<input disabled checked class="form-check-input" type="checkbox" id="check_notification_async">
+										</div>
+										<div>
+											<label class="form-label mb-0 text-main" for="check_notification_async">Async</label>
 										</div>
 									</div>
 								</div>
-
-
 							</div>
 
-
-
 							<hr class="my-6">
+
+							<!-- Plugin Logs Table -->
 							<div class="card shadow border-0 mb-7">
 								<div class="card-header">
 									<h5 id="ID_PLUGINLOGS" class="mb-0 text-muted">Plugin Trace WebViewer</h5>
@@ -688,7 +736,6 @@
 											<tr>
 												<th scope="col">
 													<div class="d-flex align-items-center gap-2 ps-1">
-
 														<span>Start</span>
 													</div>
 												</th>
@@ -699,9 +746,7 @@
 												<th scope="col">Depth</th>
 												<th scope="col">Mode</th>
 												<th scope="col">Entity</th>
-
 												<th scope="col">Exception</th>
-
 												<th></th>
 											</tr>
 										</thead>
@@ -713,8 +758,10 @@
 									<span id="ID_PLUGINLOGS_COUNT" class="text-muted text-sm">No plugin logs retrieved yet.</span>
 								</div>
 							</div>
+
 							<hr class="my-6">
 						</main>
+
 					</div>
 				</div>
 			</div>
