@@ -1167,22 +1167,51 @@
 		Panel4: {
 			PluginTraces: async () => {
 
-				const top = 5000
+				const top = 5000;
+				let filter = "$filter=";
 
+				let from = document.getElementById("plugintracelog_from").value;
+				const plugintracelog_message_create = document.getElementById("plugintracelog_message_create").checked;
+				const plugintracelog_message_update = document.getElementById("plugintracelog_message_update").checked;
+				const plugintracelog_message_associate = document.getElementById("plugintracelog_message_associate").checked;
+				let plugintracelog_entity = document.getElementById("plugintracelog_entity").value;
+				const plugintracelog_message_exceptiononly = document.getElementById("plugintracelog_message_exceptiononly").checked;
+				if (plugintracelog_message_exceptiononly) {
+					filter += (filter != "$filter=" ? " and " : "") + "exceptiondetails ne null";
+				}
+				if (plugintracelog_entity) {
+					filter += (filter != "$filter=" ? " and " : "") + `primaryentity eq '${plugintracelog_entity}'`;
+				}		
+				if (plugintracelog_message_create) {
+					filter += (filter != "$filter=" ? " and " : "") + "messagename eq 'Create'";
+				}
+				if (plugintracelog_message_update) {
+					filter += (filter != "$filter=" ? " and " : "") + "messagename eq 'Update'";
+				}
+				if (plugintracelog_message_associate) {
+					filter += (filter != "$filter=" ? " and " : "") + "messagename eq 'Associate'";
+				}
+				if (from) {
+					const fromDate = new Date(from);
+					fromDate.setHours(0, 0, 0, 0); // Set time to the start of the day
+					from = `createdon gt ${fromDate.toISOString()}`; // Format as ISO date
+				}
+				if (from) {
+					filter += (filter != "$filter=" ? " and " : "") + from;
+				}
 
-
-
+				if (filter == "$filter=") {
+					filter = ``;
+				} else {
+					filter += `&`;
+				}
 				try {
 
 					const plugintraces = await AuditApp.WebApi.RetrieveWithCustomFilter(
-						"plugintracelogs?$top=5000&$orderby=createdon desc"
+						`plugintracelogs?${filter}$top=5000&$orderby=performanceconstructorstarttime desc`
 					);
 					console.log("plugintraces", plugintraces);
 					AuditApp.Panel4.renderPluginLogs(plugintraces.value)
-
-
-
-
 				} catch (e) {
 
 					alert(e.message);
@@ -1196,6 +1225,22 @@
 					const date = new Date(dateString);
 					return date.toLocaleString();
 				}
+
+				function shortenString(input) {
+					if (input.length > 62) {
+						return input.slice(0, 62) + '...';
+					}
+					return input;
+				}
+
+				function extractUsefulInfo(errorMessage) {
+					// Regular expression to match the message after 'Message:' and capture until the next period or closing parenthesis
+					const regex = /System\.ServiceModel\.FaultException`1\[Microsoft\.Xrm\.Sdk\.OrganizationServiceFault\]:\s*(.*?)\s*\(Fault Detail is equal to Exception details:/s;
+					const match = errorMessage.match(regex);
+					return match ? match[1].trim() : errorMessage;
+				}
+
+
 				// Get references to the necessary DOM elements
 				const mainList = document.getElementById('ID_PLUGINLOGS_MAINLIST');
 				const countElement = document.getElementById('ID_PLUGINLOGS_COUNT');
@@ -1214,20 +1259,28 @@
 				data.forEach(item => {
 					const row = document.createElement('tr');
 
-					// Create and append table cells
+
+					const startdatetime = formatDate(item.performanceconstructorstarttime);
+					const duration = item.performanceexecutionduration || '';
+					const operation = item["operationtype@OData.Community.Display.V1.FormattedValue"] || 'N/A';
+					let typename = item.typename || '';
+					typename = shortenString(typename);
+					const messagename = item.messagename || '';
+					const depth = item.depth || '';
+					const mode = item["mode@OData.Community.Display.V1.FormattedValue"] || 'N/A';
+					let exception = item.exceptiondetails || '';
+					exception = extractUsefulInfo(exception);
+
 					row.innerHTML = `
-            <td>${formatDate(item.performanceconstructorstarttime)}</td>
-            <td>${item.performanceexecutionduration || 'N/A'}</td>
-            <td class="d-none d-xl-table-cell">${item["operationtype@OData.Community.Display.V1.FormattedValue"] || 'N/A'
-						}</td >
-            <td class="d-none d-xl-table-cell">${item.typename || 'N/A'}</td>
-            <td>${item.messagename || 'N/A'}</td>
-            <td>${item.depth || 'N/A'}</td>
-            <td>${item["mode@OData.Community.Display.V1.FormattedValue"] || 'N/A'}</td>
-            <td>'-'</td>
-            <td>'-'</td>
-            <td>${item.messageblock || 'N/A'}</td>
-            <td>${item.exceptiondetails || 'N/A'}</td>
+            <td>${startdatetime}</td>
+            <td>${duration}</td>
+            <td class="d-none d-xl-table-cell">${operation}</td >
+            <td class="d-none d-xl-table-cell">${typename}</td>
+            <td>${messagename}</td>
+            <td>${depth}</td>
+            <td>${mode}</td>
+			<td>${item.primaryentity}</td>
+            <td>${exception}</td>
         `;
 
 					mainList.appendChild(row);
