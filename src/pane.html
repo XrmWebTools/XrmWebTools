@@ -507,7 +507,7 @@
 										<div class="d-flex align-items-center gap-4">
 											<div><button id="pane3_advancedaudit" type="button" class="btn btn-sm btn-primary rounded-pill" aria-label="Close"><span>Search</span></button></div>
 											<div class="vr opacity-20 my-1"></div>
-											<h1 class="h4 ls-tight text-muted">Search audit by table, record id and/or user</h1>
+											<h1 class="h4 ls-tight text-muted">Search audit with advanced filters</h1>
 										</div>
 									</div>
 									<div class="col-auto d-none d-md-block">
@@ -547,6 +547,100 @@
 											<input id="pane3_advancedaudit_until" type="date" class="form-control" value="">
 										</div>
 									</div>
+									<hr class="my-6">
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">Event</label></div>
+										<div class="col-md-8 col-xl-8">
+											<select id="pane3_advancedaudit_event" class="form-select" aria-label="Default select example">
+												<option selected="selected">All</option>
+												<option value="0">Unknown</option>
+												<option value="1">Create</option>
+												<option value="2">Update</option>
+												<option value="3">Delete</option>
+												<option value="4">Activate</option>
+												<option value="5">Deactivate</option>
+												<option value="6">Upsert</option>
+												<option value="11">Cascade</option>
+												<option value="12">Merge</option>
+												<option value="13">Assign</option>
+												<option value="14">Share</option>
+												<option value="15">Retrieve</option>
+												<option value="16">Close</option>
+												<option value="17">Cancel</option>
+												<option value="18">Complete</option>
+												<option value="20">Resolve</option>
+												<option value="21">Reopen</option>
+												<option value="22">Fulfill</option>
+												<option value="23">Paid</option>
+												<option value="24">Qualify</option>
+												<option value="25">Disqualify</option>
+												<option value="26">Submit</option>
+												<option value="27">Reject</option>
+												<option value="28">Approve</option>
+												<option value="29">Invoice</option>
+												<option value="30">Hold</option>
+												<option value="31">Add Member</option>
+												<option value="32">Remove Member</option>
+												<option value="33">Associate Entities</option>
+												<option value="34">Disassociate Entities</option>
+												<option value="35">Add Members</option>
+												<option value="36">Remove Members</option>
+												<option value="37">Add Item</option>
+												<option value="38">Remove Item</option>
+												<option value="39">Add Substitute</option>
+												<option value="40">Remove Substitute</option>
+												<option value="41">Set State</option>
+												<option value="42">Renew</option>
+												<option value="43">Revise</option>
+												<option value="44">Win</option>
+												<option value="45">Lose</option>
+												<option value="46">Internal Processing</option>
+												<option value="47">Reschedule</option>
+												<option value="48">Modify Share</option>
+												<option value="49">Unshare</option>
+												<option value="50">Book</option>
+												<option value="51">Generate Quote From Opportunity</option>
+												<option value="52">Add To Queue</option>
+												<option value="53">Assign Role To Team</option>
+												<option value="54">Remove Role From Team</option>
+												<option value="55">Assign Role To User</option>
+												<option value="56">Remove Role From User</option>
+												<option value="57">Add Privileges to Role</option>
+												<option value="58">Remove Privileges From Role</option>
+												<option value="59">Replace Privileges In Role</option>
+												<option value="60">Import Mappings</option>
+												<option value="61">Clone</option>
+												<option value="62">Send Direct Email</option>
+												<option value="63">Enabled for organization</option>
+												<option value="64">User Access via Web</option>
+												<option value="65">User Access via Web Services</option>
+												<option value="100">Delete Entity</option>
+												<option value="101">Delete Attribute</option>
+												<option value="102">Audit Change at Entity Level</option>
+												<option value="103">Audit Change at Attribute Level</option>
+												<option value="104">Audit Change at Org Level</option>
+												<option value="105">Entity Audit Started</option>
+												<option value="106">Attribute Audit Started</option>
+												<option value="107">Audit Enabled</option>
+												<option value="108">Entity Audit Stopped</option>
+												<option value="109">Attribute Audit Stopped</option>
+												<option value="110">Audit Disabled</option>
+												<option value="111">Audit Log Deletion</option>
+												<option value="112">User Access Audit Started</option>
+												<option value="113">User Access Audit Stopped</option>
+												<option value="115">Archive</option>
+												<option value="116">Retain</option>
+												<option value="117">RollbackRetain</option>
+												<option value="118">IPFirewallAcccesDenied</option>
+												<option value="119">IPFirewallAcccesAllowed</option>
+												<option value="120">Restore</option>
+												<option value="121">ApplicationBasedAccessDenied</option>
+												<option value="122">ApplicationBasedAccessAllowed</option>
+											</select>
+
+										</div>
+									</div>
+
 								</div>
 								<div class="col-lg-4 ">
 									<div class="row align-items-center g-3 mt-6">

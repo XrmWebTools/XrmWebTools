@@ -27,7 +27,7 @@
 			setDateTimes: function () {
 				var today = new Date().toISOString().split('T')[0];
 				document.getElementById('pane3_advancedaudit_until').value = today;
-				document.getElementById('pane3_advancedaudit_from').value = today;
+			//	document.getElementById('pane3_advancedaudit_from').value = today;
 			},
 			clearAdvancedFindParams: function () {
 				document.getElementById('pane3_advancedaudit_table').value = null;
@@ -728,7 +728,7 @@
 			getOnlineUsers: async () => {
 				try {
 					// Fetch audits from today with a specific filter
-					const audits = await AuditApp.WebApi.RetrieveAllAuditsFromTodayWithCustomFilter(0, "action eq 64", "", false);
+					const audits = await AuditApp.WebApi.RetrieveAllAuditsFromTodayWithCustomFilter(0, "action eq 64", "5000", false);
 
 					const noapplicationusers = document.getElementById("sidebar_onlineusers_noapplicationusers").checked;
 					let applicationUsers = [];
@@ -782,22 +782,36 @@
 
 				// Iterate over all user IDs and fetch details
 				for (const ID of allIDs) {
-					const audit = result[ID][0]; // Assuming there is at least one audit per user
-					const timestamp = AuditApp.Sidebar.formatTime(audit.createdon);
+					const auditsForUser = result[ID]; // All audits for this user
+					let firstLogin = null;
+					let lastLogin = null;
+
+					// Find first and last login times by iterating over audits
+					auditsForUser.forEach(audit => {
+						const auditTime = new Date(audit.createdon);
+
+						if (!firstLogin || auditTime < firstLogin) {
+							firstLogin = auditTime;
+						}
+
+						if (!lastLogin || auditTime > lastLogin) {
+							lastLogin = auditTime;
+						}
+					});
 
 					let applicationUser = false;
 					if (users) {
 						// Check if the user is an application user
-						const user = users.find(x => x["systemuserid"] === audit["_objectid_value"]);
+						const user = users.find(x => x["systemuserid"] === auditsForUser[0]["_objectid_value"]);
 						applicationUser = user && user["applicationid"];
 					}
-
 
 					if (!applicationUser) {
 						userDetails.push({
 							ID,
-							timestamp,
-							fullname: audit["_objectid_value@OData.Community.Display.V1.FormattedValue"],
+							firstLogin: AuditApp.Sidebar.formatTime(firstLogin),
+							lastLogin: AuditApp.Sidebar.formatTime(lastLogin),
+							fullname: auditsForUser[0]["_objectid_value@OData.Community.Display.V1.FormattedValue"],
 							firstname: "",
 							lastname: ""
 						});
@@ -810,18 +824,13 @@
 			// Function to format a date string into a time string (HH:MM AM/PM)
 			formatTime: (dateString) => {
 				const date = new Date(dateString);
-				let hours = date.getHours();
+				let hours = date.getHours(); // Get hours in 24-hour format
 				const minutes = date.getMinutes();
-				const period = hours >= 12 ? 'PM' : 'AM';
 
-				// Convert hours to 12-hour format
-				if (hours > 12) hours -= 12;
-				if (hours === 0) hours = 12;
+				const formattedHours = (hours < 10 ? '0' : '') + hours; // Pad single-digit hours with a leading 0
+				const formattedMinutes = (minutes < 10 ? '0' : '') + minutes; // Pad single-digit minutes with a leading 0
 
-				const formattedHours = (hours < 10 ? '0' : '') + hours;
-				const formattedMinutes = (minutes < 10 ? '0' : '') + minutes;
-
-				return `${formattedHours}:${formattedMinutes} ${period}`;
+				return `${formattedHours}:${formattedMinutes}`; // Return time in HH:MM format
 			},
 
 			// Function to display online users in the sidebar
@@ -850,22 +859,27 @@
 			createUserListItem: (user) => {
 				const initials = AuditApp.Sidebar.getInitials(user.fullname);
 
+				// Check if firstLogin and lastLogin are the same
+				const loginTime = user.firstLogin === user.lastLogin
+					? user.firstLogin // If same, show only one time
+					: `${user.firstLogin} - ${user.lastLogin}`; // If different, show the range
+
 				return `
-            <li id="ID_USERLIST_${user.ID}">
-                <a href="#" class="nav-link d-flex align-items-center">
-                    <div class='me-4'>
-                        <div class='position-relative d-inline-block text-white'>
-                            <span class='avatar bg-soft-warning text-warning rounded-circle'>${initials}</span>
-                            <span class='position-absolute bottom-2 end-2 transform translate-x-1/2 translate-y-1/2 border-2 border-solid border-current w-3 h-3 bg-success rounded-circle'></span>
-                        </div>
-                    </div>
-                    <div>
-                        <span class="d-block text-sm font-semibold">${user.fullname}</span>
-                        <span class="d-block text-xs text-muted font-regular">${user.timestamp}</span>
-                    </div>
-                </a>
-            </li>
-        `;
+    <li id="ID_USERLIST_${user.ID}">
+        <a href="#" class="nav-link d-flex align-items-center">
+            <div class='me-4'>
+                <div class='position-relative d-inline-block text-white'>
+                    <span class='avatar bg-soft-warning text-warning rounded-circle'>${initials}</span>
+                    <span class='position-absolute bottom-2 end-2 transform translate-x-1/2 translate-y-1/2 border-2 border-solid border-current w-3 h-3 bg-success rounded-circle'></span>
+                </div>
+            </div>
+            <div>
+                <span class="d-block text-sm font-semibold">${user.fullname}</span>
+                <span class="d-block text-xs text-muted font-regular">${loginTime}</span>
+            </div>
+        </a>
+    </li>
+    `;
 			},
 
 			// Function to get initials from a fullname
@@ -1101,6 +1115,8 @@
 				let from = document.getElementById("pane3_advancedaudit_from").value;
 				let until = document.getElementById("pane3_advancedaudit_until").value;
 				let top = document.getElementById("pane3_advancedaudit_top").value;
+				let event = document.getElementById("pane3_advancedaudit_event").value;
+		
 				if (!top) {
 					top = 5000;
 					document.getElementById("pane3_advancedaudit_top").value = 5000;
@@ -1158,6 +1174,10 @@
 				// Add 'until' date filter if 'until' is provided
 				if (until) {
 					filter += (filter != "$filter=" ? " and " : "") + until;
+				}
+
+				if (event && event != "All") {
+					filter += (filter != "$filter=" ? " and " : "") + `action eq ${event}`;
 				}
 
 				if (filter == "$filter=") {
