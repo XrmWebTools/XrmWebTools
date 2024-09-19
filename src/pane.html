@@ -133,7 +133,6 @@
 							<div class="card  border-0 mt-5 mb-3">
 								<div class="card-body">
 									<div class="vstack gap-4">
-										<i class="bi bi-rocket-takeoff-fill text-main text-2xl"></i>
 										<p id="sidebar_onlineusers_info" class="text-sm text-main text-opacity-70">Clicking the button will load online users from today in the sidebar! Performance Issues ? uncheck the following:</p>
 										<div>
 											<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" checked id="sidebar_onlineusers_noapplicationusers">
@@ -187,7 +186,7 @@
 						<div class="d-xxl-flex align-items-center gap-4 px-4 scrollable-x">
 							<div class="d-flex gap-2 text-xs">
 								<span id="title" class="text-xl fw-bold text-main ">
-									Audit Engine for Microsoft Dynamics 365
+									Audit Engine 365
 								</span>
 							</div>
 						</div>
@@ -225,6 +224,9 @@
 									</li>
 									<li class="nav-item">
 										<a id="id_plugintraces_link" href="#" class="nav-link font-semibold">Plugin Traces</a>
+									</li>
+									<li class="nav-item">
+										<a id="id_auditcenter_link" href="#" class="nav-link font-semibold">Audit Center</a>
 									</li>
 								</ul>
 							</div>
@@ -854,6 +856,83 @@
 							</div>
 
 							<hr class="my-6">
+						</main>
+
+						<main id="id_auditcenter" class="py-6 bg-surface-secondary" style="display:none">
+
+							<div class="card container-fluid ">
+								<header class="py-4 ">
+									<div class="row align-items-center">
+										<div class="col">
+											<div class="d-flex align-items-center gap-4">
+
+												<div>
+
+													<button id="pane5_loadauditcenter" type="button" class="btn btn-sm btn-primary" aria-label="Loading">
+														<i class="bi bi-hourglass-split"></i>
+														<span>Load Audit Center</span>
+													</button>
+
+
+
+
+
+
+
+
+												</div>
+												<div class="vr opacity-20 my-1"></div>
+												<h1 class="h4 ls-tight">Audit Center v1 (work in progress)</h1>
+											</div>
+										</div>
+										<div class="col-auto d-none d-md-block">
+											<div class="hstack gap-2 justify-content-end">
+
+												<button type="button" class="btn btn-sm btn-neutral hidden" aria-label="Open in new window">
+													<i class="bi bi-box-arrow-up-right"></i>
+													<span>Full Window</span>
+
+												</button>
+												<button type="button" class="btn btn-sm btn-neutral hidden">
+													<i class="bi bi-save"> </i>
+													<span>Dev button</span>
+												</button>
+											</div>
+										</div>
+									</div>
+								</header>
+							</div>
+							<div class="row g-5 mt-6">
+								<div class="col-lg-4 vstack gap-5">
+									<div class="vstack gap-6">
+										<div class="card">
+											<div id="pane5_allentities" class="card-body">
+												<h5 class="mb-4">All entities in your CRM</h5>
+												<hr class="my-6">
+												<div class="vstack gap-4" id="entities-container">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-8 vstack gap-5">
+									<div class="vstack gap-6">
+										<div class="card">
+											<div class="card-body">
+												<h5 id="allfieldsfor" class="mb-3">
+													All fields for selected entity in left pane
+												</h5>
+												<hr class="my-6">
+												<div id="container_attr">
+													<!--<div class="row align-items-center"><div class="col-md-2"><label class="form-label">LogicalName</label></div><div class="col-md-10 col-xl-10"><div class=""><input type="text" class="form-control"></div></div></div>
+													<div class="row align-items-center mt-6"><div class="col-md-2"><label class="form-label">  Audit Enabled</label></div><div class="col-md-10 col-xl-10"><div class=""><input disabled="" value="true" type="text" class="form-control"></div></div></div>
+													<hr class="my-6">-->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</main>
 
 					</div>

@@ -27,7 +27,7 @@
 			setDateTimes: function () {
 				var today = new Date().toISOString().split('T')[0];
 				document.getElementById('pane3_advancedaudit_until').value = today;
-			//	document.getElementById('pane3_advancedaudit_from').value = today;
+				//	document.getElementById('pane3_advancedaudit_from').value = today;
 			},
 			clearAdvancedFindParams: function () {
 				document.getElementById('pane3_advancedaudit_table').value = null;
@@ -242,6 +242,35 @@
 
 					req.send(JSON.stringify(entity));
 				});
+			},
+
+			CreateAsync: async function (entityName, entity) {
+				return new Promise((resolve, reject) => {
+					entityName = entityName + "s";
+					const clientURL = Xrm.Page.context.getClientUrl();
+
+					var req = new XMLHttpRequest();
+					req.open("POST", clientURL + "/api/data/v9.2/" + entityName, true);
+					req.setRequestHeader("Accept", "application/json");
+					req.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+					req.setRequestHeader("OData-MaxVersion", "4.0");
+					req.setRequestHeader("OData-Version", "4.0");
+					req.onreadystatechange = function () {
+						if (this.readyState === 4) {
+							req.onreadystatechange = null;
+							if (this.status === 204) {
+								//Success - Return Data - EntityId
+								var result = this.getResponseHeader("OData-EntityId")
+								var entityId = result.split(entityName)[1].replace(/[()]/g, "").toLowerCase();
+								resolve(entityId);
+							}
+							else {
+								reject(JSON.parse(this.response));
+							}
+						}
+					};
+					req.send(JSON.stringify(entity));
+				});
 			}
 		},
 		TargetFrame: {
@@ -341,6 +370,7 @@
 				{ buttonId: "id_users_last_login_link", contentId: "id_users_last_login" },
 				{ buttonId: "id_advanced_audit_find_link", contentId: "id_advanced_audit_find" },
 				{ buttonId: "id_plugintraces_link", contentId: "id_plugintraces" },
+				{ buttonId: "id_auditcenter_link", contentId: "id_auditcenter" },
 
 			];
 
@@ -522,7 +552,12 @@
 				await AuditApp.Panel4.Setting();
 				AuditApp.toggleOverlay(false);
 			});
-			//pane4_settingddl
+
+			document.getElementById("pane5_loadauditcenter").addEventListener("click", async function () {
+				AuditApp.toggleOverlay(true, "Retrieving", "Entity Definitions");
+				await AuditApp.Panel5.loadauditcenter();
+				AuditApp.toggleOverlay(false);
+			});
 		},
 		Panel1: {
 
@@ -1116,7 +1151,7 @@
 				let until = document.getElementById("pane3_advancedaudit_until").value;
 				let top = document.getElementById("pane3_advancedaudit_top").value;
 				let event = document.getElementById("pane3_advancedaudit_event").value;
-		
+
 				if (!top) {
 					top = 5000;
 					document.getElementById("pane3_advancedaudit_top").value = 5000;
@@ -1225,7 +1260,7 @@
 			/**
 			 * Retrieves plugin traces based on user input and applies filters.
 			 */
-			PluginTraces: async () => {			
+			PluginTraces: async () => {
 				const top = 5000; // Maximum number of records to retrieve
 				let filter = "$filter="; // Initialize filter string
 
@@ -1393,7 +1428,7 @@
 					let setting = -1;
 					switch (settingddl_value) {
 						case "Off":
-							 setting = 0;
+							setting = 0;
 							break;
 						case "Exception":
 							setting = 1;
@@ -1441,7 +1476,109 @@
 					}
 				}
 			},
-		}
+
+		},
+		Panel5: {
+
+			loadauditcenter: async () => {
+				try {
+					const entityDef = await AuditApp.WebApi.RetrieveWithCustomFilter(`EntityDefinitions?$select=LogicalName,IsAuditEnabled`);
+					const allEntities = entityDef.value;
+					const auditedEntities = allEntities.filter(item => item.IsAuditEnabled.Value === true);
+					AuditApp.Panel5.displayEntities(auditedEntities);
+				} catch (e) {
+					alert("Error: " + e.message);
+				}
+			},
+
+			displayEntities: (entities) => {
+
+				const container = document.getElementById('entities-container');
+				container.innerHTML = ''; // Clear any existing content
+
+				entities.forEach(entity => {
+
+					const tempDiv = document.createElement('div');
+					tempDiv.className = "d-flex align-items-center"
+					tempDiv.innerHTML = `
+                        <i class="bi bi-database me-2 text-muted"></i>
+                        <a href="#" class="text-sm text-heading text-primary-hover">${entity.LogicalName}</a>
+                        <div class="ms-auto text-end">
+                            <a href="#" class="btn btn-sm px-3 py-1 btn-neutral">Load Attributes</a>
+                        </div>
+                `;
+
+					// Get the "Load Attributes" button
+					const loadAttributesButton = tempDiv.querySelector('a.btn-neutral');
+
+					// Attach a click event listener
+					loadAttributesButton.addEventListener('click', async(event) => {
+						event.preventDefault(); // Prevent the default link behavior
+
+						AuditApp.Panel5.displayEntityAttributes(entity.LogicalName)
+						//alert(); // Show an alert with the entity name
+					});
+
+					container.appendChild(tempDiv);
+				});
+			},
+
+
+			displayEntityAttributes: async (entityname) => {
+
+				AuditApp.toggleOverlay(true, "Retrieving", "Attributes for " + entityname);
+				const entityDefentityname = await AuditApp.WebApi.RetrieveWithCustomFilter(`EntityDefinitions(LogicalName='${entityname}')/Attributes`);
+				AuditApp.Panel5.displayAttributes(entityDefentityname.value);
+
+				document.getElementById("allfieldsfor").innerHTML = `All fields and audit status for ${entityname}`;
+				AuditApp.toggleOverlay(false);
+
+			},
+
+			displayAttributes: (attributes) => {
+				const container = document.getElementById('container_attr');
+				let htmlContent = '';
+
+				// Sort attributes so that those with IsAuditEnabled.Value === true come first
+				attributes.sort((a, b) => {
+					const auditA = a.IsAuditEnabled?.Value ? 1 : 0;
+					const auditB = b.IsAuditEnabled?.Value ? 1 : 0;
+					return auditB - auditA; // Sort in descending order
+				});
+
+				attributes.forEach(attr => {
+					const logicalName = attr.LogicalName || '';
+					const auditEnabled = attr.IsAuditEnabled?.Value ? 'true' : 'false';
+
+					htmlContent += `
+                    <div class="row align-items-center">
+                        <div class="col-md-2">
+                            <label class="form-label">LogicalName</label>
+                        </div>
+                        <div class="col-md-10 col-xl-10">
+                            <div class="">
+                                <input type="text" class="form-control" value="${logicalName}" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row align-items-center mt-6">
+                        <div class="col-md-2">
+                            <label class="form-label">Audit Enabled</label>
+                        </div>
+                        <div class="col-md-10 col-xl-10">
+                            <div class="">
+                                <input type="text" class="form-control" value="${auditEnabled}" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="my-6">
+                `;
+				});
+
+				container.innerHTML = htmlContent;
+			}
+
+		},
 	};
 
 	AuditApp.RegisterEvents();

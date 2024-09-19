@@ -1,5 +1,5 @@
 app-extension {
-	font-family: Arial, sans-serif;
+	font-family: "Segoe UI Regular", SegoeUI, "Segoe UI";
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
@@ -92,7 +92,7 @@ app-extension {
 	--x-dark-border-subtle: #64748b;
 	--x-white-rgb: 255,255,255;
 	--x-black-rgb: 0,0,0;
-	--x-font-sans-serif: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans","Liberation Sans",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+	--x-font-sans-serif: "Segoe UI Regular", "Segoe UI", SegoeUI, "Segoe UI";
 	--x-font-monospace: var(--x-font-monospace);
 	--x-gradient: linear-gradient(180deg,rgba(255,255,255,.15),rgba(255,255,255,0));
 	--x-body-font-family: var(--x-font-sans-serif);
@@ -102,7 +102,7 @@ app-extension {
 	--x-body-color: #1e293b;
 	--x-body-color-rgb: 30,41,59;
 	--x-body-bg: #fff;
-	--x-body-bg-rgb: 255,255,255;
+	--x-body-bg-rgb: 250,250,250;
 	--x-emphasis-color: #0f172a;
 	--x-emphasis-color-rgb: 15,23,42;
 	--x-secondary-color: rgba(30,41,59,.75);
@@ -112,7 +112,7 @@ app-extension {
 	--x-tertiary-color: rgba(30,41,59,.5);
 	--x-tertiary-color-rgb: 30,41,59;
 	--x-tertiary-bg: #f8fafc;
-	--x-tertiary-bg-rgb: 248,250,252;
+	--x-tertiary-bg-rgb: 255,255,255;
 	--x-heading-color: #0f172a;
 	--x-link-color: #8957ff;
 	--x-link-color-rgb: 137,87,255;
@@ -1819,7 +1819,7 @@ app-extension {
 	--x-nav-tabs-border-radius: var(--x-border-radius);
 	--x-nav-tabs-link-hover-border-color: var(--x-secondary-bg)var(--x-secondary-bg)var(--x-border-color);
 	--x-nav-tabs-link-active-color: var(--x-emphasis-color);
-	--x-nav-tabs-link-active-bg: var(--x-body-bg);
+	--x-nav-tabs-link-active-bg: rgba(var(--x-body-bg-rgb));
 	--x-nav-tabs-link-active-border-color: var(--x-border-color)var(--x-border-color)var(--x-body-bg);
 	border-bottom: var(--x-nav-tabs-border-width)solid var(--x-nav-tabs-border-color)
 }
