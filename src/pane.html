@@ -1,4 +1,6 @@
 ﻿<div id="app-extension" data-bs-theme="light">
+	<div class="rightBodyLinks" style="display:none">
+	</div>
 	<div class="app-extension-sections" tabindex="9999">
 		<!--#region Overlay  -->
 		<a id="app_info_message" class="btn w-full btn-primary text-truncate rounded-0 py-2 border-0 position-relative text-muted" style="z-index: 1000; width: 100%; display: none">
@@ -865,24 +867,13 @@
 									<div class="row align-items-center">
 										<div class="col">
 											<div class="d-flex align-items-center gap-4">
-
 												<div>
-
 													<button id="pane5_loadauditcenter" type="button" class="btn btn-sm btn-primary" aria-label="Loading">
-														<i class="bi bi-hourglass-split"></i>
 														<span>Load Audit Center</span>
 													</button>
-
-
-
-
-
-
-
-
 												</div>
 												<div class="vr opacity-20 my-1"></div>
-												<h1 class="h4 ls-tight">Audit Center v1 (work in progress)</h1>
+												<h1 class="h4 ls-tight">Audit Center v2</h1>
 											</div>
 										</div>
 										<div class="col-auto d-none d-md-block">
@@ -903,19 +894,22 @@
 								</header>
 							</div>
 							<div class="row g-5 mt-6">
-								<div class="col-lg-4 vstack gap-5">
+								<div class="col-lg-6 vstack gap-5">
 									<div class="vstack gap-6">
 										<div class="card">
 											<div id="pane5_allentities" class="card-body">
-												<h5 class="mb-4">All entities in your CRM</h5>
+												<h5 class="mb-6">All entities in your CRM</h5>
 												<hr class="my-6">
+
+
+
 												<div class="vstack gap-4" id="entities-container">
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<div class="col-lg-8 vstack gap-5">
+								<div class="col-lg-6 vstack gap-5">
 									<div class="vstack gap-6">
 										<div class="card">
 											<div class="card-body">
@@ -924,9 +918,7 @@
 												</h5>
 												<hr class="my-6">
 												<div id="container_attr">
-													<!--<div class="row align-items-center"><div class="col-md-2"><label class="form-label">LogicalName</label></div><div class="col-md-10 col-xl-10"><div class=""><input type="text" class="form-control"></div></div></div>
-													<div class="row align-items-center mt-6"><div class="col-md-2"><label class="form-label">  Audit Enabled</label></div><div class="col-md-10 col-xl-10"><div class=""><input disabled="" value="true" type="text" class="form-control"></div></div></div>
-													<hr class="my-6">-->
+
 												</div>
 											</div>
 										</div>

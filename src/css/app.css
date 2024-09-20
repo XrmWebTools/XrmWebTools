@@ -69,3 +69,20 @@ circle.outerCircle {
 .testing {
 	background: url("chrome-extension://__MSG_@@extension_id__/src/img/audit48.png");
 }
+
+.rightBodyLinks {
+	position: fixed;
+	right: 0px;
+	top: 30%;
+/*	background: rgba(0, 0, 0, 0.95);
+*/	padding: 3px 5px 7px 5px;
+	z-index: 8;
+}
+	.rightBodyLinks a {
+		display: block;
+		text-align: center;
+		color: #fcedc0;
+		font-family: "Philosopher", sans-serif;
+		font-size: 14px;
+		margin: 8px 0px;
+	}

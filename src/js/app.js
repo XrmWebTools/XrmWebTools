@@ -43,6 +43,63 @@
 				document.getElementById("pane3_advancedaudit_recordid").value = entityId;
 				document.getElementById("id_advanced_audit_find_link").click();
 				document.getElementById("pane3_advancedaudit").click();
+			},
+			OpenInDefaultSolution: function (entityName) {
+
+
+				var entityDetail = "";
+				if (entityName && entityName.trim() != "") {
+					var entityTypeCode = Xrm.Internal.getEntityCode(entityName);
+					if (!entityTypeCode) {
+						return;
+					}
+					var entitiesCategoryCode = 9801; // undocumented
+					entityDetail = "&def_category=" + entitiesCategoryCode + "&def_type=" + entityTypeCode
+				}
+				// ref https://docs.microsoft.com/en-us/previous-versions/dynamicscrm-2016/developers-guide/gg328257(v=crm.8)?redirectedfrom=MSDN#constant-solutionid-values
+				var defaultSolutionId = "{FD140AAF-4DF4-11DD-BD17-0019B9312238}";
+
+				var popupWidth = 800;
+				var popupHeight = 600;
+
+				// Calculate the center position
+				var screenLeft = window.screenLeft || window.screenX;
+				var screenTop = window.screenTop || window.screenY;
+				var screenWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
+				var screenHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
+				var left = (screenWidth / 2) - (popupWidth / 2) + screenLeft;
+				var top = (screenHeight / 2) - (popupHeight / 2) + screenTop;
+
+				var popupFeatures = `width=${popupWidth},height=${popupHeight},left=${left},top=${top},scrollbars=yes,resizable=yes`;
+
+				window.open(
+					Xrm.Page.context.getClientUrl() + "/tools/solution/edit.aspx?id=" + defaultSolutionId + entityDetail,
+					'_blank',
+					popupFeatures
+				);
+
+				window.open();
+			},
+			OpenAttribute: function (attributeId = "7F8D833D-66EC-43B4-B7C2-8DD98C25596A", entityId = "95ae88b3-cc0c-45ac-a2db-655dceec238b") {
+
+				var popupWidth = 800;
+				var popupHeight = 600;
+
+				// Calculate the center position
+				var screenLeft = window.screenLeft || window.screenX;
+				var screenTop = window.screenTop || window.screenY;
+				var screenWidth = window.innerWidth || document.documentElement.clientWidth || screen.width;
+				var screenHeight = window.innerHeight || document.documentElement.clientHeight || screen.height;
+				var left = (screenWidth / 2) - (popupWidth / 2) + screenLeft;
+				var top = (screenHeight / 2) - (popupHeight / 2) + screenTop;
+
+				var popupFeatures = `width=${popupWidth},height=${popupHeight},left=${left},top=${top},scrollbars=yes,resizable=yes`;
+
+				window.open(
+					Xrm.Page.context.getClientUrl() + `/tools/systemcustomization/attributes/manageAttribute.aspx?attributeId=%7b${attributeId}%7d&entityId=%7b${entityId}%7d&appSolutionId=%7bFD140AAF-4DF4-11DD-BD17-0019B9312238%7d`,
+					'_blank',
+					popupFeatures
+				);
 			}
 		},
 		CONFIG: {
@@ -1482,11 +1539,26 @@
 
 			loadauditcenter: async () => {
 				try {
-					const entityDef = await AuditApp.WebApi.RetrieveWithCustomFilter(`EntityDefinitions?$select=LogicalName,IsAuditEnabled`);
+					// Retrieve entity definitions with specific fields: LogicalName and IsAuditEnabled
+					const entityDef = await AuditApp.WebApi.RetrieveWithCustomFilter(
+						`EntityDefinitions?$select=LogicalName,IsAuditEnabled`
+					);
 					const allEntities = entityDef.value;
-					const auditedEntities = allEntities.filter(item => item.IsAuditEnabled.Value === true);
-					AuditApp.Panel5.displayEntities(auditedEntities);
+					console.log("panel 5 allEntities", allEntities);
+
+					// Sort entities: first by audited entities (IsAuditEnabled = true), then the rest
+					allEntities.sort((a, b) => (b.IsAuditEnabled.Value === true) - (a.IsAuditEnabled.Value === true));
+
+					// Filter entities by ensuring they have a valid entityTypeCode
+					const filteredEntities = allEntities.filter(entity => {
+						const entityTypeCode = Xrm.Internal.getEntityCode(entity.LogicalName);
+						return entityTypeCode !== null && entityTypeCode !== undefined;
+					});
+
+					// Display the filtered and sorted entities in the panel
+					AuditApp.Panel5.displayEntities(filteredEntities);
 				} catch (e) {
+					// Handle any errors that occur during the process
 					alert("Error: " + e.message);
 				}
 			},
@@ -1495,16 +1567,24 @@
 
 				const container = document.getElementById('entities-container');
 				container.innerHTML = ''; // Clear any existing content
-
 				entities.forEach(entity => {
+					const entity_MetadataId = entity.MetadataId;
+					const auditEnabled = entity.IsAuditEnabled.Value === true;
+					const successORdANGER = auditEnabled ? "success" : "danger";
+					const text = auditEnabled ? "Audit ON" : "Audit OFF";
 
 					const tempDiv = document.createElement('div');
 					tempDiv.className = "d-flex align-items-center"
 					tempDiv.innerHTML = `
                         <i class="bi bi-database me-2 text-muted"></i>
-                        <a href="#" class="text-sm text-heading text-primary-hover">${entity.LogicalName}</a>
+                        <a href="#" class="text-sm text-heading text-primary-hover">${entity.LogicalName} </a>
+						<a class="text-sm text-heading text-primary-hover"></a>
+						<span class="badge bg-${successORdANGER}-subtle text-${successORdANGER}" style="margin-left:5px">${text}</span>
                         <div class="ms-auto text-end">
-                            <a href="#" class="btn btn-sm px-3 py-1 btn-neutral">Load Attributes</a>
+						     <a href="#" class="btn btn-sm px-3 py-1 btn-primary text-white">Edit Entity</a>
+
+                            <a href="#" class="btn btn-sm px-3 py-1 btn-neutral text-muted">Load Fields</a>
+
                         </div>
                 `;
 
@@ -1515,7 +1595,17 @@
 					loadAttributesButton.addEventListener('click', async(event) => {
 						event.preventDefault(); // Prevent the default link behavior
 
-						AuditApp.Panel5.displayEntityAttributes(entity.LogicalName)
+						AuditApp.Panel5.displayEntityAttributes(entity.LogicalName, entity_MetadataId)
+						//alert(); // Show an alert with the entity name
+					});
+
+					// Get the "Load Attributes" button
+					const EDIT = tempDiv.querySelector('a.btn-primary');
+
+					// Attach a click event listener
+					EDIT.addEventListener('click', async (event) => {
+						event.preventDefault(); // Prevent the default link behavior
+						AuditApp.UI.OpenInDefaultSolution(entity.LogicalName)
 						//alert(); // Show an alert with the entity name
 					});
 
@@ -1524,20 +1614,25 @@
 			},
 
 
-			displayEntityAttributes: async (entityname) => {
+			displayEntityAttributes: async (entityname, entity_MetadataId) => {
 
 				AuditApp.toggleOverlay(true, "Retrieving", "Attributes for " + entityname);
 				const entityDefentityname = await AuditApp.WebApi.RetrieveWithCustomFilter(`EntityDefinitions(LogicalName='${entityname}')/Attributes`);
-				AuditApp.Panel5.displayAttributes(entityDefentityname.value);
+				console.log("panel 5 attr", entityDefentityname.value)
+				AuditApp.Panel5.displayAttributes(entityDefentityname.value, entity_MetadataId);
 
-				document.getElementById("allfieldsfor").innerHTML = `All fields and audit status for ${entityname}`;
+				document.getElementById("allfieldsfor").innerHTML = `All fields for ${entityname}`;
 				AuditApp.toggleOverlay(false);
 
 			},
 
-			displayAttributes: (attributes) => {
+			displayAttributes: (attributes, entity_MetadataId) => {
 				const container = document.getElementById('container_attr');
-				let htmlContent = '';
+
+				// Clear the container's current content
+				while (container.firstChild) {
+					container.removeChild(container.firstChild);
+				}
 
 				// Sort attributes so that those with IsAuditEnabled.Value === true come first
 				attributes.sort((a, b) => {
@@ -1547,35 +1642,52 @@
 				});
 
 				attributes.forEach(attr => {
+					const attr_MetadataId = attr.MetadataId;
 					const logicalName = attr.LogicalName || '';
-					const auditEnabled = attr.IsAuditEnabled?.Value ? 'true' : 'false';
+					const auditEnabled = attr.IsAuditEnabled?.Value === true;
+					const text = auditEnabled ? "Audit ON" : "Audit OFF";
+					const successORdANGER = auditEnabled ? "success" : "danger";
 
-					htmlContent += `
-                    <div class="row align-items-center">
-                        <div class="col-md-2">
-                            <label class="form-label">LogicalName</label>
-                        </div>
-                        <div class="col-md-10 col-xl-10">
-                            <div class="">
-                                <input type="text" class="form-control" value="${logicalName}" disabled>
-                            </div>
-                        </div>
+					// Create the outer div for each attribute
+					const attributeDiv = document.createElement('div');
+
+					// Create the inner HTML structure as a string
+					const htmlContent = `
+            <div class="row align-items-center">
+                <div class="col-md-2">
+                    <label class="form-label">LogicalName</label>
+                </div>
+                <div class="col-md-10 col-xl-10">
+                    <div>
+                        <input type="text" class="form-control" value="${logicalName}" disabled>
                     </div>
-                    <div class="row align-items-center mt-6">
-                        <div class="col-md-2">
-                            <label class="form-label">Audit Enabled</label>
-                        </div>
-                        <div class="col-md-10 col-xl-10">
-                            <div class="">
-                                <input type="text" class="form-control" value="${auditEnabled}" disabled>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="my-6">
-                `;
+                </div>
+            </div>
+            <div class="row align-items-center mt-2">
+                <div class="col-md-2">
+                    <label class="form-label"></label>
+                </div>
+                <div class="col-md-10 col-xl-10">
+                    <span class="badge text-bg-primary edit-attribute">Edit attribute</span>
+                    <span class="badge bg-${successORdANGER}-subtle text-${successORdANGER}">${text}</span>
+                </div>
+            </div>
+            <hr class="my-3">
+        `;
+
+					// Set the innerHTML of the div
+					attributeDiv.innerHTML = htmlContent;
+
+					// Append the div to the container
+					container.appendChild(attributeDiv);
+
+					// Add event listener to "Edit attribute" badge
+					const editBadge = attributeDiv.querySelector('.edit-attribute');
+					editBadge.addEventListener('click', () => {
+						AuditApp.UI.OpenAttribute(attr_MetadataId, entity_MetadataId )
+
+					});
 				});
-
-				container.innerHTML = htmlContent;
 			}
 
 		},
