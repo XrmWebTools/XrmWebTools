@@ -15,6 +15,7 @@
 				if (topBar) {
 					const topBar_color = window.getComputedStyle(topBar).backgroundColor;
 					document.getElementById("app_time").style.color = topBar_color;
+					document.getElementById("title").style.color = topBar_color;
 					//document.getElementById("id_audit_today_link").style.color = topBar_color;
 					//document.getElementById("id_users_last_login_link").style.color = topBar_color;
 					//document.getElementById("id_advanced_audit_find_link").style.color = topBar_color;
@@ -78,7 +79,6 @@
 					popupFeatures
 				);
 
-				window.open();
 			},
 			OpenAttribute: function (attributeId = "7F8D833D-66EC-43B4-B7C2-8DD98C25596A", entityId = "95ae88b3-cc0c-45ac-a2db-655dceec238b") {
 
@@ -1364,6 +1364,7 @@
 					);
 					console.log("plugintraces", plugintraces);
 					AuditApp.Panel4.renderPluginLogs(plugintraces.value);
+					document.getElementById("pane4_plugintraces").innerHTML = "Refresh Plugin Traces";
 				} catch (e) {
 					// Handle and display errors
 					alert(e.message);
@@ -1557,6 +1558,8 @@
 
 					// Display the filtered and sorted entities in the panel
 					AuditApp.Panel5.displayEntities(filteredEntities);
+
+					document.getElementById("pane5_loadauditcenter").innerHTML = "Refresh Audit Center";
 				} catch (e) {
 					// Handle any errors that occur during the process
 					alert("Error: " + e.message);

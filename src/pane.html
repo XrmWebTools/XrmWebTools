@@ -195,7 +195,7 @@
 						<div class="d-lg-none d-xxl-flex align-items-center gap-4 px-4 scrollable-x">
 							<div class="d-flex gap-2 text-xs">
 								<!--<span class="text-heading fw-semibold">Time:</span>-->
-								<span id="app_time" class="text-muted">00:00:00</span>
+								<span id="app_time" class="text-main">00:00:00</span>
 							</div>
 						</div>
 						<div class="hstack flex-fill justify-content-end flex-nowrap gap-6 ms-auto px-6 px-xxl-8">
@@ -239,26 +239,36 @@
 					<div class="flex-fill overflow-y-lg-auto scrollbar bg-body  border-top border-lg shadow-2">
 
 						<main id="id_audit_today" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8">
-							<header class="py-4 border-bottom">
-								<div class="row align-items-center">
-									<div class="col">
-										<div class="d-flex align-items-center gap-4">
-											<div><button id="id_pane1_searchauditsfromtoday" type="button" class="btn btn-sm btn-primary rounded-pill" aria-label="Close"><span>Load audits</span></button></div>
-											<div class="vr opacity-20 my-1"></div>
-											<h1 class="h4 ls-tight">Today</h1>
+
+							<div class="card container-fluid ">
+
+								<header class="py-4 ">
+									<div class="row align-items-center">
+										<div class="col">
+											<div class="d-flex align-items-center gap-4">
+												<div>
+
+
+													<a id="id_pane1_searchauditsfromtoday" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
+												</div>
+												<div class="vr opacity-20 my-1"></div>
+												<h1 class="h4 ls-tight">Today</h1>
+											</div>
+										</div>
+										<div class="col-auto d-none d-md-block">
+											<div class="hstack gap-2 justify-content-end">
+
+												<a target="_blank" href="https://github.com/auditengine/auditengine/issues" class="text-sm text-main text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Report an issue?</span> </a>
+												<button type="button" class="btn btn-sm btn-neutral" onclick="document.getElementById('panel1_card_extrafilters').classList.toggle('hidden');">
+													<span>Add Extra Filters</span>
+												</button>
+											</div>
 										</div>
 									</div>
-									<div class="col-auto d-none d-md-block">
-										<div class="hstack gap-2 justify-content-end">
-											<a target="_blank" href="https://github.com/auditengine/auditengine/issues" class="text-sm text-main text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Report an issue?</span> </a>
-											<button type="button" class="btn btn-sm btn-neutral" onclick="document.getElementById('panel1_card_extrafilters').classList.toggle('hidden');">
-												<span>Add Extra Filters</span>
-											</button>
-										</div>
-									</div>
-								</div>
-							</header>
-							<div class="card border-0 py-5">
+								</header>
+							</div>
+					
+							<div class=" border-0 mt-6">
 								<div class="row row-cols-xl-4 row-cols-md-2 g-6">
 									<div class="col">
 										<div id="card_creates_today" class="card bg-success bg-opacity-10 border-success border-opacity-40">
@@ -338,7 +348,7 @@
 									</div>
 								</div>
 							</div>
-							<div id="panel1_card_extrafilters" class="card hidden">
+							<div id="panel1_card_extrafilters" class="card hidden mt-6">
 								<div class="card-header py-3">
 									<div class="d-flex align-items-center">
 										<h5 class="text-main">Extra filters?</h5>
@@ -388,8 +398,7 @@
 									</div>
 								</div>
 							</div>
-							<hr class="my-6">
-							<div class="card shadow border-0 mb-7">
+							<div class="card shadow border-0 mb-7 mt-6">
 								<div class="card-header">
 									<h5 class="mb-0 text-muted">Audit logs from today</h5>
 								</div>
@@ -419,6 +428,9 @@
 									<span id="ID_logs" class="text-muted text-sm"></span>
 								</div>
 							</div>
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
 						</main>
 
 						<main id="id_users_last_login" style="display:none">
@@ -501,27 +513,36 @@
 									<span id="ID_Getting_Things_Ready" class="text-muted text-sm">No users retrieved yet.</span>
 								</div>
 							</div>
-							<hr class="my-6">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
 						</main>
 
 						<main id="id_advanced_audit_find" class="py-6 bg-surface-secondary " style="display:none">
-							<header class="py-4 border-bottom">
-								<div class="row align-items-center">
-									<div class="col">
-										<div class="d-flex align-items-center gap-4">
-											<div><button id="pane3_advancedaudit" type="button" class="btn btn-sm btn-primary rounded-pill" aria-label="Close"><span>Search</span></button></div>
-											<div class="vr opacity-20 my-1"></div>
-											<h1 class="h4 ls-tight text-muted">Search audit with advanced filters</h1>
+
+							<div class="card container-fluid ">
+
+								<header class="py-4 ">
+									<div class="row align-items-center">
+										<div class="col">
+											<div class="d-flex align-items-center gap-4">
+												<div>
+													<a id="pane3_advancedaudit" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
+												</div>
+												<div class="vr opacity-20 my-1"></div>
+												<h1 class="h4 ls-tight">Advanced Audit Find</h1>
+											</div>
+										</div>
+										<div class="col-auto d-none d-md-block">
+											<div class="hstack gap-2 justify-content-end">
+												<!--<a href="#" class="text-sm text-muted text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Need help?</span> </a>
+												<button type="button" class="btn btn-sm btn-neutral"><span id="pane3_webapi">Open results in WebApi</span></button>-->
+											</div>
 										</div>
 									</div>
-									<div class="col-auto d-none d-md-block">
-										<div class="hstack gap-2 justify-content-end">
-											<a href="#!" class="text-sm text-muted text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Need help?</span> </a>
-											<button type="button" class="btn btn-sm btn-neutral"><span id="pane3_webapi">Open results in WebApi</span></button>
-										</div>
-									</div>
-								</div>
-							</header>
+								</header>
+							</div>
+
 							<div class="row g-5">
 								<div class="col-lg-4 ">
 									<div class="row align-items-center g-3 mt-6">
@@ -682,38 +703,45 @@
 									<span id="id_audits_advanced_find_logs" class="text-muted text-sm"></span>
 								</div>
 							</div>
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
 						</main>
 
 						<main id="id_plugintraces" class="py-6 bg-surface-secondary" style="display:none">
-							<header class="py-4 border-bottom">
-								<div class="row align-items-center">
-									<div class="col">
-										<div class="d-flex align-items-center gap-4">
-											<div>
-												<button id="pane4_plugintraces" type="button" class="btn btn-sm btn-primary rounded-pill" aria-label="Search">
-													<span>Search</span>
-												</button>
-											</div>
-											<div class="vr opacity-20 my-1"></div>
-											<h1 class="h4 ls-tight text-muted">Plugin Trace WebViewer</h1>
-										</div>
-									</div>
-									<div class="col-auto d-none d-md-block">
-										<div class="hstack gap-2 justify-content-end">
-											<button id="pane4_setting" type="button" class="btn btn-sm btn-neutral">
-												<span>Setting</span>
-											</button>
-											<select class="form-select" id="pane4_settingddl">
-												<option>Not retrieved</option>
-												<option>Off</option>
-												<option>Exception</option>
-												<option>All</option>
-											</select>
-										</div>
-									</div>
-								</div>
-							</header>
+						
+							<div class="card container-fluid ">
 
+								<header class="py-4 ">
+									<div class="row align-items-center">
+										<div class="col">
+											<div class="d-flex align-items-center gap-4">
+												<div>
+
+
+													<a id="pane4_plugintraces" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
+												</div>
+												<div class="vr opacity-20 my-1"></div>
+												<h1 class="h4 ls-tight">Plugin Trace WebViewer</h1>
+											</div>
+										</div>
+										<div class="col-auto d-none d-md-block">
+											<div class="hstack gap-2 justify-content-end">
+
+												<button id="pane4_setting" type="button" class="btn btn-neutral">
+													<span>Setting</span>
+												</button>
+												<select class="form-select" id="pane4_settingddl">
+													<option>Not retrieved</option>
+													<option>Off</option>
+													<option>Exception</option>
+													<option>All</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</header>
+							</div>
 							<hr class="my-6 d-lg-none">
 
 							<div class="row g-5">
@@ -857,23 +885,26 @@
 								</div>
 							</div>
 
-							<hr class="my-6">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
 						</main>
 
 						<main id="id_auditcenter" class="py-6 bg-surface-secondary" style="display:none">
 
 							<div class="card container-fluid ">
+
 								<header class="py-4 ">
 									<div class="row align-items-center">
 										<div class="col">
 											<div class="d-flex align-items-center gap-4">
 												<div>
-													<button id="pane5_loadauditcenter" type="button" class="btn btn-sm btn-primary" aria-label="Loading">
-														<span>Load Audit Center</span>
-													</button>
+													
+
+													<a id="pane5_loadauditcenter" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
 												</div>
 												<div class="vr opacity-20 my-1"></div>
-												<h1 class="h4 ls-tight">Audit Center v2</h1>
+												<h1 class="h4 ls-tight">Audit Center</h1>
 											</div>
 										</div>
 										<div class="col-auto d-none d-md-block">
@@ -893,6 +924,8 @@
 									</div>
 								</header>
 							</div>
+
+
 							<div class="row g-5 mt-6">
 								<div class="col-lg-6 vstack gap-5">
 									<div class="vstack gap-6">
@@ -925,6 +958,9 @@
 									</div>
 								</div>
 							</div>
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
 						</main>
 
 					</div>
@@ -932,8 +968,5 @@
 			</div>
 		</div>
 
-		<!--<hr class="my-6">
-		<hr class="my-6">
-		<hr class="my-6">-->
 	</div>
 </div>
