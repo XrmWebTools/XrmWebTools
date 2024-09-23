@@ -111,16 +111,52 @@
 						</a>
 						<div class="navbar-user d-lg-none"></div>
 						<div id="sidebarCollapse" class="collapse navbar-collapse overflow-x">
-							<ul class="navbar-nav" style="display:none">
+
+							<ul class="navbar-nav" style="padding-left:0px">
+								<!-- Audit Section -->
 								<li class="nav-item my-1">
-									<a class="nav-link d-flex align-items-center rounded-pill" href="#">
-										<i class="bi bi-arrow-repeat"></i>
-										<span id="refreshdashboard">Refresh Dashboard</span>
+									<a id="sidebar-audit" class="nav-link d-flex align-items-center rounded-pill active" href="#" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-audit-items">
+										<i class="bi bi-house-fill"></i> <span>Audit</span>
 										<span class="badge badge-sm rounded-pill me-n2 bg-success-subtle text-success ms-auto"></span>
 									</a>
+									<div class="collapse show" id="sidebar-audit-items" style="">
+										<ul class="nav nav-sm flex-column mt-1">
+											<li id="sidebar-audit-items-today" class="nav-item"><a href="#" class="nav-link">Today</a></li>
+											<li id="sidebar-audit-items-users" class="nav-item"><a href="#" class="nav-link">Users Last Login</a></li>
+											<li id="sidebar-audit-items-advfind" class="nav-item"><a href="#" class="nav-link">Adv Audit Find</a></li>
+										</ul>
+									</div>
+								</li>
+
+								<!-- System Health Section -->
+								<li class="nav-item my-1">
+									<a id="sidebar-systemhealth" class="nav-link d-flex align-items-center rounded-pill collapsed" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebar-pages">
+										<i class="bi bi-bar-chart-fill"></i> <span>System Health</span>
+										<span class="badge badge-sm rounded-pill me-n2 bg-success-subtle text-success ms-auto"></span>
+									</a>
+									<div class="collapse" id="sidebar-systemhealth-items" style="">
+										<ul class="nav nav-sm flex-column mt-1">
+											<li id="sidebar-systemhealth-items-plugintraces" class="nav-item"><a href="#" class="nav-link">Plugin Traces</a></li>
+											<li id="sidebar-systemhealth-items-solutionhistory" class="nav-item"><a href="#" class="nav-link">Solution History</a></li>
+										</ul>
+									</div>
+								</li>
+
+								<!-- Settings Section -->
+								<li class="nav-item my-1">
+									<a id="sidebar-settings" class="nav-link d-flex align-items-center rounded-pill collapsed" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebar-account">
+										<i class="bi bi-gear-fill"></i> <span>Settings</span>
+										<span class="badge badge-sm rounded-pill me-n2 bg-success-subtle text-success ms-auto"></span>
+									</a>
+									<div class="collapse" id="sidebar-settings-items" style="">
+										<ul class="nav nav-sm flex-column mt-1">
+											<li id="sidebar-settings-items-auditcenter" class="nav-item"><a href="#" class="nav-link">Audit Center</a></li>
+										</ul>
+									</div>
 								</li>
 							</ul>
-							<hr class="navbar-divider my-5 opacity-70">
+
+							<hr class="my-6">
 							<ul id="ID_USERLIST" class="navbar-nav mb-md-4">
 								<li>
 									<div class="nav-link text-xs font-semibold text-uppercase text-muted ls-wide">
@@ -222,14 +258,18 @@
 										<a id="id_users_last_login_link" href="#" class="nav-link font-semibold">Users Last Login</a>
 									</li>
 									<li class="nav-item">
-										<a id="id_advanced_audit_find_link" href="#" class="nav-link font-semibold">Advanced Find</a>
+										<a id="id_advanced_audit_find_link" href="#" class="nav-link font-semibold">Adv Audit Find</a>
 									</li>
 									<li class="nav-item">
 										<a id="id_plugintraces_link" href="#" class="nav-link font-semibold">Plugin Traces</a>
 									</li>
 									<li class="nav-item">
+										<a id="id_solutions_link" href="#" class="nav-link font-semibold">Solution History</a>
+									</li>
+									<li class="nav-item">
 										<a id="id_auditcenter_link" href="#" class="nav-link font-semibold">Audit Center</a>
 									</li>
+
 								</ul>
 							</div>
 						</div>
@@ -267,7 +307,7 @@
 									</div>
 								</header>
 							</div>
-					
+
 							<div class=" border-0 mt-6">
 								<div class="row row-cols-xl-4 row-cols-md-2 g-6">
 									<div class="col">
@@ -709,7 +749,7 @@
 						</main>
 
 						<main id="id_plugintraces" class="py-6 bg-surface-secondary" style="display:none">
-						
+
 							<div class="card container-fluid ">
 
 								<header class="py-4 ">
@@ -899,7 +939,7 @@
 										<div class="col">
 											<div class="d-flex align-items-center gap-4">
 												<div>
-													
+
 
 													<a id="pane5_loadauditcenter" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
 												</div>
@@ -963,6 +1003,106 @@
 							<hr class="my-6" style="color:transparent">
 						</main>
 
+						<main id="id_solutions" style="display:none" class="container-fluid mw-screen-lg py-10">
+
+							<div class="card container-fluid ">
+
+								<header class="py-4 ">
+									<div class="row align-items-center">
+										<div class="col">
+											<div class="d-flex align-items-center gap-4">
+												<div>
+
+
+													<a id="pane6_solutions" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
+												</div>
+												<div class="vr opacity-20 my-1"></div>
+												<h1 class="h4 ls-tight">Solution History (work in progress)</h1>
+											</div>
+										</div>
+										<div class="col-auto d-none d-md-block">
+											<div class="hstack gap-2 justify-content-end">
+
+												<button type="button" class="btn btn-sm btn-neutral hidden" aria-label="Open in new window">
+													<i class="bi bi-box-arrow-up-right"></i>
+													<span>Open All Solutions</span>
+
+												</button>
+												<button type="button" class="btn btn-sm btn-neutral hidden">
+													<i class="bi bi-save"> </i>
+													<span>Open All Solutions Histories</span>
+												</button>
+											</div>
+
+
+										</div>
+									</div>
+								</header>
+							</div>
+
+							<div id="solutionswithhistorylist">
+
+								
+
+							</div>
+
+							<!--<div class="border-bottom">
+								<div class="d-flex align-items-center">
+
+								</div>
+								<ul class="nav nav-tabs nav-tabs-flush gap-8 overflow-x border-0 mt-4">
+									<li class="nav-item"><a href="#" class="nav-link active">Custom</a></li>
+									<li class="nav-item"><a href="#" class="nav-link">Microsoft</a></li>
+
+								</ul>
+							</div>-->
+							<div class="vstack gap-3 mt-6">
+
+								<div class="card">
+									<div class="card-body pb-0">
+										<div class="mb-4">
+											<h4 class="mb-1">Select a solution</h4>
+											<p class="text-sm text-muted">Find a solution by friendlyname or uniquename or publisher.</p>
+										</div>
+										<div class="row g-3">
+											<div class="col-lg-8">
+												<div class="input-group input-group-sm input-group-inline mb-1"><span class="input-group-text"><i class="bi bi-search"></i> </span><input id="filtersolutions" type="text" class="form-control" placeholder="Search solutions"></div>
+											</div>
+											<!--<div class="col-lg-4">
+												<select class="form-select form-select-sm">
+													<option value="member">Role</option>
+													<option value="owner">Date</option>
+													<option value="owner">Name</option>
+												</select>
+											</div>-->
+											<div></div>
+										</div>
+										<div id="pane_solutions_list" class="list-group list-group-flush">
+
+											<!--<div class="list-group-item d-flex align-items-center">
+												<div class="me-4">
+												</div>
+												<div class="flex-fill"><a href="#" class="d-block h6 font-semibold mb-1">Robert Fox</a><span class="d-block text-sm text-muted">robert.fox@example.com</span></div>
+												<div class="ms-auto text-end">
+													<div class="dropdown">
+														<a class="text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></a>
+														<div class="dropdown-menu"><a href="#!" class="dropdown-item">Action </a><a href="#!" class="dropdown-item">Another action </a><a href="#!" class="dropdown-item">Something else here</a></div>
+													</div>
+												</div>
+											</div>-->
+
+										</div>
+									</div>
+								</div>
+
+
+
+
+							</div>
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+						</main>
 					</div>
 				</div>
 			</div>

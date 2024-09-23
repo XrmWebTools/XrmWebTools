@@ -100,7 +100,8 @@
 					'_blank',
 					popupFeatures
 				);
-			}
+			},
+
 		},
 		CONFIG: {
 			baseUrl: 'https://github.com/auditengine/',
@@ -421,14 +422,16 @@
 			}
 		},
 		ManageTabs: function () {
+			//todo: clean up this navigation shitty code but at least it works for now
+
 			// List of button and corresponding content section IDs
 			const tabs = [
 				{ buttonId: "id_audit_today_link", contentId: "id_audit_today" },
 				{ buttonId: "id_users_last_login_link", contentId: "id_users_last_login" },
 				{ buttonId: "id_advanced_audit_find_link", contentId: "id_advanced_audit_find" },
 				{ buttonId: "id_plugintraces_link", contentId: "id_plugintraces" },
+				{ buttonId: "id_solutions_link", contentId: "id_solutions" },
 				{ buttonId: "id_auditcenter_link", contentId: "id_auditcenter" },
-
 			];
 
 			// Function to handle tab switching
@@ -449,6 +452,9 @@
 						button.classList.add('font-regular');
 						content.style.display = 'none'; // Hide the content
 					}
+
+
+
 				});
 			}
 
@@ -458,6 +464,143 @@
 					handleTabClick(event, tab);
 				});
 			});
+
+			////////////////////////////////////	
+			// Array with section and collapse IDs
+			const sectionIDs = [
+				{
+					sectionId: "sidebar-audit",
+					itemsCollapseId: "sidebar-audit-items",
+					itemIds: [
+						"sidebar-audit-items-today",
+						"sidebar-audit-items-users",
+						"sidebar-audit-items-advfind"
+					],
+					sectionTabs: [tabs[0], tabs[1], tabs[2]]
+				},
+				{
+					sectionId: "sidebar-systemhealth",
+					itemsCollapseId: "sidebar-systemhealth-items",
+					itemIds: [
+						"sidebar-systemhealth-items-plugintraces",
+						"sidebar-systemhealth-items-solutionhistory"
+					],
+					sectionTabs: [tabs[3], tabs[4]]
+				},
+				{
+					sectionId: "sidebar-settings",
+					itemsCollapseId: "sidebar-settings-items",
+					itemIds: [
+						"sidebar-settings-items-auditcenter"
+					],
+					sectionTabs: [tabs[5]]
+
+				}
+			];
+
+			for (const section of sectionIDs) {
+				document.getElementById(section.sectionId).addEventListener('click', function (e) {
+
+					//for (const temp of sectionIDs) {
+					//	if (temp.sectionId != section.sectionId) {
+					//		for (const link of temp.sectionTabs) {
+					//			document.getElementById(link.buttonId).classList.add("hidden");
+					//		}
+					//	} else {
+					//		for (const link of temp.sectionTabs) {
+					//			document.getElementById(link.buttonId).classList.remove("hidden");
+					//		}
+					//	}
+
+					//}
+
+					//document.getElementById(section.sectionTabs[0].buttonId).click();
+				});
+
+				for (let i = 0; i < section.itemIds.length; i++) {
+					document.getElementById(section.itemIds[i]).addEventListener('click', function (e) {
+						document.getElementById(section.sectionTabs[i].buttonId).click();
+					});
+				}
+			}
+
+			// Extract triggers and collapses from the section array
+			const allTriggers = sectionIDs.map(section => document.getElementById(section.sectionId));
+			const allCollapses = sectionIDs.map(section => document.getElementById(section.itemsCollapseId));
+
+			// Function to check if at least one section is expanded
+			function isAtLeastOneExpanded() {
+				return allCollapses.some(collapse => collapse.classList.contains('show'));
+			}
+
+			// Toggle main sections
+			allTriggers.forEach((trigger, index) => {
+				trigger.addEventListener('click', function (e) {
+					e.preventDefault();  // Prevent link default
+
+					const isCurrentlyExpanded = allCollapses[index].classList.contains('show');
+
+					// Only allow collapsing if more than one section is currently expanded
+					if (isCurrentlyExpanded && isAtLeastOneExpanded() && allCollapses.filter(collapse => collapse.classList.contains('show')).length === 1) {
+						return;  // Prevent collapsing the last open section
+					}
+
+					// Collapse all other sections
+					allCollapses.forEach((collapse, i) => {
+						if (i !== index) {
+							collapse.classList.remove('show');
+							allTriggers[i].classList.add('collapsed');
+							allTriggers[i].setAttribute('aria-expanded', 'false');
+							allTriggers[i].classList.remove('active');
+						}
+					});
+
+					// Toggle the clicked section
+					const isExpanded = allCollapses[index].classList.toggle('show');
+					trigger.classList.toggle('active', isExpanded);
+					trigger.classList.toggle('collapsed', !isExpanded);
+					trigger.setAttribute('aria-expanded', isExpanded);
+				});
+			});
+
+			// Add click listeners for nav items to keep their parent section open
+			const navItems = sectionIDs.flatMap(section => section.itemIds.map(itemId => document.getElementById(itemId)));
+
+			navItems.forEach(navItem => {
+				navItem.addEventListener('click', function (e) {
+					e.preventDefault();  // Prevent link default
+
+					// Collapse other sections
+					allCollapses.forEach((collapse, i) => {
+						if (!collapse.classList.contains('show')) {
+							collapse.classList.remove('show');
+							allTriggers[i].classList.add('collapsed');
+							allTriggers[i].setAttribute('aria-expanded', 'false');
+							allTriggers[i].classList.remove('active');
+						}
+					});
+
+					// Set the clicked nav item active
+					navItems.forEach(item => item.style.color = ''); // Reset all colors
+					navItem.style.color = '#8957FF'; // Set the active color
+
+					// Ensure the parent section stays open
+					const parentCollapse = navItem.closest('.collapse');
+					if (parentCollapse) {
+						const parentTrigger = allTriggers.find(trigger => {
+							return document.getElementById(trigger.getAttribute('aria-controls')) === parentCollapse;
+						});
+
+						if (parentTrigger) {
+							parentCollapse.classList.add('show');
+							parentTrigger.classList.remove('collapsed');
+							parentTrigger.setAttribute('aria-expanded', 'true');
+							parentTrigger.classList.add('active');
+						}
+					}
+				});
+			});
+
 		},
 		startTime: function () {
 			console.log("auditengine: startTime");
@@ -546,28 +689,36 @@
 			console.log("auditengine: RegisterEvents");
 
 			// Panel 1
-			document.getElementById("id_pane1_searchauditsfromtoday").addEventListener("click", async function () {
+			document.getElementById("id_pane1_searchauditsfromtoday").addEventListener("click", async function (event) {
+				// Prevent the default anchor behavior (e.g., scrolling to top)
+				event.preventDefault();
 				AuditApp.toggleOverlay(true, "Retrieving", "Audits from today");
 				await AuditApp.Panel1.ButtonClick_SearchAuditsFromToday();
 				AuditApp.toggleOverlay(false);
 			});
 
 			// Sidebar
-			document.getElementById("app_loadonlineusers").addEventListener("click", async function () {
+			document.getElementById("app_loadonlineusers").addEventListener("click", async function (event) {
+				// Prevent the default anchor behavior (e.g., scrolling to top)
+				event.preventDefault();
 				AuditApp.toggleOverlay(true, "Retrieving", "Online Users");
 				await AuditApp.Sidebar.getOnlineUsers();
 				AuditApp.toggleOverlay(false);
 			});
 
 			// Panel 2 - Load views
-			document.getElementById("Load_views").addEventListener("click", async function () {
+			document.getElementById("Load_views").addEventListener("click", async function (event) {
+				// Prevent the default anchor behavior (e.g., scrolling to top)
+				event.preventDefault();
 				AuditApp.toggleOverlay(true, "Retrieving", "systemuser views");
 				await AuditApp.Panel2.RetrieveSystemViews();
 				AuditApp.toggleOverlay(false);
 			});
 
 			// Panel 2 - Add last login
-			document.getElementById("addlastlogin").addEventListener("click", async function () {
+			document.getElementById("addlastlogin").addEventListener("click", async function (event) {
+				// Prevent the default anchor behavior (e.g., scrolling to top)
+				event.preventDefault();
 				AuditApp.toggleOverlay(true, "Retrieving", "Users Last Login");
 				await AuditApp.Panel2.AddLastLogin();
 				AuditApp.toggleOverlay(false);
@@ -575,13 +726,25 @@
 
 
 			// Panel 3 - Advanced audit
-			document.getElementById("pane3_advancedaudit").addEventListener("click", async function () {
+			document.getElementById("pane3_advancedaudit").addEventListener("click", async function (event) {
+
+				// Prevent the default anchor behavior (e.g., scrolling to top)
+				event.preventDefault();
+
+				// Show overlay and perform the advanced audit logic
 				AuditApp.toggleOverlay(true, "Retrieving", "Advanced Audit");
+
+				// Wait for the advanced audit to complete
 				await AuditApp.Panel3.AdvancedAudit();
+
+				// Hide the overlay after the audit is done
 				AuditApp.toggleOverlay(false);
 			});
 
-			document.getElementById("auditengine_opened").addEventListener("click", async function () {
+
+			document.getElementById("auditengine_opened").addEventListener("click", async function (event) {
+				// Prevent the default anchor behavior (e.g., scrolling to top)
+				event.preventDefault();
 				console.log("auditengine: Opening recieved");
 				try {
 					if (Xrm && Xrm.Page && Xrm.Page.data && Xrm.Page.data.entity) {
@@ -598,23 +761,42 @@
 
 
 
-			document.getElementById("pane4_plugintraces").addEventListener("click", async function () {
+			document.getElementById("pane4_plugintraces").addEventListener("click", async function (event) {
+				// Prevent the default anchor behavior (e.g., scrolling to top)
+				event.preventDefault();
 				AuditApp.toggleOverlay(true, "Retrieving", "Plugin Traces");
 				await AuditApp.Panel4.PluginTraces();
 				AuditApp.toggleOverlay(false);
 			});
 
 			document.getElementById("pane4_setting").addEventListener("click", async function () {
+				// Prevent the default anchor behavior (e.g., scrolling to top)
+				event.preventDefault();
 				AuditApp.toggleOverlay(true, "Retrieving", "Setting");
 				await AuditApp.Panel4.Setting();
 				AuditApp.toggleOverlay(false);
 			});
 
-			document.getElementById("pane5_loadauditcenter").addEventListener("click", async function () {
+			document.getElementById("pane5_loadauditcenter").addEventListener("click", async function (event) {
+				// Prevent the default anchor behavior (e.g., scrolling to top)
+				event.preventDefault();
 				AuditApp.toggleOverlay(true, "Retrieving", "Entity Definitions");
 				await AuditApp.Panel5.loadauditcenter();
 				AuditApp.toggleOverlay(false);
 			});
+
+			document.getElementById("pane6_solutions").addEventListener("click", async function (event) {
+				// Prevent the default anchor behavior (e.g., scrolling to top)
+				event.preventDefault();
+				AuditApp.toggleOverlay(true, "Retrieving", "Solutions");
+				await AuditApp.Panel6.loadsolutions();
+				AuditApp.toggleOverlay(false);
+			});
+
+
+
+
+
 		},
 		Panel1: {
 
@@ -989,7 +1171,9 @@
 
 				// Return the initials
 				return firstInitial + secondInitial;
-			}
+			},
+
+
 		},
 		Panel2: {
 
@@ -1595,7 +1779,7 @@
 					const loadAttributesButton = tempDiv.querySelector('a.btn-neutral');
 
 					// Attach a click event listener
-					loadAttributesButton.addEventListener('click', async(event) => {
+					loadAttributesButton.addEventListener('click', async (event) => {
 						event.preventDefault(); // Prevent the default link behavior
 
 						AuditApp.Panel5.displayEntityAttributes(entity.LogicalName, entity_MetadataId)
@@ -1687,13 +1871,213 @@
 					// Add event listener to "Edit attribute" badge
 					const editBadge = attributeDiv.querySelector('.edit-attribute');
 					editBadge.addEventListener('click', () => {
-						AuditApp.UI.OpenAttribute(attr_MetadataId, entity_MetadataId )
+						AuditApp.UI.OpenAttribute(attr_MetadataId, entity_MetadataId)
 
 					});
 				});
 			}
 
 		},
+		Panel6: {
+			loadsolutions: async () => {
+				try {
+					// Retrieve solutions from the API
+					const solutions = await AuditApp.WebApi.RetrieveWithCustomFilter('solutions?$filter=isvisible eq true&$select=friendlyname,uniquename,_publisherid_value');
+
+					const publisherWithSolutions = [];  // Array to store publishers and their solutions
+					const publisherAttribute = "_publisherid_value@OData.Community.Display.V1.FormattedValue";  // Publisher attribute key
+
+					// Filter out publishers that match unwanted strings
+					const filteredPublishers = solutions.value
+						.map(solution => solution[publisherAttribute])
+						.filter(publisher => ![
+							"Dynamics 365",
+							"MicrosoftCorporation",
+							"Microsoft First Party",
+							"Dynamics Marketing",
+							"Microsoft Dynamics GDPR",
+							"Microsoft",
+							"Default Publisher",
+							"Consent solution extensions publisher",
+							"PowerCat"
+						].some(unwanted => publisher.includes(unwanted)));
+
+					// Build publisherWithSolutions array
+					filteredPublishers.forEach(publisher => {
+						// Check if publisher is already added to the result
+						if (!publisherWithSolutions.some(entry => entry.publisher === publisher)) {
+							// Filter the solutions for the current publisher
+							const customPublisherSolutions = solutions.value.filter(
+								solution => solution[publisherAttribute] === publisher
+							);
+							// Push the publisher and its solutions into the result array
+							publisherWithSolutions.push({ publisher, solutions: customPublisherSolutions });
+						}
+					});
+
+					// Sort publishers by the number of solutions (descending order)
+					publisherWithSolutions.sort((a, b) => b.solutions.length - a.solutions.length);
+
+					// Output the result to the console
+					console.log("auditengine: publisherWithSolutions", publisherWithSolutions);
+					const rendersolutions = solutions.value.sort((a, b) => {
+						let nameA = a.friendlyname.toLowerCase(); // Convert to lowercase for case-insensitive comparison
+						let nameB = b.friendlyname.toLowerCase();
+
+						if (nameA < nameB) return -1; // a comes before b
+						if (nameA > nameB) return 1;  // b comes before a
+						return 0; // names are equal
+					});
+
+					console.log("auditengine: solutions", rendersolutions);
+					AuditApp.Panel6.rendersolutions(rendersolutions);
+
+					AuditApp.Panel6.loadedsolutions = rendersolutions;
+
+					const searchInput = document.getElementById('filtersolutions');
+					searchInput.addEventListener('input', (e) => {
+						const query = e.target.value;
+						AuditApp.Panel6.filterSolutions(query);
+					});
+
+				} catch (error) {
+					// Handle any errors that occur during the process
+					alert("Error: " + error.message);
+				}
+			},
+
+			rendersolutions: (solutions) => {
+				const paneSolutionsList = document.getElementById('pane_solutions_list');
+
+				// Clear the pane before rendering
+				paneSolutionsList.innerHTML = '';
+
+				solutions.forEach(solution => {
+					// Create a new div for each solution
+					const solutionItem = document.createElement('div');
+					solutionItem.className = 'list-group-item d-flex align-items-center';
+
+					// Set the HTML structure for each solution item
+					solutionItem.innerHTML = `
+            <div class="me-4">
+                <!-- You can add an icon or image here if needed -->
+            </div>
+            <div class="flex-fill">
+                <a href="#" class="d-block h6 font-semibold mb-1">${solution.friendlyname}</a>
+                <span class="d-block text-sm text-muted">${solution["_publisherid_value@OData.Community.Display.V1.FormattedValue"]}</span>
+            </div>
+            <div class="ms-auto text-end">
+               <a id="dsqds" href="#" class="btn px-3 py-1 btn-primary text-white load-history-btn">Load History</a>
+            </div>
+        `;
+
+					// Append the solution item to the list
+					paneSolutionsList.appendChild(solutionItem);
+
+					// Add a click event listener to the Load History button
+					const loadHistoryBtn = solutionItem.querySelector('.load-history-btn');
+					loadHistoryBtn.addEventListener('click', async () => {
+						AuditApp.toggleOverlay(true, "Retrieving", "Solution History for " + solution.friendlyname);
+
+						await AuditApp.Panel6.solutionHistory(solution.uniquename, solution.friendlyname);
+						AuditApp.toggleOverlay(false);
+
+					});
+				});
+			},
+
+			loadedsolutions: [],
+
+			filterSolutions: (query) => {
+
+				if (!query) {
+					AuditApp.Panel6.rendersolutions(AuditApp.Panel6.loadedsolutions);
+
+				}
+
+
+				// Convert query to lowercase for case-insensitive search
+				const filteredSolutions = AuditApp.Panel6.loadedsolutions.filter(solution =>
+					solution.friendlyname.toLowerCase().includes(query.toLowerCase())
+					||
+					solution.uniquename.toLowerCase().includes(query.toLowerCase())
+					||
+					solution["_publisherid_value@OData.Community.Display.V1.FormattedValue"].toLowerCase().includes(query.toLowerCase())
+
+				);
+
+				// Render filtered solutions
+				AuditApp.Panel6.rendersolutions(filteredSolutions);
+
+			},
+
+			solutionHistory: async (uniquename, FriendlyName) => {
+
+				const hist = await AuditApp.WebApi.RetrieveWithCustomFilter(`msdyn_solutionhistories?$filter=msdyn_name eq '${uniquename}'&$select=msdyn_starttime,msdyn_operation,msdyn_status&$orderby=msdyn_starttime desc`);
+				console.log("audit engine hist", hist);
+
+				const container = document.getElementById('solutionswithhistorylist');
+
+				// Create a card for the new entry
+				const card = document.createElement('div');
+				card.className = 'card mt-6';
+
+				// Card header
+				card.innerHTML = `
+        <div class="card-header py-3">
+            <div class="d-flex align-items-center">
+                <h5>Solution History: ${FriendlyName}</h5>
+                <div class="hstack gap-3 ms-auto">
+                    <a href="#" class="p-1 text-muted"><i class="bi bi-calendar-event"></i></a>
+                    <a href="#" class="p-1 text-muted"><i class="bi bi-three-dots"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body py-0">
+            <div class="list-group list-group-flush mb-3">
+    `;
+
+				// Loop through the array and create rows for each item
+				hist.value.forEach(item => {
+
+					const successOrDanger = item['msdyn_exceptionmessage'] ? "danger" : "success";
+					const successOrError = item['msdyn_exceptionmessage'] ? "Error" : "Success";
+
+					card.innerHTML += `
+            <div class="list-group-item py-3">
+                <div class="row g-3 align-items-center">
+                    <div class="col-sm-6 col-12 d-flex">
+                        <div class="form-check form-check-linethrough d-flex align-items-center gap-1">
+						  <a href="#" class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas">
+                                ${item['msdyn_starttime@OData.Community.Display.V1.FormattedValue']} 
+                            </a>
+                            <a href="#" class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas">
+                                ${item['msdyn_operation@OData.Community.Display.V1.FormattedValue']} 
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-sm-auto col-12 ms-sm-auto">
+                        <div class="hstack gap-5 justify-content-end">
+                            <div><span class="badge bg-${successOrDanger}-subtle text-${successOrDanger}">${successOrError}</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+				});
+
+				// Close the list group and card body
+				card.innerHTML += `
+            </div>
+        </div>
+    `;
+
+				// Append the new card to the container
+				container.appendChild(card);
+
+			}
+
+		}
 	};
 
 	AuditApp.RegisterEvents();

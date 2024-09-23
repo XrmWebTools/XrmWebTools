@@ -428,8 +428,10 @@ app-extension {
 }
 
 #app-extension a {
-	color: rgba(var(--x-link-color-rgb), var(--x-link-opacity, 1));
-	text-decoration: none;
+	/*	color: rgba(var(--x-link-color-rgb), var(--x-link-opacity, 1));
+*/ text-decoration: none;
+	font-size: 14px;
+	font-weight: 600;
 }
 
 	#app-extension a:hover {
