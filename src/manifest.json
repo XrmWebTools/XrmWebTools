@@ -1,0 +1,51 @@
+{
+	"manifest_version": 3,
+	"name": "Audit Engine 365",
+	"short_name": "Audit Engine 365",
+	"version": "2.1",
+	"description": "Audit Engine for Microsoft Dynamics 365",
+	"content_security_policy": {
+		"script-src": "self",
+		"object-src": "self"
+	},
+	"action": {
+		"default_title": "Audit Engine for Microsoft Dynamics 365",
+		"default_icon": "/img/audit48.png"
+	},
+	"icons": {
+		"32": "img/audit32.png",
+		"48": "img/audit48.png",
+		"64": "img/audit64.png",
+		"128": "img/audit128.png"
+	},
+	"content_scripts": [
+		{
+			"run_at": "document_end",
+			"matches": [
+				"*://*.dynamics.com/*"
+			],
+			"js": [
+				"manifest.js"
+			],
+			"css": [
+				"auditengine.css"
+			]
+		}
+	],
+	"permissions": [
+		"scripting",
+		"activeTab"
+	],
+	"host_permissions": [
+		"*://*.dynamics.com/*"
+	],
+	"web_accessible_resources": [
+		{
+			"matches": [ "*://*.dynamics.com/*" ],
+			"resources": [ "*" ]
+		}
+	],
+	"background": {
+		"service_worker": "service-worker.js"
+	}
+}

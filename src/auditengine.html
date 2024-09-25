@@ -1,0 +1,1112 @@
+﻿<div id="app-extension" data-bs-theme="light">
+	<div class="rightBodyLinks" style="display:none">
+	</div>
+	<div class="app-extension-sections" tabindex="9999">
+		<!--#region Overlay  -->
+		<a id="app_info_message" class="btn w-full btn-primary text-truncate rounded-0 py-2 border-0 position-relative text-muted" style="z-index: 1000; width: 100%; display: none">
+			<strong>Type</strong>
+			Message
+		</a>
+		<div id="overlay" class="hidden">
+			<svg width="300" height="300" viewBox="0 0 300 300">
+				<circle cx="150" cy="150" r="75" class="outerCircle"></circle>
+			</svg>
+		</div>
+		<!--#endregion Overlay -->
+		<!--#region Model Audit Form -->
+		<div id="auditform" class="modal fade show" tabindex="-1" a aria-modal="true" role="dialog" style="display: none;">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content overflow-hidden">
+					<div class="modal-header pb-0 border-0">
+						<h1 class="modal-title h4" id="auditform_id">Audit Details</h1>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.getElementById('auditform').style.display='none';"></button>
+					</div>
+					<hr class="my-6" />
+					<div class="modal-body">
+						<div class="row row-cols-md-2 g-0 g-md-10 g-xl-16">
+							<div class="col">
+								<div class="list-group list-group-flush">
+									<div class="list-group-item d-flex align-items-center px-0">
+										<div class="flex-fill">
+											<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Created On</a>
+											<span id="auditform_createdon" class="d-block text-sm text-muted"></span>
+										</div>
+									</div>
+									<div class="list-group-item d-flex align-items-center px-0">
+										<div class="flex-fill">
+											<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Record</a>
+											<span id="auditform_record" class="d-block text-sm text-muted"></span>
+											<span id="auditform_recordid" class="d-block text-sm text-muted"></span>
+										</div>
+										<div class="ms-auto text-end">
+											<a id="auditform_record_openincrm" target="_blank" href="#" class="btn btn-sm btn-neutral">Open Record In CRM</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<hr class="my-0 d-md-none">
+							<div class="col">
+								<div class="list-group list-group-flush">
+									<div class="list-group-item d-flex align-items-center px-0">
+										<div class="flex-fill">
+											<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Event</a>
+											<span id="auditform_event" class="d-block text-sm text-muted"></span>
+											<div class="d-flex mx-n1"></div>
+										</div>
+									</div>
+
+									<div class="list-group-item d-flex align-items-center px-0">
+										<div class="flex-fill">
+											<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Changed By</a>
+											<span id="auditform_user" class="d-block text-sm text-muted"></span>
+											<span id="auditform_userid" class="d-block text-sm text-muted"></span>
+											<div class="d-flex mx-n1"></div>
+										</div>
+										<div class="ms-auto text-end">
+											<a id="auditform_user_openincrm" href="#" target="_blank" class="btn btn-sm btn-neutral">Open User In CRM</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="">
+							<label class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Changed Data</label>
+							<textarea id="auditform_changeddata" class="form-control" rows="8"></textarea>
+						</div>
+						<div class="text-xs text-muted mt-6">
+							Would you like to open this audit in the Web Api ?
+							<a id="auditform_openinwebapi" href="#" target="_blank" class="fw-bold">Open In WebApi</a>
+						</div>
+					</div>
+					<!--<div class="offcanvas-footer d-flex gap-2 justify-content-end py-4 px-6 border-top" style="display:none">
+						<button type="button" class="btn btn-sm btn-primary">Open all logs for this record</button>
+						<button type="button" class="btn btn-sm btn-primary">Open all logs for this record changed by this user</button>
+						<button type="button" class="btn btn-sm btn-primary">Open audit In Web Api</button>
+						<button type="button" class="btn btn-sm btn-neutral" data-bs-dismiss="offcanvas">Close</button>
+					</div>-->
+				</div>
+			</div>
+		</div>
+		<!--#endregion Model Audit Form -->
+
+		<div id="audithistory_app" class="bg-body-tertiary">
+
+			<div class="d-flex flex-column flex-lg-row h-lg-100 gap-1">
+
+				<!--#region SIDEBAR -->
+				<nav class="flex-none navbar navbar-vertical navbar-expand-lg show vh-lg-100 px-0 py-2 navbar-dark bg-transparent" id="sidebar">
+					<div class="container-fluid px-3 px-md-4 px-lg-6">
+						<button class="navbar-toggler ms-n2"
+								type="button"
+								data-bs-toggle="collapse"
+								data-bs-target="#sidebarCollapse"
+								aria-controls="sidebarCollapse"
+								aria-expanded="false"
+								aria-label="Toggle navigation">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<a class="navbar-brand d-inline-block py-lg-1 mb-lg-5" href="#">
+							<img id="app_img_logo_lightmode" class="logo-dark h-rem-8 h-rem-md-10" alt="...">
+							<img id="app_img_logo_darkmode"  class="logo-light h-rem-8 h-rem-md-10" alt="...">
+						</a>
+						<div class="navbar-user d-lg-none"></div>
+						<div id="sidebarCollapse" class="collapse navbar-collapse overflow-x">
+
+							<ul class="navbar-nav" style="padding-left:0px">
+								<!-- Audit Section -->
+								<li class="nav-item my-1">
+									<a id="sidebar-audit" class="nav-link d-flex align-items-center rounded-pill active" href="#" data-bs-toggle="collapse" role="button" aria-expanded="true" aria-controls="sidebar-audit-items">
+										<i class="bi bi-house-fill"></i> <span>Audit</span>
+										<span class="badge badge-sm rounded-pill me-n2 bg-success-subtle text-success ms-auto"></span>
+									</a>
+									<div class="collapse show" id="sidebar-audit-items" style="">
+										<ul class="nav nav-sm flex-column mt-1">
+											<li id="sidebar-audit-items-today" class="nav-item"><a href="#" class="nav-link">Today</a></li>
+											<li id="sidebar-audit-items-users" class="nav-item"><a href="#" class="nav-link">Users Last Login</a></li>
+											<li id="sidebar-audit-items-advfind" class="nav-item"><a href="#" class="nav-link">Adv Audit Find</a></li>
+										</ul>
+									</div>
+								</li>
+
+								<!-- System Health Section -->
+								<li class="nav-item my-1">
+									<a id="sidebar-systemhealth" class="nav-link d-flex align-items-center rounded-pill collapsed" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebar-pages">
+										<i class="bi bi-bar-chart-fill"></i> <span>System Health</span>
+										<span class="badge badge-sm rounded-pill me-n2 bg-success-subtle text-success ms-auto"></span>
+									</a>
+									<div class="collapse" id="sidebar-systemhealth-items" style="">
+										<ul class="nav nav-sm flex-column mt-1">
+											<li id="sidebar-systemhealth-items-plugintraces" class="nav-item"><a href="#" class="nav-link">Plugin Traces</a></li>
+											<li id="sidebar-systemhealth-items-solutionhistory" class="nav-item"><a href="#" class="nav-link">Solution History</a></li>
+										</ul>
+									</div>
+								</li>
+
+								<!-- Settings Section -->
+								<li class="nav-item my-1">
+									<a id="sidebar-settings" class="nav-link d-flex align-items-center rounded-pill collapsed" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebar-account">
+										<i class="bi bi-gear-fill"></i> <span>Settings</span>
+										<span class="badge badge-sm rounded-pill me-n2 bg-success-subtle text-success ms-auto"></span>
+									</a>
+									<div class="collapse" id="sidebar-settings-items" style="">
+										<ul class="nav nav-sm flex-column mt-1">
+											<li id="sidebar-settings-items-auditcenter" class="nav-item"><a href="#" class="nav-link">Audit Center</a></li>
+										</ul>
+									</div>
+								</li>
+							</ul>
+
+							<hr class="my-6">
+							<ul id="ID_USERLIST" class="navbar-nav mb-md-4">
+								<li>
+									<div class="nav-link text-xs font-semibold text-uppercase text-muted ls-wide">
+										Users Online Today:
+										<span class="badge bg-soft-primary text-primary rounded-pill d-inline-flex align-items-center ms-4 ">
+											0
+										</span>
+									</div>
+								</li>
+							</ul>
+							<hr class="my-6">
+							<div class="card  border-0 mt-5 mb-3">
+								<div class="card-body">
+									<div class="vstack gap-4">
+										<p id="sidebar_onlineusers_info" class="text-sm text-main text-opacity-70">Clicking the button will load online users from today in the sidebar! Performance Issues ? uncheck the following:</p>
+										<div>
+											<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" checked id="sidebar_onlineusers_noapplicationusers">
+											<a href="#" class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas">No application users</a>
+										</div>
+										<a id="app_loadonlineusers" class="btn btn-sm btn-primary text-white">Load online users</a>
+									</div>
+								</div>
+							</div>
+							<hr class="navbar-divider my-5 opacity-70 hidden">
+							<hr class="navbar-divider my-5 opacity-70 hidden">
+							<div class="mt-auto"></div>
+							<div class="my-4 px-lg-6 position-relative">
+								<div class="dropup w-full">
+									<div id="systemdropdown" style=" top:-80px" class="dropdown-menu  w-full">
+										<a id="app_opensystemform" class="dropdown-item" href="#">
+											<i class="bi bi-house me-3"></i>
+											Open System Form
+										</a>
+									</div>
+									<button id="opensystemdropdown" style="background-color:transparent;color:mediumpurple"
+											class="btn-primary d-flex w-full py-3 ps-3 pe-4 align-items-center shadow shadow-3-hover rounded-3"
+											type="button"
+											data-bs-toggle="dropdown"
+											aria-expanded="false">
+										<div class="me-4">
+											<div class="position-relative d-inline-block text-white">
+												<span id="app_user_initialen" class="avatar bg-soft-warning text-warning rounded-circle">FL</span>
+												<span class="position-absolute bottom-2 end-2 transform translate-x-1/2 translate-y-1/2 border-2 border-solid border-current w-3 h-3 bg-success rounded-circle"></span>
+											</div>
+										</div>
+										<div>
+											<span id="app_user_fullname" class="d-block text-sm font-semibold">firstname lastname</span>
+										</div>
+										<span>
+											<i class="bi bi-chevron-expand text-white text-opacity-70"></i>
+										</span>
+									</button>
+								</div>
+							</div>
+							<hr class="my-6">
+						</div>
+					</div>
+				</nav>
+				<!--#endregion SIDEBAR -->
+
+				<div class="flex-lg-fill overflow-x-auto ps-lg-1 vstack vh-lg-100 position-relative">
+
+					<!--#region HEADER-->
+					<div class="d-lg-flex py-3">
+						<div class="d-xxl-flex align-items-center gap-4 px-4 scrollable-x">
+							<div class="d-flex gap-2 text-xs">
+								<span id="title" class="text-xl fw-bold text-main ">
+									Audit Engine 365
+								</span>
+							</div>
+						</div>
+						<div class="d-lg-none d-xxl-flex align-items-center gap-4 px-4 scrollable-x">
+							<div class="d-flex gap-2 text-xs">
+								<!--<span class="text-heading fw-semibold">Time:</span>-->
+								<span id="app_time" class="text-main">00:00:00</span>
+							</div>
+						</div>
+						<div class="hstack flex-fill justify-content-end flex-nowrap gap-6 ms-auto px-6 px-xxl-8">
+							<div class="form-check form-switch">
+								<input style="cursor: pointer;" id="toggle_light_dark" class="form-check-input" type="checkbox"
+									   onchange="document.getElementById('app-extension').setAttribute('data-bs-theme', this.checked ? 'dark' : 'light'); localStorage.setItem('theme', this.checked ? 'dark' : 'light')">
+								<label class="form-check-label ms-2 text-primary" id="toggle_light_dark_label">
+									Dark Mode
+								</label>
+							</div>
+						</div>
+						<span id="auditengine_opened" style="display:none" />
+					</div>
+					<!--#endregion HEADER-->
+					<!--#region NAVIGATION-->
+					<header class="bg-surface-primary " style="padding-bottom: 0px; padding-top: 0px;">
+						<div class="container-fluid" style="padding-left:0px;">
+							<div class="mb-npx">
+								<ul class="nav nav-tabs mt-4 overflow-x border-0" style="margin-bottom: 0px;padding-left: 0px;">
+									<li class="nav-item ">
+										<a id="id_audit_today_link" href="#" class="nav-link active font-semibold">Today</a>
+									</li>
+									<li class="nav-item">
+										<a id="id_users_last_login_link" href="#" class="nav-link font-semibold">Users Last Login</a>
+									</li>
+									<li class="nav-item">
+										<a id="id_advanced_audit_find_link" href="#" class="nav-link font-semibold">Adv Audit Find</a>
+									</li>
+									<li class="nav-item">
+										<a id="id_plugintraces_link" href="#" class="nav-link font-semibold">Plugin Traces</a>
+									</li>
+									<li class="nav-item">
+										<a id="id_solutions_link" href="#" class="nav-link font-semibold">Solution History</a>
+									</li>
+									<li class="nav-item">
+										<a id="id_auditcenter_link" href="#" class="nav-link font-semibold">Audit Center</a>
+									</li>
+
+								</ul>
+							</div>
+						</div>
+					</header>
+					<!--#endregion NAVIGATION-->
+
+					<div class="flex-fill overflow-y-lg-auto scrollbar bg-body  border-top border-lg shadow-2">
+
+						<main id="id_audit_today" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8">
+
+							<div class="card container-fluid ">
+
+								<header class="py-4 ">
+									<div class="row align-items-center">
+										<div class="col">
+											<div class="d-flex align-items-center gap-4">
+												<div>
+
+
+													<a id="id_pane1_searchauditsfromtoday" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
+												</div>
+												<div class="vr opacity-20 my-1"></div>
+												<h1 class="h4 ls-tight">Today</h1>
+											</div>
+										</div>
+										<div class="col-auto d-none d-md-block">
+											<div class="hstack gap-2 justify-content-end">
+
+												<a target="_blank" href="https://github.com/auditengine/auditengine/issues" class="text-sm text-main text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Report an issue?</span> </a>
+												<button type="button" class="btn btn-sm btn-neutral" onclick="document.getElementById('panel1_card_extrafilters').classList.toggle('hidden');">
+													<span>Add Extra Filters</span>
+												</button>
+											</div>
+										</div>
+									</div>
+								</header>
+							</div>
+
+							<div class=" border-0 mt-6">
+								<div class="row row-cols-xl-4 row-cols-md-2 g-6">
+									<div class="col">
+										<div id="card_creates_today" class="card bg-success bg-opacity-10 border-success border-opacity-40">
+											<div class="p-5">
+												<div class="d-flex gap-3 mb-5">
+													<img id="create_logo" class="avatar" alt="..." src="">
+													<div class="">
+														<a class="d-block text-l text-success">Creates</a>
+														<span class="d-block text-xs text-muted">Create logs from today</span>
+													</div>
+												</div>
+												<div class="d-flex align-items-end">
+													<div class="hstack gap-2">
+														<span id="card_creates_today_badge" class="badge bg-danger bg-opacity-25 text-danger">Not Loaded</span>
+													</div>
+												</div>
+												<div id="card_creates_today_account" class="d-block text-xs fw-bold">Count: 0</div>
+											</div>
+										</div>
+									</div>
+									<div class="col">
+										<div id="card_updates_today" class="card bg-warning bg-opacity-10 border-warning border-opacity-40">
+											<div class="p-5">
+												<div class="d-flex gap-3 mb-5">
+													<img id="update_logo" class="avatar" alt="...">
+													<div class="">
+														<a class="d-block text-l text-warning">Updates</a>
+														<span class="d-block text-xs text-muted">Update logs from today</span>
+													</div>
+												</div>
+												<div class="d-flex align-items-end">
+													<div class="hstack gap-2">
+														<span id="card_updates_today_badge" class="badge bg-danger bg-opacity-25 text-danger">Not Loaded</span>
+													</div>
+												</div>
+												<div id="card_updates_today_account" class="d-block text-xs fw-bold">Count: 0</div>
+											</div>
+										</div>
+									</div>
+									<div class="col">
+										<div id="card_deletes_today" class="card bg-danger bg-opacity-10 border-danger border-opacity-40">
+											<div class="p-5">
+												<div class="d-flex gap-3 mb-5">
+													<img id="delete_logo" class="avatar" alt="...">
+													<div class="">
+														<a class="d-block text-l text-danger">Deletes</a>
+														<span class="d-block text-xs text-muted">Delete logs from today</span>
+													</div>
+												</div>
+												<div class="d-flex align-items-end">
+													<div class="hstack gap-2">
+														<span id="card_deletes_today_badge" class="badge bg-danger bg-opacity-25 text-danger">Not Loaded</span>
+													</div>
+												</div>
+												<div id="card_deletes_today_account" class="d-block text-xs fw-bold">Count: 0</div>
+											</div>
+										</div>
+									</div>
+									<div class="col">
+										<div id="card_logins_today" class="card bg-primary bg-opacity-10 border-solid border-opacity-40">
+											<div class="p-5">
+												<div class="d-flex gap-3 mb-5">
+													<img id="access_logo" class="avatar" alt="...">
+													<div class="">
+														<a class="d-block text-l text-primary">Web Access</a>
+														<span class="d-block text-xs text-muted">Logins from today</span>
+													</div>
+												</div>
+												<div class="d-flex align-items-end">
+													<div class="hstack gap-2">
+														<span id="card_logins_today_badge" class="badge bg-danger bg-opacity-25 text-danger">Not Loaded</span>
+													</div>
+												</div>
+												<div id="card_logins_today_count" class="d-block text-xs fw-bold">Count: 0</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="panel1_card_extrafilters" class="card hidden mt-6">
+								<div class="card-header py-3">
+									<div class="d-flex align-items-center">
+										<h5 class="text-main">Extra filters?</h5>
+										<div class="hstack gap-3 ms-auto"><a href="#" class="p-1 text-muted"><i class="bi bi-calendar-event"></i> </a><a href="#" class="p-1 text-muted"><i class="bi bi-three-dots"></i></a></div>
+									</div>
+								</div>
+								<div class="card-body py-0">
+									<div class="list-group list-group-flush mb-5">
+										<div class="list-group-item py-3">
+											<div class="row g-3 align-items-center">
+												<div class="col-sm-6 col-12 d-flex">
+													<div class="form-check form-check-linethrough d-flex align-items-center gap-1">
+														<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="topcountcheckbox"
+															   onclick="document.getElementById('topcountrequired').classList.toggle('hidden', !this.checked)">
+														<a href="#offcanvasCreate" class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas">Top Count: Only retrieve x latest audits of today</a>
+													</div>
+												</div>
+												<div class="col-sm-auto col-12 ms-sm-auto">
+													<div class="hstack gap-5 justify-content-end">
+														<input id="topcountinput" class="form-control" type="text" value="500" />
+														<div>
+															<span id="topcountrequired" class="badge bg-success-subtle text-success hidden">Good for performance</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="list-group-item py-3">
+											<div class="row g-3 align-items-center">
+												<div class="col-sm-6 col-12 d-flex">
+													<div class="form-check form-check-linethrough d-flex align-items-center gap-1">
+														<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="today_showwebaccess"
+															   onclick="document.getElementById('today_showwebaccess_label').classList.toggle('hidden', !this.checked)">
+														<a class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas"> Show Web Access</a>
+													</div>
+												</div>
+												<div class="col-sm-auto col-12 ms-sm-auto">
+													<div class="hstack gap-5 justify-content-end">
+														<div><span class="badge bg--subtle text-muted">Filter out Web Access audits from the underlying view</span></div>
+														<div>
+															<span id="today_showwebaccess_label" class="badge bg-warning-subtle text-warning hidden">Might impact performance</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="card shadow border-0 mb-7 mt-6">
+								<div class="card-header">
+									<h5 class="mb-0 text-muted">Audit logs from today</h5>
+								</div>
+								<table class="table table-hover table-striped table-responsive table-sm ">
+									<thead>
+										<tr>
+											<th scope="col"></th>
+
+											<th scope="col">
+												<div class="d-flex align-items-center gap-2 ps-1">
+
+													<span>Created On</span>
+												</div>
+											</th>
+											<th scope="col">Event</th>
+											<th scope="col" class="d-none d-xl-table-cell">Changed By</th>
+											<th scope="col" class="d-none d-xl-table-cell">Record Type</th>
+											<th scope="col">Record Name</th>
+											<th scope="col">Changed Data</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody id="id_audits_from_today">
+									</tbody>
+								</table>
+								<div class="card-footer border-0 py-5">
+									<span id="ID_logs" class="text-muted text-sm"></span>
+								</div>
+							</div>
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+						</main>
+
+						<main id="id_users_last_login" style="display:none">
+							<div class="row g-5">
+								<div class="col-lg-4 vstack gap-5">
+									<div class="card">
+										<div class="card-body d-flex flex-column">
+											<div class="row align-items-center g-3 ">
+												<div class="col-md-4"><label class="form-label mb-0">1. Load User Views</label></div>
+												<div class="col-md-6 col-xl-5">
+													<button id="Load_views" type="submit" class="btn btn-sm btn-primary">Load views</button>
+												</div>
+											</div>
+											<hr class="my-6">
+											<div class="row align-items-center g-3">
+												<div class="col-md-4"><label class="form-label mb-0">2. Choose User View</label></div>
+												<div class="col-md-6 col-xl-5">
+													<div class="dropdown">
+														<button class="btn btn-neutral dropdown-toggle" type="button" id="userDropdownMenuButton" onclick="var dropdownMenu = document.getElementById('listofviews'); dropdownMenu.style.display = (dropdownMenu.style.display === 'block') ? 'none' : 'block';">
+															User Views not loaded
+														</button>
+														<div id="listofviews" class="dropdown-menu" style="display: none;" aria-labelledby="userDropdownMenuButton">
+															<a id="view_id" class="dropdown-item d-flex gap-3 align-items-center position-relative">
+																<span>Click Load User Views first</span>
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+											<hr class="my-6">
+											<div class="row align-items-center g-3 ">
+												<div class="col-md-4"><label class="form-label mb-0">3. Add last login</label></div>
+												<div class="col-md-6 col-xl-5">
+													<button id="addlastlogin" type="submit" class="btn btn-sm btn-primary">Add Last Login</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-8 vstack gap-5">
+									<div class="card hidden">
+										<div class="card-body py-4">
+											<div class="d-flex flex-wrap align-items-center justify-content-between mb-5">
+												<div class="flex-1">
+													<h6 class="h5 text-limit fw-semibold mb-1 text-muted">Users Last Login report</h6>
+													<p class="text-sm text-muted d-none d-sm-block">
+														It's easy as
+														1 2 3.
+													</p>
+												</div>
+												<div class="ms-sm-auto">
+													<div class="d-flex align-items-center mt-5 mb-3 lh-none text-heading d-block display-5 ls-tight mb-0"><span class="fw-semibold text-2xl align-self-start mt-1 me-1">$</span> <span>59</span> <span class="d-inline-block fw-normal text-muted text-lg mt-sm-3 ms-1">/ month</span></div>
+												</div>
+											</div>
+											<div class="d-flex align-items-center justify-content-between mb-1"><span class="text-sm text-muted fw-semibold text-heading d-block">30 days</span> <span class="text-sm text-muted fw-semibold d-block">No activity last 3 months</span></div>
+											<div class="progress progress-sm shadow-none mb-6">
+												<div class="progress-bar bg-primary" role="progressbar" style="width:70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+											</div>
+											<hr class="my-4">
+											<div class="d-flex flex-wrap gap-2 align-items-center justify-content-between"><a href="#" class="text-muted text-danger-hover text-sm fw-semibold">Last login is not mapped yet</a> <a href="#" class="btn btn-sm btn-neutral">Bulk update users with last login</a></div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<hr class="my-6">
+							<div class="card shadow border-0 mb-7">
+								<div class="card-header">
+									<h5 id="ID_USERS" class="mb-0 text-muted">Users Last Login Report</h5>
+								</div>
+								<div class="table-responsive">
+									<table class="table table-hover table-striped table-nowrap">
+										<thead id="panel2_columns" class="thead-light">
+
+										</thead>
+										<tbody id="ID_USERS_MAINLIST">
+										</tbody>
+									</table>
+								</div>
+								<div class="card-footer border-0 py-5">
+									<span id="ID_Getting_Things_Ready" class="text-muted text-sm">No users retrieved yet.</span>
+								</div>
+							</div>
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+						</main>
+
+						<main id="id_advanced_audit_find" class="py-6 bg-surface-secondary " style="display:none">
+
+							<div class="card container-fluid ">
+
+								<header class="py-4 ">
+									<div class="row align-items-center">
+										<div class="col">
+											<div class="d-flex align-items-center gap-4">
+												<div>
+													<a id="pane3_advancedaudit" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
+												</div>
+												<div class="vr opacity-20 my-1"></div>
+												<h1 class="h4 ls-tight">Advanced Audit Find</h1>
+											</div>
+										</div>
+										<div class="col-auto d-none d-md-block">
+											<div class="hstack gap-2 justify-content-end">
+												<!--<a href="#" class="text-sm text-muted text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Need help?</span> </a>
+												<button type="button" class="btn btn-sm btn-neutral"><span id="pane3_webapi">Open results in WebApi</span></button>-->
+											</div>
+										</div>
+									</div>
+								</header>
+							</div>
+
+							<div class="row g-5">
+								<div class="col-lg-4 ">
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">Table</label></div>
+										<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_table" type="text" class="form-control" value="account"></div>
+									</div>
+									<hr class="my-6">
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">Record ID</label></div>
+										<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_recordid" type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"></div>
+									</div>
+									<hr class="my-6">
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">User ID</label></div>
+										<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_userid" type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"></div>
+									</div>
+								</div>
+								<div class="col-lg-4 ">
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">From (00:00)</label></div>
+										<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_from" type="date" class="form-control"></div>
+									</div>
+									<hr class="my-6">
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">Until (23:59)</label></div>
+										<div class="col-md-8 col-xl-8">
+											<input id="pane3_advancedaudit_until" type="date" class="form-control" value="">
+										</div>
+									</div>
+									<hr class="my-6">
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">Event</label></div>
+										<div class="col-md-8 col-xl-8">
+											<select id="pane3_advancedaudit_event" class="form-select" aria-label="Default select example">
+												<option selected="selected">All</option>
+												<option value="0">Unknown</option>
+												<option value="1">Create</option>
+												<option value="2">Update</option>
+												<option value="3">Delete</option>
+												<option value="4">Activate</option>
+												<option value="5">Deactivate</option>
+												<option value="6">Upsert</option>
+												<option value="11">Cascade</option>
+												<option value="12">Merge</option>
+												<option value="13">Assign</option>
+												<option value="14">Share</option>
+												<option value="15">Retrieve</option>
+												<option value="16">Close</option>
+												<option value="17">Cancel</option>
+												<option value="18">Complete</option>
+												<option value="20">Resolve</option>
+												<option value="21">Reopen</option>
+												<option value="22">Fulfill</option>
+												<option value="23">Paid</option>
+												<option value="24">Qualify</option>
+												<option value="25">Disqualify</option>
+												<option value="26">Submit</option>
+												<option value="27">Reject</option>
+												<option value="28">Approve</option>
+												<option value="29">Invoice</option>
+												<option value="30">Hold</option>
+												<option value="31">Add Member</option>
+												<option value="32">Remove Member</option>
+												<option value="33">Associate Entities</option>
+												<option value="34">Disassociate Entities</option>
+												<option value="35">Add Members</option>
+												<option value="36">Remove Members</option>
+												<option value="37">Add Item</option>
+												<option value="38">Remove Item</option>
+												<option value="39">Add Substitute</option>
+												<option value="40">Remove Substitute</option>
+												<option value="41">Set State</option>
+												<option value="42">Renew</option>
+												<option value="43">Revise</option>
+												<option value="44">Win</option>
+												<option value="45">Lose</option>
+												<option value="46">Internal Processing</option>
+												<option value="47">Reschedule</option>
+												<option value="48">Modify Share</option>
+												<option value="49">Unshare</option>
+												<option value="50">Book</option>
+												<option value="51">Generate Quote From Opportunity</option>
+												<option value="52">Add To Queue</option>
+												<option value="53">Assign Role To Team</option>
+												<option value="54">Remove Role From Team</option>
+												<option value="55">Assign Role To User</option>
+												<option value="56">Remove Role From User</option>
+												<option value="57">Add Privileges to Role</option>
+												<option value="58">Remove Privileges From Role</option>
+												<option value="59">Replace Privileges In Role</option>
+												<option value="60">Import Mappings</option>
+												<option value="61">Clone</option>
+												<option value="62">Send Direct Email</option>
+												<option value="63">Enabled for organization</option>
+												<option value="64">User Access via Web</option>
+												<option value="65">User Access via Web Services</option>
+												<option value="100">Delete Entity</option>
+												<option value="101">Delete Attribute</option>
+												<option value="102">Audit Change at Entity Level</option>
+												<option value="103">Audit Change at Attribute Level</option>
+												<option value="104">Audit Change at Org Level</option>
+												<option value="105">Entity Audit Started</option>
+												<option value="106">Attribute Audit Started</option>
+												<option value="107">Audit Enabled</option>
+												<option value="108">Entity Audit Stopped</option>
+												<option value="109">Attribute Audit Stopped</option>
+												<option value="110">Audit Disabled</option>
+												<option value="111">Audit Log Deletion</option>
+												<option value="112">User Access Audit Started</option>
+												<option value="113">User Access Audit Stopped</option>
+												<option value="115">Archive</option>
+												<option value="116">Retain</option>
+												<option value="117">RollbackRetain</option>
+												<option value="118">IPFirewallAcccesDenied</option>
+												<option value="119">IPFirewallAcccesAllowed</option>
+												<option value="120">Restore</option>
+												<option value="121">ApplicationBasedAccessDenied</option>
+												<option value="122">ApplicationBasedAccessAllowed</option>
+											</select>
+
+										</div>
+									</div>
+
+								</div>
+								<div class="col-lg-4 ">
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-4"><label class="form-label mb-0 text-muted">Top</label></div>
+										<div class="col-md-4 col-xl-4"><input id="pane3_advancedaudit_top" type="text" class="form-control" value="250"></div>
+									</div>
+								</div>
+							</div>
+							<hr class="my-6">
+							<div class="card shadow border-0 mb-7">
+								<div class="card-header">
+									<h5 class="mb-0 text-muted">Advanced Audit Find</h5>
+								</div>
+								<table class="table table-hover table-striped table-responsive table-sm ">
+									<thead>
+										<tr>
+											<th scope="col">
+												<div class="d-flex align-items-center gap-2 ps-1">
+
+													<span>Created On</span>
+												</div>
+											</th>
+											<th scope="col">Event</th>
+											<th scope="col" class="d-none d-xl-table-cell">Changed By</th>
+											<th scope="col" class="d-none d-xl-table-cell">Record Type</th>
+											<th scope="col">Record Name</th>
+											<th scope="col">Changed Data</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody id="id_audits_advanced_find">
+									</tbody>
+								</table>
+								<div class="card-footer border-0 py-5">
+									<span id="id_audits_advanced_find_logs" class="text-muted text-sm"></span>
+								</div>
+							</div>
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+						</main>
+
+						<main id="id_plugintraces" class="py-6 bg-surface-secondary" style="display:none">
+
+							<div class="card container-fluid ">
+
+								<header class="py-4 ">
+									<div class="row align-items-center">
+										<div class="col">
+											<div class="d-flex align-items-center gap-4">
+												<div>
+
+
+													<a id="pane4_plugintraces" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
+												</div>
+												<div class="vr opacity-20 my-1"></div>
+												<h1 class="h4 ls-tight">Plugin Trace WebViewer</h1>
+											</div>
+										</div>
+										<div class="col-auto d-none d-md-block">
+											<div class="hstack gap-2 justify-content-end">
+
+												<button id="pane4_setting" type="button" class="btn btn-neutral">
+													<span>Setting</span>
+												</button>
+												<select class="form-select" id="pane4_settingddl">
+													<option>Not retrieved</option>
+													<option>Off</option>
+													<option>Exception</option>
+													<option>All</option>
+												</select>
+											</div>
+										</div>
+									</div>
+								</header>
+							</div>
+							<hr class="my-6 d-lg-none">
+
+							<div class="row g-5">
+								<!-- Filter Section -->
+								<div class="col-lg-8 vstack gap-5">
+									<!-- Date From -->
+									<div class="row align-items-center g-3 mt-6">
+										<div class="col-md-2">
+											<label class="form-label mb-0 text-main">Date From</label>
+										</div>
+										<div class="col-md-10">
+											<input id="plugintracelog_from" type="date" class="form-control">
+										</div>
+									</div>
+
+									<!-- Message Type -->
+									<div class="row align-items-center g-3">
+										<div class="col-md-2">
+											<label class="form-label mb-0 text-main">Message</label>
+										</div>
+										<div class="col-md-10">
+											<div class="d-flex gap-3 scrollable-x">
+												<div class="form-item-checkable">
+													<input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_all" checked>
+													<label class="form-item cursor-pointer" for="plugintracelog_message_all">
+														<span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted">
+															<i class="bi text-xl"></i>
+															<span class="fw-semibold text-xs">ALL</span>
+														</span>
+													</label>
+												</div>
+												<div class="form-item-checkable">
+													<input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_create">
+													<label class="form-item cursor-pointer" for="plugintracelog_message_create">
+														<span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted">
+															<i class="bi text-xl"></i>
+															<span class="fw-semibold text-xs">Create</span>
+														</span>
+													</label>
+												</div>
+												<div class="form-item-checkable">
+													<input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_update">
+													<label class="form-item cursor-pointer" for="plugintracelog_message_update">
+														<span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted">
+															<i class="bi text-xl"></i>
+															<span class="fw-semibold text-xs">Update</span>
+														</span>
+													</label>
+												</div>
+												<div class="form-item-checkable">
+													<input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_associate">
+													<label class="form-item cursor-pointer" for="plugintracelog_message_associate">
+														<span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted">
+															<i class="bi text-xl"></i>
+															<span class="fw-semibold text-xs">Associate</span>
+														</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<!-- Entity -->
+									<div class="row align-items-center g-3">
+										<div class="col-md-2">
+											<label class="form-label mb-0 text-main">Entity</label>
+										</div>
+										<div class="col-md-10">
+											<input id="plugintracelog_entity" type="text" class="form-control">
+										</div>
+									</div>
+								</div>
+
+								<!-- Additional Filters -->
+								<div class="col-lg-4 vstack gap-5">
+									<!-- Exception Only -->
+									<div class="d-flex g-3 mt-6">
+										<div class="me-3">
+											<input class="form-check-input" type="checkbox" id="plugintracelog_message_exceptiononly">
+										</div>
+										<div>
+											<label class="form-label mb-0 text-main">Exception Only</label>
+										</div>
+									</div>
+
+									<!-- Sync -->
+									<div class="d-flex">
+										<div class="me-3">
+											<input disabled checked class="form-check-input" type="checkbox" id="check_notification_sync">
+										</div>
+										<div>
+											<label class="form-label mb-0 text-main" for="check_notification_sync">Sync</label>
+										</div>
+									</div>
+
+									<!-- Async -->
+									<div class="d-flex">
+										<div class="me-3">
+											<input disabled checked class="form-check-input" type="checkbox" id="check_notification_async">
+										</div>
+										<div>
+											<label class="form-label mb-0 text-main" for="check_notification_async">Async</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<hr class="my-6">
+
+							<!-- Plugin Logs Table -->
+							<div class="card shadow border-0 mb-7">
+								<div class="card-header">
+									<h5 id="ID_PLUGINLOGS" class="mb-0 text-muted">Plugin Trace WebViewer</h5>
+								</div>
+								<div class="table-responsive">
+									<table class="table table-hover table-striped table-nowrap">
+										<thead>
+											<tr>
+												<th scope="col">
+													<div class="d-flex align-items-center gap-2 ps-1">
+														<span>Start</span>
+													</div>
+												</th>
+												<th scope="col">Duration</th>
+												<th scope="col" class="d-none d-xl-table-cell">Operation</th>
+												<th scope="col" class="d-none d-xl-table-cell">Plugin</th>
+												<th scope="col">Step</th>
+												<th scope="col">Depth</th>
+												<th scope="col">Mode</th>
+												<th scope="col">Entity</th>
+												<th scope="col">Exception</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody id="ID_PLUGINLOGS_MAINLIST">
+										</tbody>
+									</table>
+								</div>
+								<div class="card-footer border-0 py-5">
+									<span id="ID_PLUGINLOGS_COUNT" class="text-muted text-sm">No plugin logs retrieved yet.</span>
+								</div>
+							</div>
+
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+						</main>
+
+						<main id="id_auditcenter" class="py-6 bg-surface-secondary" style="display:none">
+
+							<div class="card container-fluid ">
+
+								<header class="py-4 ">
+									<div class="row align-items-center">
+										<div class="col">
+											<div class="d-flex align-items-center gap-4">
+												<div>
+
+
+													<a id="pane5_loadauditcenter" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
+												</div>
+												<div class="vr opacity-20 my-1"></div>
+												<h1 class="h4 ls-tight">Audit Center</h1>
+											</div>
+										</div>
+										<div class="col-auto d-none d-md-block">
+											<div class="hstack gap-2 justify-content-end">
+
+												<button type="button" class="btn btn-sm btn-neutral hidden" aria-label="Open in new window">
+													<i class="bi bi-box-arrow-up-right"></i>
+													<span>Full Window</span>
+
+												</button>
+												<button type="button" class="btn btn-sm btn-neutral hidden">
+													<i class="bi bi-save"> </i>
+													<span>Dev button</span>
+												</button>
+											</div>
+										</div>
+									</div>
+								</header>
+							</div>
+
+
+							<div class="row g-5 mt-6">
+								<div class="col-lg-6 vstack gap-5">
+									<div class="vstack gap-6">
+										<div class="card">
+											<div id="pane5_allentities" class="card-body">
+												<h5 class="mb-6">All entities in your CRM</h5>
+												<hr class="my-6">
+
+
+
+												<div class="vstack gap-4" id="entities-container">
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-lg-6 vstack gap-5">
+									<div class="vstack gap-6">
+										<div class="card">
+											<div class="card-body">
+												<h5 id="allfieldsfor" class="mb-3">
+													All fields for selected entity in left pane
+												</h5>
+												<hr class="my-6">
+												<div id="container_attr">
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+						</main>
+
+						<main id="id_solutions" style="display:none" class="container-fluid mw-screen-lg py-10">
+
+							<div class="card container-fluid ">
+
+								<header class="py-4 ">
+									<div class="row align-items-center">
+										<div class="col">
+											<div class="d-flex align-items-center gap-4">
+												<div>
+
+
+													<a id="pane6_solutions" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
+												</div>
+												<div class="vr opacity-20 my-1"></div>
+												<h1 class="h4 ls-tight">Solution History (work in progress)</h1>
+											</div>
+										</div>
+										<div class="col-auto d-none d-md-block">
+											<div class="hstack gap-2 justify-content-end">
+
+												<button type="button" class="btn btn-sm btn-neutral hidden" aria-label="Open in new window">
+													<i class="bi bi-box-arrow-up-right"></i>
+													<span>Open All Solutions</span>
+
+												</button>
+												<button type="button" class="btn btn-sm btn-neutral hidden">
+													<i class="bi bi-save"> </i>
+													<span>Open All Solutions Histories</span>
+												</button>
+											</div>
+
+
+										</div>
+									</div>
+								</header>
+							</div>
+
+							<div id="solutionswithhistorylist">
+
+								
+
+							</div>
+
+							<!--<div class="border-bottom">
+								<div class="d-flex align-items-center">
+
+								</div>
+								<ul class="nav nav-tabs nav-tabs-flush gap-8 overflow-x border-0 mt-4">
+									<li class="nav-item"><a href="#" class="nav-link active">Custom</a></li>
+									<li class="nav-item"><a href="#" class="nav-link">Microsoft</a></li>
+
+								</ul>
+							</div>-->
+							<div class="vstack gap-3 mt-6">
+
+								<div class="card">
+									<div class="card-body pb-0">
+										<div class="mb-4">
+											<h4 class="mb-1">Select a solution</h4>
+											<p class="text-sm text-muted">Find a solution by friendlyname or uniquename or publisher.</p>
+										</div>
+										<div class="row g-3">
+											<div class="col-lg-8">
+												<div class="input-group input-group-sm input-group-inline mb-1"><span class="input-group-text"><i class="bi bi-search"></i> </span><input id="filtersolutions" type="text" class="form-control" placeholder="Search solutions"></div>
+											</div>
+											<!--<div class="col-lg-4">
+												<select class="form-select form-select-sm">
+													<option value="member">Role</option>
+													<option value="owner">Date</option>
+													<option value="owner">Name</option>
+												</select>
+											</div>-->
+											<div></div>
+										</div>
+										<div id="pane_solutions_list" class="list-group list-group-flush">
+
+											<!--<div class="list-group-item d-flex align-items-center">
+												<div class="me-4">
+												</div>
+												<div class="flex-fill"><a href="#" class="d-block h6 font-semibold mb-1">Robert Fox</a><span class="d-block text-sm text-muted">robert.fox@example.com</span></div>
+												<div class="ms-auto text-end">
+													<div class="dropdown">
+														<a class="text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></a>
+														<div class="dropdown-menu"><a href="#!" class="dropdown-item">Action </a><a href="#!" class="dropdown-item">Another action </a><a href="#!" class="dropdown-item">Something else here</a></div>
+													</div>
+												</div>
+											</div>-->
+
+										</div>
+									</div>
+								</div>
+
+
+
+
+							</div>
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+							<hr class="my-6" style="color:transparent">
+						</main>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
