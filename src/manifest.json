@@ -1,20 +1,22 @@
 {
 	"manifest_version": 3,
-	"name": "Audit Engine 365",
-	"short_name": "Audit Engine 365",
-	"version": "2.1",
-	"description": "Audit Engine for Microsoft Dynamics 365",
+	"name": "XrmWebTools",
+	"short_name": "XrmWebTools",
+	"version": "2.0.0.1",
+	"description": "Only for *.dynamics.com/*",
 	"content_security_policy": {
 		"script-src": "self",
 		"object-src": "self"
 	},
 	"action": {
-		"default_title": "Audit Engine for Microsoft Dynamics 365",
-		"default_icon": "/img/audit48.png"
+		"default_title": "XrmWebTools",
+		"default_icon": "/img/XWT48.png",
+		"default_popup": "popup/popup.html"
+
 	},
 	"icons": {
 		"32": "img/audit32.png",
-		"48": "img/audit48.png",
+		"48": "img/XWT48.png",
 		"64": "img/audit64.png",
 		"128": "img/audit128.png"
 	},
@@ -25,10 +27,8 @@
 				"*://*.dynamics.com/*"
 			],
 			"js": [
-				"manifest.js"
-			],
-			"css": [
-				"auditengine.css"
+				"engine/init.js",
+				"rightbodylinks/init.js"
 			]
 		}
 	],
@@ -44,8 +44,5 @@
 			"matches": [ "*://*.dynamics.com/*" ],
 			"resources": [ "*" ]
 		}
-	],
-	"background": {
-		"service_worker": "service-worker.js"
-	}
+	]
 }

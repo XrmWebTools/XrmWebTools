@@ -1,0 +1,236 @@
+﻿<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>CRM++</title>
+	<style>
+		@import url(https://unpkg.com/@webpixels/css@1.1.5/dist/index.css);
+		@import url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.0/font/bootstrap-icons.min.css");
+
+		.hidden {
+			display: none;
+		}
+
+		#overlay {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			z-index: 1000; /* Adjust as needed to ensure it's on top */
+		}
+
+		circle.outerCircle {
+			stroke: #8957ff;
+			stroke-width: 7.5;
+			fill: none;
+			animation-iteration-count: infinite;
+			animation-duration: 2s;
+			stroke-dasharray: 471;
+			animation-name: rotate;
+			animation-direction: reverse;
+			animation-timing-function: cubic-bezier(.62, .06, .36, .94);
+		}
+
+		@keyframes rotate {
+			0% {
+				stroke-dashoffset: 471;
+			}
+
+			50% {
+				stroke-dashoffset: 0;
+			}
+
+			100% {
+				stroke-dashoffset: -471;
+			}
+		}
+	</style>
+</head>
+<body style="overflow:hidden;min-width:750px;">
+
+	<div id="overlay" class="hidden">
+		<svg width="300" height="300" viewBox="0 0 300 300">
+			<circle cx="150" cy="150" r="75" class="outerCircle"></circle>
+		</svg>
+	</div>
+	<div class="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
+
+		<!-- Main content -->
+		<div class="h-screen flex-grow-1 overflow-y-lg-auto">
+
+			<!--#region Header  -->
+			<header class="bg-surface-secondary">
+				<div class="container-fluid max-w-screen-xl">
+					<div class="row g-0">
+						<!--<div class="col-auto"><a href="#" class="avatar w-40 h-40 border border-body border-4 rounded-circle shadow mt-n16"><img alt="..." src="/img/people/img-profile.jpg" class="rounded-circle"></a></div>-->
+						<div class="col ps-4 pt-4">
+							<h6 class="text-xs  text-muted mb-1">
+								XRM WebTools for Microsoft Dynamics 365 (former audit engine)
+							</h6>
+							<div class="row align-items-center">
+								<div class="col-sm col-12">
+									<h1 id="helloworld" class="h2 ls-tight"><span class="d-inline-block me-3">👋</span>Hi, Please open from a CRM!</h1>
+								</div>
+								<div class="col-sm-auto col-12 mt-4 mt-sm-0">
+									<div class="hstack gap-2 justify-content-sm-end">
+										<a id="opentoolbox" class="btn btn-sm btn-primary">
+											<span class="pe-2">
+												<i class="bi bi-plus-square-dotted">
+												</i>
+											</span><span>Open XrmWebTools Library</span>
+										</a>
+										
+
+									</div>
+								</div>
+							</div>
+							<div class="d-flex gap-2 flex-wrap mt-3 d-none d-sm-block" >
+								<a  href="#" class="bg-warning bg-opacity-50 bg-opacity-100-hover border rounded px-3 py-1 font-semibold text-heading text-xs">Form Commands</a>
+								<!--<a  href="#" class="bg-white bg-opacity-50 bg-opacity-100-hover border rounded px-3 py-1 font-semibold text-heading text-xs">Navigations</a>-->
+								<a  href="#" class="bg-primary bg-opacity-50 bg-opacity-100-hover border rounded px-3 py-1 font-semibold text-heading text-xs">Toolbox</a>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</header>
+			<!--#endregion Header -->
+
+
+			<main id="main_toolbox" class="py-1 bg-surface-secondary">
+
+				<div class="container-fluid">
+					<div class="row">
+
+						<div class="col-12 col-md-12">
+							<div>
+
+
+
+
+								<div id="toolbox" class="row g-3 g-xl-5 mt-1">
+
+
+									<!--LOGICALNAMES-->
+									<div class="col-lg-3 col-sm-6 tool-item">
+										<div class="card shadow-4-hover ">
+											<div class="card-body pb-5">
+												<div class="d-flex justify-content-between align-items-center">
+													<div><img id="img_logicalnames" alt="..." class="w-10 h-10 "></div>
+													<div class="text-end"><button id="popup_logicalnames" type="button" class="btn btn-sm btn-warning rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span>Logical Names</span></button></div>
+
+												</div>
+
+											</div>
+										</div>
+									</div>
+
+									<!--GODMODE-->
+									<div class="col-lg-3 col-sm-6 tool-item">
+										<div class="card shadow-4-hover">
+											<div class="card-body pb-5">
+												<div class="d-flex justify-content-between align-items-center">
+													<div><img id="img_godmode" alt="..." class="w-10 h-10"></div>
+													<div class="text-end"><button id="popup_godmode" type="button" class="btn btn-sm btn-warning rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span>God Mode</span></button></div>
+												</div>
+												<!--<div class="mt-6">
+				<h6 class="mb-2">God Mode</h6>-->
+												<!--<p class="text-sm text-muted">Bypass form restrictions, making required fields optional and allowing edits to read-only fields.</p>-->
+												<!--</div>-->
+											</div>
+										</div>
+									</div>
+
+									<!--Dark Mode (only in new look)-->
+									<div class="col-lg-3 col-sm-6 tool-item">
+										<div class="card shadow-4-hover">
+											<div class="card-body pb-5">
+												<div class="d-flex justify-content-between align-items-center">
+													<div><img id="img_darkmode" alt="..." class="w-10 h-10"></div>
+													<div class="text-end"><button id="popup_darkmode" type="button" class="btn btn-sm btn-warning rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span>Dark Mode</span></button></div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+
+									<!--Advanced Find-->
+									<div class="col-lg-3 col-sm-6 tool-item">
+										<div class="card shadow-4-hover">
+											<div class="card-body pb-5">
+												<div class="d-flex justify-content-between align-items-center">
+													<div><img id="img_openadvfind" alt="..." class="w-10 h-10"></div>
+													<div class="text-end"><button id="popup_openadvfind" type="button" class="btn btn-sm btn-warning rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span>Advanced Find</span></button></div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+
+									<!--Audit Engine-->
+									<div class="col-lg-3 col-sm-6 tool-item">
+										<div class="card shadow-4-hover">
+											<div class="card-body pb-5">
+												<div class="d-flex justify-content-between align-items-center">
+													<div><img id="img_auditengine" alt="..." class="w-10 h-10"></div>
+													<div class="text-end"><button id="popup_auditengine" type="button" class="btn btn-sm btn-primary rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span>Audit Engine 365</span></button></div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+									<!--Plugin Trace Viewer-->
+									<div class="col-lg-3 col-sm-6 tool-item">
+										<div class="card shadow-4-hover">
+											<div class="card-body pb-5">
+												<div class="d-flex justify-content-between align-items-center">
+													<div><img id="img_plugintraceviewer" alt="..." class="w-10 h-10"></div>
+													<div class="text-end"><button id="popup_plugintraceviewer" type="button" class="btn btn-sm btn-primary rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span>Plugin Trace Viewer</span></button></div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+									<!--Solution History-->
+									<div class="col-lg-3 col-sm-6 tool-item">
+										<div class="card shadow-4-hover">
+											<div class="card-body pb-5">
+												<div class="d-flex justify-content-between align-items-center">
+													<div><img id="img_solutionhistory" alt="..." class="w-10 h-10"></div>
+													<div class="text-end"><button id="popup_solutionhistory" type="button" class="btn btn-sm btn-primary rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span>Solution History</span></button></div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+									<!--Users Last Login-->
+									<div class="col-lg-3 col-sm-6 tool-item">
+										<div class="card shadow-4-hover">
+											<div class="card-body pb-5">
+												<div class="d-flex justify-content-between align-items-center">
+													<div><img id="img_userslastlogin" alt="..." class="w-10 h-10"></div>
+													<div class="text-end"><button id="popup_userslastlogin" type="button" class="btn btn-sm btn-primary rounded-pill"><i class="bi bi-plus-lg me-1"></i> <span>Users Last Login</span></button></div>
+												</div>
+
+											</div>
+										</div>
+									</div>
+
+
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+
+
+	
+		</div>
+	</div>
+
+	<script src="popup.js"></script>
+</body>
+</html>
