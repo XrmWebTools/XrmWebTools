@@ -130,7 +130,7 @@
 				</button>
 				<!-- Brand -->
 				<a class="navbar-brand py-lg-2 mb-lg-5 px-lg-6 me-0" href="#">
-					<img src="chrome-extension://akeibalkkhjfohcapablamfngmfbhanl/img/XWT48.png" alt="...">
+					<img style="max-width:48px" src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" alt="...">
 				</a>
 				<!-- User menu (mobile) -->
 				<div class="navbar-user d-lg-none ">
@@ -225,8 +225,69 @@
 					<div class="row g-0">
 						<div class="col ps-4 pt-4">
 							<h6 class="text-xs  text-muted mb-1">XrmWebTools for Microsoft Dynamics 365 (former audit engine)</h6>
-							<h1 id="helloworld" class="h2 ls-tight">Connected<span class="d-inline-block me-3"></span></h1>
-							<!--<div class="d-flex gap-2 flex-wrap mt-3 d-none d-sm-block"><a href="#" class="bg-white bg-opacity-50 bg-opacity-100-hover border rounded px-3 py-1 font-semibold text-heading text-xs"> Xrm.Page.context.getClientUrl()</a> </div>-->
+							<div class="d-flex flex-column flex-md-row gap-3 justify-content-between">
+								<div class="d-flex gap-3">
+									<!--<div class="input-group input-group-sm input-group-inline">
+			<span class="input-group-text pe-2">
+				<i class="bi bi-search"></i>
+			</span>
+			<input type="text" class="form-control" placeholder="Search" aria-label="Search">
+		</div>-->
+									<div>
+										<button type="button" class="btn btn-sm px-3 btn-neutral d-flex align-items-center">
+											<span class="text-xs text-primary">⚡</span>
+											<span class="vr opacity-20 mx-3"></span>
+
+											<span id="connect">Not Connected</span>
+										</button>
+									</div>
+
+									<!--<div class="dropdown">
+			<button class="btn btn-sm px-3 btn-neutral d-flex align-items-center dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+				<span>Windows</span>
+				<span class="vr opacity-20 mx-3"></span>
+
+			</button>
+			<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				<li><a class="dropdown-item" href="#">Option 1</a></li>
+				<li><a class="dropdown-item" href="#">Option 2</a></li>
+				<li><a class="dropdown-item" href="#">Option 3</a></li>
+			</ul>
+		</div>-->
+
+									<div>
+										<button type="button" disabled class="btn btn-sm px-3 btn-neutral d-flex align-items-center">
+											<span class="text-xs text-primary">🛠️</span>
+											<span class="vr opacity-20 mx-3"></span>
+
+											<span>Configuration</span>
+										</button>
+									</div>
+
+									<div>
+										<button type="button" class="btn btn-sm px-3 btn-neutral d-flex align-items-center"
+												onclick="window.open('https://github.com/auditengine/auditengine/issues', '_blank');">
+											<span class="text-xs text-primary">ℹ️</span>
+											<span class="vr opacity-20 mx-3"></span>
+
+											<span>Help</span>
+										</button>
+									</div>
+
+								</div>
+								<div class="btn-group">
+
+
+									<button type="button" class="btn btn-sm px-3 btn-neutral d-flex align-items-center" onclick="if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => console.log(`Error: ${err.message} (${err.name})`)); } else { if (document.exitFullscreen) { document.exitFullscreen(); } } return false;">
+										<i class="bi bi-box-arrow-up-right"></i>
+										<span class="vr opacity-20 mx-3"></span>
+
+										<span>Full Screen</span>
+									</button>
+
+
+								</div>
+							</div>							<!--<div class="d-flex gap-2 flex-wrap mt-3 d-none d-sm-block"><a href="#" class="bg-white bg-opacity-50 bg-opacity-100-hover border rounded px-3 py-1 font-semibold text-heading text-xs"> Xrm.Page.context.getClientUrl()</a> </div>-->
 						</div>
 						<div class="col-12 col-md-auto mt-2 mt-md-0 mb-md-3 hstack gap-2 mt-4 mt-sm-0">
 							<a href="#" class="btn btn-sm btn-square btn-neutral" style="display:none">
@@ -237,10 +298,6 @@
 								<i class="bi bi-bell-fill"></i>
 							</a>
 
-							<a href="#" class="btn btn-sm btn-primary d-block d-md-inline-block ms-auto ms-md-0"
-							   onclick="if (!document.fullscreenElement) { document.documentElement.requestFullscreen().catch(err => console.log(`Error: ${err.message} (${err.name})`)); } else { if (document.exitFullscreen) { document.exitFullscreen(); } } return false;">
-								Full Screen
-							</a>
 						</div>
 					</div>
 					<ul class="nav nav-tabs overflow-x ms-1 mt-4">
@@ -293,7 +350,7 @@
 										<div class="row justify-content-between align-items-center">
 											<div class="col-lg-6 col-12">
 												<div class="d-flex align-items-center" onclick="document.getElementById('id_audit_today_link').click(); return false;">
-													<div><img alt="..." src="chrome-extension://akeibalkkhjfohcapablamfngmfbhanl/img/XWT48.png" class="avatar rounded"></div>
+													<div><img alt="..." src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" class="avatar rounded"></div>
 													<div class="ms-4"><a href="#" class="h6 mb-1">Audit Today</a> <span class="d-block text-sm text-muted">Check out what's happening today!'</span></div>
 												</div>
 											</div>
@@ -322,7 +379,7 @@
 										<div class="row justify-content-between align-items-center">
 											<div class="col-lg-6 col-12">
 												<div class="d-flex align-items-center" onclick="document.getElementById('id_advanced_audit_find_link').click(); return false;">
-													<div><img alt="..." src="chrome-extension://akeibalkkhjfohcapablamfngmfbhanl/img/XWT48.png" class="avatar rounded"></div>
+													<div><img alt="..." src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" class="avatar rounded"></div>
 													<div class="ms-4"><a href="#" class="h6 mb-1">Audit Advanced Find</a> <span class="d-block text-sm text-muted">Query Audit logs with extra filters</span></div>
 												</div>
 											</div>
@@ -348,7 +405,7 @@
 										<div class="row justify-content-between align-items-center">
 											<div class="col-lg-6 col-12">
 												<div class="d-flex align-items-center" onclick="document.getElementById('id_auditcenter_link').click(); return false;">
-													<div><img alt="..." src="chrome-extension://akeibalkkhjfohcapablamfngmfbhanl/img/XWT48.png" class="avatar rounded"></div>
+													<div><img alt="..." src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" class="avatar rounded"></div>
 													<div class="ms-4"><a href="#" class="h6 mb-1">Audit Center</a> <span class="d-block text-sm text-muted">Allows you to define audit settings</span></div>
 												</div>
 											</div>
@@ -374,7 +431,7 @@
 										<div class="row justify-content-between align-items-center">
 											<div class="col-lg-6 col-12">
 												<div class="d-flex align-items-center" onclick="document.getElementById('id_plugintraces_link').click(); return false;">
-													<div><img alt="..." src="chrome-extension://akeibalkkhjfohcapablamfngmfbhanl/img/XWT48.png" class="avatar rounded"></div>
+													<div><img alt="..." src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" class="avatar rounded"></div>
 													<div class="ms-4"><a href="#" class="h6 mb-1">Plugin Trace Viewer</a> <span class="d-block text-sm text-muted">Investigate the Plugin Trace Log and findiing records with easy filtering and display possibilities</span></div>
 												</div>
 											</div>
@@ -400,7 +457,7 @@
 										<div class="row justify-content-between align-items-center">
 											<div class="col-lg-6 col-12">
 												<div class="d-flex align-items-center" onclick="document.getElementById('id_solutions_link').click(); return false;">
-													<div><img alt="..." src="chrome-extension://akeibalkkhjfohcapablamfngmfbhanl/img/XWT48.png" class="avatar rounded"></div>
+													<div><img alt="..." src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" class="avatar rounded"></div>
 													<div class="ms-4"><a href="#" class="h6 mb-1">Solution History</a> <span class="d-block text-sm text-muted">Easily view details of CRM solution imports</span></div>
 												</div>
 											</div>
@@ -426,7 +483,7 @@
 										<div class="row justify-content-between align-items-center">
 											<div class="col-lg-6 col-12">
 												<div class="d-flex align-items-center" onclick="document.getElementById('id_users_last_login_link').click(); return false;">
-													<div><img alt="..." src="chrome-extension://akeibalkkhjfohcapablamfngmfbhanl/img/XWT48.png" class="avatar rounded"></div>
+													<div><img alt="..." src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" class="avatar rounded"></div>
 													<div class="ms-4"><a href="#" class="h6 mb-1">Users Last Login</a> <span class="d-block text-sm text-muted">You subtitle comes here</span></div>
 												</div>
 											</div>

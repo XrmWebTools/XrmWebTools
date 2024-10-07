@@ -1,46 +1,8 @@
 ﻿console.clear();
 console.info("XRM WebTools: Hi!");
-
-
-
-
-
 setTimeout(() => { document.getElementById("audithistory_app").style.display = "block" }, 50);
-//alert("welcome to xrmtoolbox web " + Xrm.Page.context.getClientUrl());
-
-
-//var userSettings = Xrm.Utility.getGlobalContext().userSettings;
-//console.log("usersetting", userSettings)
-
-
-//var currentuserid = userSettings.userId;
-//var userSettings = userSettings.userName;
-
-//let firstWord = typeof username === 'string' ? username.trim().split(" ")[0] : "";
-
-//// Update the #helloworld element in the current document
-//const hour = new Date().getHours();
-
-//const welcomeTypes = [`Good morning, ${firstWord}!`, `Good afternoon, ${firstWord}!`, `Good evening, ${firstWord}!`];
-//let welcomeText = "";
-
-//if (hour < 12) welcomeText = welcomeTypes[0];
-//else if (hour < 18) welcomeText = welcomeTypes[1];
-//else welcomeText = welcomeTypes[2];
-
-
-
-//document.getElementById("helloworld").innerHTML = `Connected to: ${window.location.origin}`;
+document.getElementById("connect").innerHTML = `Connected to: ${window.location.origin}`;
 document.getElementById("url").innerHTML = `<i class="bi bi-house"></i> ${window.location.origin}`;
-
-//
-//alert("welcome to xrmtoolbox web " + Xrm.Page.context.getClientUrl());
-
-//document.getElementById("title").innerHTML = "XrmToolBox Web Edition";
-
-
-
-
 const XRMWebTools = {
 
 	WebApi: {
@@ -262,6 +224,34 @@ const XRMWebTools = {
 				req.send(JSON.stringify(entity));
 			});
 		}
+	},
+	CONFIG: {
+		baseUrl: 'https://github.com/auditengine/',
+		getUrl_naam: () => {
+			return `${XRMWebTools.CONFIG.baseUrl}auditengine/issues`;
+		},
+		organizationid: "",
+		currenttracelogsetting: "",
+		openAttribute(attributeId, entityId) {
+			const url = `${window.location.origin}/tools/systemcustomization/attributes/manageAttribute.aspx?attributeId=%7b${attributeId}%7d&entityId=%7b${entityId}%7d&appSolutionId=%7bFD140AAF-4DF4-11DD-BD17-0019B9312238%7d`;
+
+			xrmw.UI.openPopup(url);
+		},
+
+		openPopup(url, popupWidth = 800, popupHeight = 600) {
+			const { screenLeft, screenTop, innerWidth, innerHeight } = window;
+			const { clientWidth, clientHeight } = document.documentElement;
+
+			const screenWidth = innerWidth || clientWidth || screen.width;
+			const screenHeight = innerHeight || clientHeight || screen.height;
+
+			const left = (screenWidth / 2) - (popupWidth / 2) + (screenLeft || window.screenX);
+			const top = (screenHeight / 2) - (popupHeight / 2) + (screenTop || window.screenY);
+
+			const popupFeatures = `width=${popupWidth},height=${popupHeight},left=${left},top=${top},scrollbars=yes,resizable=yes`;
+
+			window.open(url, '_blank', popupFeatures);
+		},
 	},
 	Sidebar: {
 
@@ -1281,13 +1271,13 @@ const XRMWebTools = {
 				allEntities.sort((a, b) => (b.IsAuditEnabled.Value === true) - (a.IsAuditEnabled.Value === true));
 
 				// Filter entities by ensuring they have a valid entityTypeCode
-				const filteredEntities = allEntities.filter(entity => {
-					const entityTypeCode = Xrm.Internal.getEntityCode(entity.LogicalName);
-					return entityTypeCode !== null && entityTypeCode !== undefined;
-				});
+				//const filteredEntities = allEntities.filter(entity => {
+				//	const entityTypeCode = Xrm.Internal.getEntityCode(entity.LogicalName);
+				//	return entityTypeCode !== null && entityTypeCode !== undefined;
+				//});
 
 				// Display the filtered and sorted entities in the panel
-				XRMWebTools.Panel5.displayEntities(filteredEntities);
+				XRMWebTools.Panel5.displayEntities(allEntities);
 
 				document.getElementById("pane5_loadauditcenter").innerHTML = "Refresh Audit Center";
 			} catch (e) {
@@ -1338,7 +1328,7 @@ const XRMWebTools = {
 				// Attach a click event listener
 				EDIT.addEventListener('click', async (event) => {
 					event.preventDefault(); // Prevent the default link behavior
-					XRMWebTools.UI.openInDefaultSolution(entity.LogicalName)
+					XRMWebTools.CONFIG.openInDefaultSolution(entity.LogicalName)
 					//alert(); // Show an alert with the entity name
 				});
 
@@ -1417,7 +1407,7 @@ const XRMWebTools = {
 				// Add event listener to "Edit attribute" badge
 				const editBadge = attributeDiv.querySelector('.edit-attribute');
 				editBadge.addEventListener('click', () => {
-					XRMWebTools.UI.openAttribute(attr_MetadataId, entity_MetadataId);
+					XRMWebTools.CONFIG.openAttribute(attr_MetadataId, entity_MetadataId);
 
 				});
 			});
@@ -1685,13 +1675,15 @@ const XRMWebTools = {
 		});
 
 		//// Sidebar
-		//document.getElementById("app_loadonlineusers").addEventListener("click", async function (event) {
-		//	// Prevent the default anchor behavior (e.g., scrolling to top)
-		//	event.preventDefault();
-		//	XRMWebTools.toggleOverlay(true, "Retrieving", "Online Users");
-		//	await XRMWebTools.Sidebar.getOnlineUsers();
-		//	XRMWebTools.toggleOverlay(false);
-		//});
+		document.getElementById('XRMWT_LoadOnlineUsers').addEventListener('click',
+
+			async (event) => {
+				event.preventDefault();
+				XRMWebTools.toggleOverlay(true, "Retrieving", "Online Users");
+				await XRMWebTools.Sidebar.getOnlineUsers();
+				XRMWebTools.toggleOverlay(false);
+			}
+		);
 
 		// Panel 2 - Load views
 		document.getElementById("Load_views").addEventListener("click", async function (event) {
@@ -1790,15 +1782,7 @@ const XRMWebTools = {
 XRMWebTools.ManageTabs();
 XRMWebTools.RegisterEvents();
 
-document.getElementById('XRMWT_LoadOnlineUsers').addEventListener('click',
 
-	async (event) => {
-		event.preventDefault();
-		XRMWebTools.toggleOverlay(true, "Retrieving", "Online Users");
-		await XRMWebTools.Sidebar.getOnlineUsers();
-		XRMWebTools.toggleOverlay(false);
-	}
-);
 
 
 
