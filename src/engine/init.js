@@ -76,10 +76,10 @@
 			}
 
 			// Check if the audit history app is already present in the document
-			const audithistory_app = document.getElementById("audithistory_app");
+			const XrmWebTools = document.getElementById("XrmWebTools");
 
 			// If not present, attempt to inject the required content
-			if (!audithistory_app) {
+			if (!XrmWebTools) {
 				// Get the URL of the audit pane HTML template
 				const auditPane = browser.runtime.getURL("engine/engine.html");
 
@@ -100,6 +100,8 @@
 
 							// Build the script and style tags
 							const js = BuildScriptTag(browser.runtime.getURL("engine/engine.js"));
+							const aaimg = BuildScriptTag(browser.runtime.getURL("img/aaimg.js"));
+
 							//const css = BuildStyleTag(browser.runtime.getURL("engine/engine.css"));
 
 
@@ -114,7 +116,7 @@
 
 
 							body.appendChild(js);
-							//body.appendChild(css);
+							body.appendChild(aaimg);
 
 						} else if (xmlHttp.status === 400) {
 							console.warn('There was an error 400');
@@ -127,7 +129,7 @@
 				// Send the request to load the audit HTML content
 				xmlHttp.send();
 			} else {
-				// If `audithistory_app` exists, stop further attempts
+				// If `XrmWebTools` exists, stop further attempts
 				clearInterval(Interval.AuditControl.Pointer);
 			}
 		}, 1000);  // Repeat the process every second (1000ms)

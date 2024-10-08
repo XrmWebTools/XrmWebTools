@@ -119,10 +119,10 @@ document.getElementById('popup_darkmode').addEventListener('click', () => ClickP
 document.getElementById('popup_openadvfind').addEventListener('click', () => ClickPaneButton('rbl_advancedfind'));
 
 
-document.getElementById('popup_auditengine').addEventListener('click', () => ClickPaneButton('openxrmwebtools'));
-document.getElementById('popup_plugintraceviewer').addEventListener('click', () => ClickPaneButton('openxrmwebtools'));
-document.getElementById('popup_solutionhistory').addEventListener('click', () => ClickPaneButton('openxrmwebtools'));
-document.getElementById('popup_userslastlogin').addEventListener('click', () => ClickPaneButton('openxrmwebtools'));
+document.getElementById('popup_auditengine').addEventListener('click', () => ClickPaneButton('openxrmwebtools_today'));
+document.getElementById('popup_plugintraceviewer').addEventListener('click', () => ClickPaneButton('openxrmwebtools_plugins'));
+document.getElementById('popup_solutionhistory').addEventListener('click', () => ClickPaneButton('openxrmwebtools_solutions'));
+document.getElementById('popup_userslastlogin').addEventListener('click', () => ClickPaneButton('openxrmwebtools_users'));
 
 
 

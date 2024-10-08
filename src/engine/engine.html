@@ -1,37 +1,21 @@
 ﻿<!doctype html>
-
 <html lang="en" class="">
 <head>
-
 	<meta charset="UTF-8">
 	<title>XrmWebTools</title>
 	<style>
 		@keyframes rotate {
-			0% {
-				stroke-dashoffset: 471;
-			}
-
-			50% {
-				stroke-dashoffset: 0;
-			}
-
-			100% {
-				stroke-dashoffset: -471;
-			}
+			0% {stroke-dashoffset: 471;}
+			50% {stroke-dashoffset: 0;}
+			100% {stroke-dashoffset: -471;}
 		}
 	</style>
-	<style id="INLINE_PEN_STYLESHEET_ID">
-
-
-				@import url(https://unpkg.com/@webpixels/css@1.1.5/dist/index.css);
-		/**/
-		/* Bootstrap Icons */
+	<style >
+		@import url(https://unpkg.com/@webpixels/css@1.1.5/dist/index.css);
 		@import url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.0/font/bootstrap-icons.min.css");
 	</style>
 </head>
-
-<body id="audithistory_app" style="display:none">
-
+<body id="XrmWebTools" style="display:none">
 	<div id="overlay" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; display:none">
 		<svg width="300" height="300" viewBox="0 0 300 300">
 			<circle cx="150" cy="150" r="75" style="stroke: #8957ff; stroke-width: 7.5; fill: none; animation-iteration-count: infinite; animation-duration: 2s; stroke-dasharray: 471; animation-name: rotate; animation-direction: reverse; animation-timing-function: cubic-bezier(.62, .06, .36, .94);"></circle>
@@ -113,13 +97,9 @@
 		</div>
 	</div>
 	<!--#endregion Model Audit Form -->
-	<!-- Banner -->
-	<!--<a  class="btn w-full btn-primary text-truncate rounded-0 py-2 border-0 position-relative" style="z-index: 1000;">
-		<strong>Crafted with Webpixels CSS:</strong> The design system for Bootstrap 5. Browse all components →
-	</a>-->
+
 	<!-- Dashboard -->
 	<div class="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
-
 
 		<!-- Vertical Navbar -->
 		<nav class="navbar show navbar-vertical h-lg-screen navbar-expand-lg px-0 py-3 navbar-light bg-white border-bottom border-bottom-lg-0 border-end-lg" id="navbarVertical">
@@ -130,7 +110,7 @@
 				</button>
 				<!-- Brand -->
 				<a class="navbar-brand py-lg-2 mb-lg-5 px-lg-6 me-0" href="#">
-					<img style="max-width:48px" src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" alt="...">
+					<img id="logo_leftcorner" style="max-width:48px" alt="...">
 				</a>
 				<!-- User menu (mobile) -->
 				<div class="navbar-user d-lg-none ">
@@ -224,15 +204,15 @@
 				<div class="container-fluid">
 					<div class="row g-0">
 						<div class="col ps-4 pt-4">
-							<h6 class="text-xs  text-muted mb-1">XrmWebTools for Microsoft Dynamics 365 (former audit engine)</h6>
+							<h6 class="text-xs  text-muted mb-1">XrmWebTools for Microsoft Dynamics 365 (2.0.0.3)</h6>
 							<div class="d-flex flex-column flex-md-row gap-3 justify-content-between">
 								<div class="d-flex gap-3">
 									<!--<div class="input-group input-group-sm input-group-inline">
-			<span class="input-group-text pe-2">
-				<i class="bi bi-search"></i>
-			</span>
-			<input type="text" class="form-control" placeholder="Search" aria-label="Search">
-		</div>-->
+										<span class="input-group-text pe-2">
+											<i class="bi bi-search"></i>
+										</span>
+										<input type="text" class="form-control" placeholder="Search" aria-label="Search">
+									</div>-->
 									<div>
 										<button type="button" class="btn btn-sm px-3 btn-neutral d-flex align-items-center">
 											<span class="text-xs text-primary">⚡</span>
@@ -242,18 +222,6 @@
 										</button>
 									</div>
 
-									<!--<div class="dropdown">
-			<button class="btn btn-sm px-3 btn-neutral d-flex align-items-center dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-				<span>Windows</span>
-				<span class="vr opacity-20 mx-3"></span>
-
-			</button>
-			<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-				<li><a class="dropdown-item" href="#">Option 1</a></li>
-				<li><a class="dropdown-item" href="#">Option 2</a></li>
-				<li><a class="dropdown-item" href="#">Option 3</a></li>
-			</ul>
-		</div>-->
 
 									<div>
 										<button type="button" disabled class="btn btn-sm px-3 btn-neutral d-flex align-items-center">
@@ -327,20 +295,9 @@
 				</div>
 			</header>
 
-
-
 			<main id="id_start_page" class="py-6 bg-surface-secondary">
 				<div class="container-fluid">
 
-
-
-
-					<!-- Card stats -->
-					<!--<div class="d-flex flex-column flex-sm-row justify-content-between gap-3 mt-4">
-						<div class="input-group input-group-sm input-group-inline"><span class="input-group-text pe-2"><i class="bi bi-search"></i> </span><input id="filtertoolbox" type="text" class="form-control" placeholder="Search a tool" aria-label="Search"></div>-->
-					<!--<a href="#" class="btn btn-sm btn-warning text-nowrap">Submit app</a>-->
-					<!--</div>-->
-					<!--TOOLS-->
 					<div class="mt-6">
 						<h4 class="mb-5"><i class="bi bi-app-indicator text-muted me-3"></i>Installed Tools</h4>
 						<div class="row g-4">
@@ -349,9 +306,9 @@
 									<div class="p-5">
 										<div class="row justify-content-between align-items-center">
 											<div class="col-lg-6 col-12">
-												<div class="d-flex align-items-center" onclick="document.getElementById('id_audit_today_link').click(); return false;">
-													<div><img alt="..." src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" class="avatar rounded"></div>
-													<div class="ms-4"><a href="#" class="h6 mb-1">Audit Today</a> <span class="d-block text-sm text-muted">Check out what's happening today!'</span></div>
+												<div class="d-flex align-items-center" onclick="document.getElementById('id_audit_today_link').click();document.getElementById('id_pane1_searchauditsfromtoday').click(); return false;">
+													<div><img alt="..." id="img_audittoday" class="avatar rounded"></div>
+													<div class="ms-4"><a href="#" class="h6 mb-1">Audit Today</a> <span class="d-block text-sm text-muted">Check out what's happening today!</span></div>
 												</div>
 											</div>
 											<div class="col-lg-auto col-12 mt-4 mt-lg-0">
@@ -359,7 +316,7 @@
 													<!--<div>
 														<a href="#" class="text-sm text-muted text-danger-hover font-semibold"><i class="bi bi-trash me-2"></i>Uninstall</a>
 													</div>-->
-													<a href="#" class="btn d-inline-flex btn-sm btn-primary border-base mx-1" onclick="document.getElementById('id_audit_today_link').click(); return false;">
+													<a href="#" class="btn d-inline-flex btn-sm btn-primary border-base mx-1" onclick="document.getElementById('id_audit_today_link').click();document.getElementById('id_pane1_searchauditsfromtoday').click(); return false;">
 														<span class="pe-2">
 															<i class="bi bi-wrench"></i>
 														</span>
@@ -379,8 +336,8 @@
 										<div class="row justify-content-between align-items-center">
 											<div class="col-lg-6 col-12">
 												<div class="d-flex align-items-center" onclick="document.getElementById('id_advanced_audit_find_link').click(); return false;">
-													<div><img alt="..." src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" class="avatar rounded"></div>
-													<div class="ms-4"><a href="#" class="h6 mb-1">Audit Advanced Find</a> <span class="d-block text-sm text-muted">Query Audit logs with extra filters</span></div>
+													<div><img alt="..." id="img_auditadvfind" class="avatar rounded"></div>
+													<div class="ms-4"><a href="#" class="h6 mb-1">Audit Advanced Find</a> <span class="d-block text-sm text-muted">Query audit logs with extra filters</span></div>
 												</div>
 											</div>
 											<div class="col-lg-auto col-12 mt-4 mt-lg-0">
@@ -405,8 +362,8 @@
 										<div class="row justify-content-between align-items-center">
 											<div class="col-lg-6 col-12">
 												<div class="d-flex align-items-center" onclick="document.getElementById('id_auditcenter_link').click(); return false;">
-													<div><img alt="..." src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" class="avatar rounded"></div>
-													<div class="ms-4"><a href="#" class="h6 mb-1">Audit Center</a> <span class="d-block text-sm text-muted">Allows you to define audit settings</span></div>
+													<div><img alt="..." id="img_auditcenter" class="avatar rounded"></div>
+													<div class="ms-4"><a href="#" class="h6 mb-1">Audit Center</a> <span class="d-block text-sm text-muted">Allows you to check which tables/attributes are audited</span></div>
 												</div>
 											</div>
 											<div class="col-lg-auto col-12 mt-4 mt-lg-0">
@@ -431,8 +388,8 @@
 										<div class="row justify-content-between align-items-center">
 											<div class="col-lg-6 col-12">
 												<div class="d-flex align-items-center" onclick="document.getElementById('id_plugintraces_link').click(); return false;">
-													<div><img alt="..." src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" class="avatar rounded"></div>
-													<div class="ms-4"><a href="#" class="h6 mb-1">Plugin Trace Viewer</a> <span class="d-block text-sm text-muted">Investigate the Plugin Trace Log and findiing records with easy filtering and display possibilities</span></div>
+													<div><img alt="..." id="img_plugintraces" class="avatar rounded"></div>
+													<div class="ms-4"><a href="#" class="h6 mb-1">Plugin Trace WebViewer</a> <span class="d-block text-sm text-muted">Displays recent Plugin Trace Logs, quicky switch between Off/Exception/All</span></div>
 												</div>
 											</div>
 											<div class="col-lg-auto col-12 mt-4 mt-lg-0">
@@ -457,7 +414,7 @@
 										<div class="row justify-content-between align-items-center">
 											<div class="col-lg-6 col-12">
 												<div class="d-flex align-items-center" onclick="document.getElementById('id_solutions_link').click(); return false;">
-													<div><img alt="..." src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" class="avatar rounded"></div>
+													<div><img alt="..." id="img_solutions" class="avatar rounded"></div>
 													<div class="ms-4"><a href="#" class="h6 mb-1">Solution History</a> <span class="d-block text-sm text-muted">Easily view details of CRM solution imports</span></div>
 												</div>
 											</div>
@@ -483,8 +440,8 @@
 										<div class="row justify-content-between align-items-center">
 											<div class="col-lg-6 col-12">
 												<div class="d-flex align-items-center" onclick="document.getElementById('id_users_last_login_link').click(); return false;">
-													<div><img alt="..." src="https://static.vecteezy.com/ti/gratis-vector/p2/9877903-pixel-art-schroevendraaier-en-moersleutel-tools-pictogram-voor-8bit-game-op-witte-achtergrond-vector.jpg" class="avatar rounded"></div>
-													<div class="ms-4"><a href="#" class="h6 mb-1">Users Last Login</a> <span class="d-block text-sm text-muted">You subtitle comes here</span></div>
+													<div><img alt="..." id="img_users_last_login_link" class="avatar rounded"></div>
+													<div class="ms-4"><a href="#" class="h6 mb-1">Users Last Login</a> <span class="d-block text-sm text-muted">Displays the most recent login activity of users, detect inactive users</span></div>
 												</div>
 											</div>
 											<div class="col-lg-auto col-12 mt-4 mt-lg-0">
@@ -503,342 +460,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
-
-					<div class="card shadow border-0 mb-7 mt-6" style="display:none">
-						<div class="card-header">
-							<h5 class="mb-0">Applications</h5>
-						</div>
-						<div class="table-responsive">
-							<table class="table table-hover table-nowrap">
-								<thead class="thead-light">
-									<tr>
-										<th scope="col">Name</th>
-										<th scope="col">Date</th>
-										<th scope="col">Company</th>
-										<th scope="col">Offer</th>
-										<th scope="col">Meeting</th>
-										<th></th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr>
-										<td>
-											<img alt="..." src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=256&amp;h=256&amp;q=80" class="avatar avatar-sm rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Robert Fox
-											</a>
-										</td>
-										<td>
-											Feb 15, 2021
-										</td>
-										<td>
-											<img alt="..." src="https://preview.webpixels.io/web/img/other/logos/logo-1.png" class="avatar avatar-xs rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Dribbble
-											</a>
-										</td>
-										<td>
-											$3.500
-										</td>
-										<td>
-											<span class="badge badge-lg badge-dot">
-												<i class="bg-success"></i>Scheduled
-											</span>
-										</td>
-										<td class="text-end">
-											<a href="#" class="btn btn-sm btn-neutral">View</a>
-											<button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-												<i class="bi bi-trash"></i>
-											</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<img alt="..." src="https://images.unsplash.com/photo-1610271340738-726e199f0258?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=256&amp;h=256&amp;q=80" class="avatar avatar-sm rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Darlene Robertson
-											</a>
-										</td>
-										<td>
-											Apr 15, 2021
-										</td>
-										<td>
-											<img alt="..." src="https://preview.webpixels.io/web/img/other/logos/logo-2.png" class="avatar avatar-xs rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Netguru
-											</a>
-										</td>
-										<td>
-											$2.750
-										</td>
-										<td>
-											<span class="badge badge-lg badge-dot">
-												<i class="bg-warning"></i>Postponed
-											</span>
-										</td>
-										<td class="text-end">
-											<a href="#" class="btn btn-sm btn-neutral">View</a>
-											<button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-												<i class="bi bi-trash"></i>
-											</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<img alt="..." src="https://images.unsplash.com/photo-1610878722345-79c5eaf6a48c?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=256&amp;h=256&amp;q=80" class="avatar avatar-sm rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Theresa Webb
-											</a>
-										</td>
-										<td>
-											Mar 20, 2021
-										</td>
-										<td>
-											<img alt="..." src="https://preview.webpixels.io/web/img/other/logos/logo-3.png" class="avatar avatar-xs rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Figma
-											</a>
-										</td>
-										<td>
-											$4.200
-										</td>
-										<td>
-											<span class="badge badge-lg badge-dot">
-												<i class="bg-success"></i>Scheduled
-											</span>
-										</td>
-										<td class="text-end">
-											<a href="#" class="btn btn-sm btn-neutral">View</a>
-											<button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-												<i class="bi bi-trash"></i>
-											</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<img alt="..." src="https://images.unsplash.com/photo-1612422656768-d5e4ec31fac0?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=256&amp;h=256&amp;q=80" class="avatar avatar-sm rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Kristin Watson
-											</a>
-										</td>
-										<td>
-											Feb 15, 2021
-										</td>
-										<td>
-											<img alt="..." src="https://preview.webpixels.io/web/img/other/logos/logo-4.png" class="avatar avatar-xs rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Mailchimp
-											</a>
-										</td>
-										<td>
-											$3.500
-										</td>
-										<td>
-											<span class="badge badge-lg badge-dot">
-												<i class="bg-dark"></i>Not discussed
-											</span>
-										</td>
-										<td class="text-end">
-											<a href="#" class="btn btn-sm btn-neutral">View</a>
-											<button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-												<i class="bi bi-trash"></i>
-											</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<img alt="..." src="https://images.unsplash.com/photo-1608976328267-e673d3ec06ce?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=256&amp;h=256&amp;q=80" class="avatar avatar-sm rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Cody Fisher
-											</a>
-										</td>
-										<td>
-											Apr 10, 2021
-										</td>
-										<td>
-											<img alt="..." src="https://preview.webpixels.io/web/img/other/logos/logo-5.png" class="avatar avatar-xs rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Webpixels
-											</a>
-										</td>
-										<td>
-											$1.500
-										</td>
-										<td>
-											<span class="badge badge-lg badge-dot">
-												<i class="bg-danger"></i>Canceled
-											</span>
-										</td>
-										<td class="text-end">
-											<a href="#" class="btn btn-sm btn-neutral">View</a>
-											<button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-												<i class="bi bi-trash"></i>
-											</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<img alt="..." src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=256&amp;h=256&amp;q=80" class="avatar avatar-sm rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Robert Fox
-											</a>
-										</td>
-										<td>
-											Feb 15, 2021
-										</td>
-										<td>
-											<img alt="..." src="https://preview.webpixels.io/web/img/other/logos/logo-1.png" class="avatar avatar-xs rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Dribbble
-											</a>
-										</td>
-										<td>
-											$3.500
-										</td>
-										<td>
-											<span class="badge badge-lg badge-dot">
-												<i class="bg-success"></i>Scheduled
-											</span>
-										</td>
-										<td class="text-end">
-											<a href="#" class="btn btn-sm btn-neutral">View</a>
-											<button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-												<i class="bi bi-trash"></i>
-											</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<img alt="..." src="https://images.unsplash.com/photo-1610271340738-726e199f0258?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=256&amp;h=256&amp;q=80" class="avatar avatar-sm rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Darlene Robertson
-											</a>
-										</td>
-										<td>
-											Apr 15, 2021
-										</td>
-										<td>
-											<img alt="..." src="https://preview.webpixels.io/web/img/other/logos/logo-2.png" class="avatar avatar-xs rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Netguru
-											</a>
-										</td>
-										<td>
-											$2.750
-										</td>
-										<td>
-											<span class="badge badge-lg badge-dot">
-												<i class="bg-warning"></i>Postponed
-											</span>
-										</td>
-										<td class="text-end">
-											<a href="#" class="btn btn-sm btn-neutral">View</a>
-											<button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-												<i class="bi bi-trash"></i>
-											</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<img alt="..." src="https://images.unsplash.com/photo-1610878722345-79c5eaf6a48c?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=256&amp;h=256&amp;q=80" class="avatar avatar-sm rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Theresa Webb
-											</a>
-										</td>
-										<td>
-											Mar 20, 2021
-										</td>
-										<td>
-											<img alt="..." src="https://preview.webpixels.io/web/img/other/logos/logo-3.png" class="avatar avatar-xs rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Figma
-											</a>
-										</td>
-										<td>
-											$4.200
-										</td>
-										<td>
-											<span class="badge badge-lg badge-dot">
-												<i class="bg-success"></i>Scheduled
-											</span>
-										</td>
-										<td class="text-end">
-											<a href="#" class="btn btn-sm btn-neutral">View</a>
-											<button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-												<i class="bi bi-trash"></i>
-											</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<img alt="..." src="https://images.unsplash.com/photo-1612422656768-d5e4ec31fac0?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=256&amp;h=256&amp;q=80" class="avatar avatar-sm rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Kristin Watson
-											</a>
-										</td>
-										<td>
-											Feb 15, 2021
-										</td>
-										<td>
-											<img alt="..." src="https://preview.webpixels.io/web/img/other/logos/logo-4.png" class="avatar avatar-xs rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Mailchimp
-											</a>
-										</td>
-										<td>
-											$3.500
-										</td>
-										<td>
-											<span class="badge badge-lg badge-dot">
-												<i class="bg-dark"></i>Not discussed
-											</span>
-										</td>
-										<td class="text-end">
-											<a href="#" class="btn btn-sm btn-neutral">View</a>
-											<button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-												<i class="bi bi-trash"></i>
-											</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<img alt="..." src="https://images.unsplash.com/photo-1608976328267-e673d3ec06ce?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=3&amp;w=256&amp;h=256&amp;q=80" class="avatar avatar-sm rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Cody Fisher
-											</a>
-										</td>
-										<td>
-											Apr 10, 2021
-										</td>
-										<td>
-											<img alt="..." src="https://preview.webpixels.io/web/img/other/logos/logo-5.png" class="avatar avatar-xs rounded-circle me-2">
-											<a class="text-heading font-semibold" href="#">
-												Webpixels
-											</a>
-										</td>
-										<td>
-											$1.500
-										</td>
-										<td>
-											<span class="badge badge-lg badge-dot">
-												<i class="bg-danger"></i>Canceled
-											</span>
-										</td>
-										<td class="text-end">
-											<a href="#" class="btn btn-sm btn-neutral">View</a>
-											<button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover">
-												<i class="bi bi-trash"></i>
-											</button>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="card-footer border-0 py-5">
-							<span class="text-muted text-sm">Showing 10 items out of 250 results found</span>
-						</div>
-					</div>
+					</div>			
 				</div>
 			</main>
 
@@ -861,7 +483,6 @@
 							</div>
 							<div class="col-auto d-none d-md-block">
 								<div class="hstack gap-2 justify-content-end">
-
 									<a target="_blank" href="https://github.com/auditengine/auditengine/issues" class="text-sm text-main text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Report an issue?</span> </a>
 									<button type="button" class="btn btn-sm btn-neutral" onclick="document.getElementById('panel1_card_extrafilters').classList.toggle('visually-hidden');">
 										<span>Add Extra Filters</span>
@@ -872,86 +493,69 @@
 					</header>
 				</div>
 
-				<div class=" border-0 mt-6">
-					<div class="row row-cols-xl-4 row-cols-md-2 g-6">
-						<div class="col">
-							<div id="card_creates_today" class="card bg-success bg-opacity-10 border-success border-opacity-40">
-								<div class="p-5">
-									<div class="d-flex gap-3 mb-5">
-										<img id="create_logo" class="avatar" alt="..." src="">
-										<div class="">
-											<a class="d-block text-l text-success">Creates</a>
-											<span class="d-block text-xs text-muted">Create logs from today</span>
-										</div>
+				<div class="row g-6 mb-8 mt-1">
+					<div class="col-xl col-sm-6 col-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="d-flex justify-content-between mb-5">
+									<div class="me-4">
+										<div class="avatar"><img id="create_logo" alt="..."></div>
 									</div>
-									<div class="d-flex align-items-end">
-										<div class="hstack gap-2">
-											<span id="card_creates_today_badge" class="badge bg-danger bg-opacity-25 text-danger">Not Loaded</span>
-										</div>
+									<div class="dropdown">
+										<a class="text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-three-dots"></i></a>
+										<div class="dropdown-menu"><a href="#!" class="dropdown-item">Action </a><a href="#!" class="dropdown-item">Another action </a><a href="#!" class="dropdown-item">Something else here</a></div>
 									</div>
-									<div id="card_creates_today_account" class="d-block text-xs fw-bold">Count: 0</div>
+								</div>
+								<h6 class="h5 font-semibold mb-6">Create logs today</h6>
+								<div class="d-flex align-items-center justify-content-between mb-1"><span id="card_creates_today_account" class="text-sm text-uppercase text-muted d-block">/</span> <span class="text-sm text-uppercase text-muted d-block"></span></div>
+								<div class="progress progress-sm shadow-none">
+									<div class="progress-bar bg-success" id="card_creates_today_account_progress" role="progressbar" style="width:0%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
 								</div>
 							</div>
 						</div>
-						<div class="col">
-							<div id="card_updates_today" class="card bg-warning bg-opacity-10 border-warning border-opacity-40">
-								<div class="p-5">
-									<div class="d-flex gap-3 mb-5">
-										<img id="update_logo" class="avatar" alt="...">
-										<div class="">
-											<a class="d-block text-l text-warning">Updates</a>
-											<span class="d-block text-xs text-muted">Update logs from today</span>
-										</div>
+					</div>
+					<div class="col-xl col-sm-6 col-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="d-flex justify-content-between mb-5">
+									<div class="me-4">
+										<div class="avatar"><img id="update_logo" alt="..."></div>
 									</div>
-									<div class="d-flex align-items-end">
-										<div class="hstack gap-2">
-											<span id="card_updates_today_badge" class="badge bg-danger bg-opacity-25 text-danger">Not Loaded</span>
-										</div>
+									<div class="dropdown">
+										<a class="text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-three-dots"></i></a>
+										<div class="dropdown-menu" style=""><a href="#!" class="dropdown-item">Action </a><a href="#!" class="dropdown-item">Another action </a><a href="#!" class="dropdown-item">Something else here</a></div>
 									</div>
-									<div id="card_updates_today_account" class="d-block text-xs fw-bold">Count: 0</div>
+								</div>
+								<h6 class="h5 font-semibold mb-6">Update logs today</h6>
+								<div class="d-flex align-items-center justify-content-between mb-1"><span id="card_updates_today_account" class="text-sm text-uppercase text-muted d-block">/</span> <span class="text-sm text-uppercase text-muted d-block"></span></div>
+								<div class="progress progress-sm shadow-none">
+									<div class="progress-bar bg-warning" id="card_updates_today_account_progress" role="progressbar" style="width:0%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
 								</div>
 							</div>
 						</div>
-						<div class="col">
-							<div id="card_deletes_today" class="card bg-danger bg-opacity-10 border-danger border-opacity-40">
-								<div class="p-5">
-									<div class="d-flex gap-3 mb-5">
-										<img id="delete_logo" class="avatar" alt="...">
-										<div class="">
-											<a class="d-block text-l text-danger">Deletes</a>
-											<span class="d-block text-xs text-muted">Delete logs from today</span>
-										</div>
+					</div>
+					<div class="col-xl col-sm-6 col-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="d-flex justify-content-between mb-5">
+									<div class="me-4">
+										<div class="avatar"><img id="delete_logo" alt="..."></div>
 									</div>
-									<div class="d-flex align-items-end">
-										<div class="hstack gap-2">
-											<span id="card_deletes_today_badge" class="badge bg-danger bg-opacity-25 text-danger">Not Loaded</span>
-										</div>
+									<div class="dropdown">
+										<a class="text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-three-dots"></i></a>
+										<div class="dropdown-menu"><a href="#!" class="dropdown-item">Action </a><a href="#!" class="dropdown-item">Another action </a><a href="#!" class="dropdown-item">Something else here</a></div>
 									</div>
-									<div id="card_deletes_today_account" class="d-block text-xs fw-bold">Count: 0</div>
 								</div>
-							</div>
-						</div>
-						<div class="col">
-							<div id="card_logins_today" class="card bg-primary bg-opacity-10 border-solid border-opacity-40">
-								<div class="p-5">
-									<div class="d-flex gap-3 mb-5">
-										<img id="access_logo" class="avatar" alt="...">
-										<div class="">
-											<a class="d-block text-l text-primary">Web Access</a>
-											<span class="d-block text-xs text-muted">Logins from today</span>
-										</div>
-									</div>
-									<div class="d-flex align-items-end">
-										<div class="hstack gap-2">
-											<span id="card_logins_today_badge" class="badge bg-danger bg-opacity-25 text-danger">Not Loaded</span>
-										</div>
-									</div>
-									<div id="card_logins_today_count" class="d-block text-xs fw-bold">Count: 0</div>
+								<h6 class="h5 font-semibold mb-6">Delete logs today</h6>
+								<div class="d-flex align-items-center justify-content-between mb-1"><span id="card_deletes_today_account" class="text-sm text-uppercase text-muted d-block">/</span> <span class="text-sm text-uppercase text-muted d-block"></span></div>
+								<div class="progress progress-sm shadow-none">
+									<div class="progress-bar bg-danger" id="card_deletes_today_account_progress" role="progressbar" style="width:00%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
+
 				<div id="panel1_card_extrafilters" class="card mt-6 visually-hidden">
 					<div class="card-header py-3">
 						<div class="d-flex align-items-center">
@@ -965,14 +569,14 @@
 								<div class="row g-3 align-items-center">
 									<div class="col-sm-6 col-12 d-flex">
 										<div class="form-check form-check-linethrough d-flex align-items-center gap-1">
-											<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="topcountcheckbox"
+											<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="topcountcheckbox" checked
 												   onclick="document.getElementById('topcountrequired').classList.toggle('hidden', !this.checked)">
 											<a href="#offcanvasCreate" class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas">Top Count: Only retrieve x latest audits of today</a>
 										</div>
 									</div>
 									<div class="col-sm-auto col-12 ms-sm-auto">
 										<div class="hstack gap-5 justify-content-end">
-											<input id="topcountinput" class="form-control" type="text" value="500" />
+											<input id="topcountinput" class="form-control" type="text" value="5000" />
 											<div>
 												<span id="topcountrequired" class="badge bg-success-subtle text-success hidden">Good for performance</span>
 											</div>
@@ -1002,32 +606,27 @@
 						</div>
 					</div>
 				</div>
-				<div class="card shadow border-0 mb-7 mt-6">
-					<div class="card-header">
-						<h5 class="mb-0 text-muted">Audit logs from today</h5>
-					</div>
 
+				<div class="card mt-6">
+					<div class="card-header border-bottom">
+						<h5 class="mb-0">Audit logs from today</h5>
+					</div>
 					<div class="table-responsive">
 						<table class="table table-hover table-striped table-nowrap">
-							<thead>
+							<thead class="table-light">
 								<tr>
-									<!--<th scope="col"></th>-->
 
-									<th scope="col">
-										<div class="d-flex align-items-center gap-2 ps-1">
-
-											<span>Created On</span>
-										</div>
-									</th>
+									<th scope="col">Created On</th>
 									<th scope="col">Event</th>
-									<th scope="col" class="d-none d-xl-table-cell">Changed By</th>
-									<th scope="col" class="d-none d-xl-table-cell">Record Type</th>
+									<th>Actions</th>
+
+									<th scope="col">Changed By</th>
+									<th scope="col">Record Type</th>
 									<th scope="col">Record Name</th>
 									<th scope="col">Changed Data</th>
-									<th></th>
 								</tr>
 							</thead>
-							<tbody id="id_audits_from_today">
+							<tbody id="id_audits_from_today">				
 							</tbody>
 						</table>
 					</div>
@@ -1036,7 +635,7 @@
 						<span id="ID_logs" class="text-muted text-sm"></span>
 					</div>
 				</div>
-
+				
 			</main>
 
 			<main id="id_users_last_login" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8" style="display:none">
@@ -1140,7 +739,7 @@
 							<div class="col-auto d-none d-md-block">
 								<div class="hstack gap-2 justify-content-end">
 									<!--<a href="#" class="text-sm text-muted text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Need help?</span> </a>
-									<button type="button" class="btn btn-sm btn-neutral"><span id="pane3_webapi">Open results in WebApi</span></button>-->
+						<button type="button" class="btn btn-sm btn-neutral"><span id="pane3_webapi">Open results in WebApi</span></button>-->
 								</div>
 							</div>
 						</div>
@@ -1279,37 +878,41 @@
 					</div>
 				</div>
 				<hr class="my-6">
-				<div class="card shadow border-0 mb-7">
-					<div class="card-header">
-						<h5 class="mb-0 text-muted">Advanced Audit Find</h5>
-					</div>
-					<table class="table table-hover table-striped table-responsive table-sm ">
-						<thead>
-							<tr>
-								<th scope="col">
-									<div class="d-flex align-items-center gap-2 ps-1">
 
-										<span>Created On</span>
-									</div>
-								</th>
-								<th scope="col">Event</th>
-								<th scope="col" class="d-none d-xl-table-cell">Changed By</th>
-								<th scope="col" class="d-none d-xl-table-cell">Record Type</th>
-								<th scope="col">Record Name</th>
-								<th scope="col">Changed Data</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody id="id_audits_advanced_find">
-						</tbody>
-					</table>
+
+				<div class="card mt-6">
+					<div class="card-header border-bottom">
+						<h5 class="mb-0">Advanced Audit Find</h5>
+					</div>
+					<div class="table-responsive">
+						<table class="table table-hover table-striped table-nowrap">
+							<thead class="table-light">
+								<tr>
+
+									<th scope="col">Created On</th>
+									<th scope="col">Event</th>
+									<th>Actions</th>
+
+									<th scope="col">Changed By</th>
+									<th scope="col">Record Type</th>
+									<th scope="col">Record Name</th>
+									<th scope="col">Changed Data</th>
+								</tr>
+							</thead>
+							<tbody id="id_audits_advanced_find">
+							</tbody>
+						</table>
+					</div>
+
 					<div class="card-footer border-0 py-5">
 						<span id="id_audits_advanced_find_logs" class="text-muted text-sm"></span>
 					</div>
 				</div>
-				<hr class="my-6" style="color:transparent">
-				<hr class="my-6" style="color:transparent">
-				<hr class="my-6" style="color:transparent">
+				<hr class="my-6">
+
+
+			
+
 			</main>
 
 			<main id="id_plugintraces" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8" style="display:none">
@@ -1749,14 +1352,10 @@
 				<hr class="my-6" style="color:transparent">
 				<hr class="my-6" style="color:transparent">
 			</main>
-			<!-- Main -->
+			
 
 		</div>
 	</div>
-
 	<script src="engine.js"></script>
-	<!--<script src="ClientGlobalContext.js.aspx" type="text/javascript"></script>-->
-
-
 </body>
 </html>

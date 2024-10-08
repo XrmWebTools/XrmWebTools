@@ -1,6 +1,7 @@
-﻿console.clear();
-console.info("XRM WebTools: Hi!");
-setTimeout(() => { document.getElementById("audithistory_app").style.display = "block" }, 50);
+﻿
+console.clear();
+console.info("XWT: Hi!");
+setTimeout(() => { document.getElementById("XrmWebTools").style.display = "block" }, 50);
 document.getElementById("connect").innerHTML = `Connected to: ${window.location.origin}`;
 document.getElementById("url").innerHTML = `<i class="bi bi-house"></i> ${window.location.origin}`;
 const XRMWebTools = {
@@ -565,7 +566,6 @@ const XRMWebTools = {
 		// Function to populate the table with audits from today
 		PopulateAuditsFromTodaysTable: (audits, tableBodyId = "id_audits_from_today") => {
 
-			const appplyButton = false;
 			const tableBody = document.getElementById(tableBodyId);
 
 			// Clear existing rows in the table
@@ -611,50 +611,116 @@ const XRMWebTools = {
 				const auditform_openinwebapi = `${window.location.origin}/api/data/v9.2/audits(${auditId})#p`;
 				const changeDataJSON = XRMWebTools.StringHelpers.formatIfJson(data.changedata);
 				// Create a new table row
+				//const row = document.createElement('tr');
+				//row.onclick = function () {
+				//	document.getElementById('auditform_id').textContent = `Audit Details: ${auditId}`;
+				//	document.getElementById('auditform_createdon').textContent = createdOnFormatted;
+				//	document.getElementById('auditform_event').textContent = actionFormatted;
+				//	document.getElementById('auditform_record').textContent = `${objectTypeCode} : ${objectIdFormatted}`;
+				//	document.getElementById('auditform_recordid').textContent = objectId;
+				//	document.getElementById('auditform_record_openincrm').setAttribute('href', record_openincrm);
+				//	document.getElementById('auditform_user').textContent = userName;
+				//	document.getElementById('auditform_userid').textContent = userId;
+				//	document.getElementById('auditform_user_openincrm').setAttribute('href', user_openincrm);
+				//	document.getElementById('auditform_changeddata').textContent = changeDataJSON;
+				//	document.getElementById('auditform').style.display = 'block';
+				//	document.getElementById('auditform_openinwebapi').setAttribute('href', auditform_openinwebapi);
+
+				//	console.log("opened audit: ", data)
+
+				//};
+
+				// Create a new row element for the table
 				const row = document.createElement('tr');
-				row.onclick = function () {
-					document.getElementById('auditform_id').textContent = `Audit Details: ${auditId}`;
-					document.getElementById('auditform_createdon').textContent = createdOnFormatted;
-					document.getElementById('auditform_event').textContent = actionFormatted;
-					document.getElementById('auditform_record').textContent = `${objectTypeCode} : ${objectIdFormatted}`;
-					document.getElementById('auditform_recordid').textContent = objectId;
-					document.getElementById('auditform_record_openincrm').setAttribute('href', record_openincrm);
-					document.getElementById('auditform_user').textContent = userName;
-					document.getElementById('auditform_userid').textContent = userId;
-					document.getElementById('auditform_user_openincrm').setAttribute('href', user_openincrm);
-					document.getElementById('auditform_changeddata').textContent = changeDataJSON;
-					document.getElementById('auditform').style.display = 'block';
-					document.getElementById('auditform_openinwebapi').setAttribute('href', auditform_openinwebapi);
 
-					console.log("opened audit: ", data)
+				// Set the default success status for badge formatting
+				let success = "success";
 
-				};
-				// Create each cell with proper formatting
-				const createdOnCell = `<td>${createdOnFormatted}</td>`;
-				const actionCell = `<td class="${actionFormatted === 'Delete' ? 'text-danger' :
-					actionFormatted === 'Create' ? 'text-success' :
-						actionFormatted === 'User Access via Web' ? 'text-primary' :
-							actionFormatted === 'Update' ? 'text-warning' : ''
-					} d-none d-xl-table-cell">${actionFormatted}</td>`;
-				const objectTypeCodeCell = `<td class="d-none d-xl-table-cell">${objectTypeCodeFormatted}</td>`;
-				//const changedDataCell = `<td class="d-none d-xl-table-cell">${changedDataSanitized}</td>`;
-				const changedDataCell = `
-  <td class="d-none d-xl-table-cell" style="max-width: 1000px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${changedDataSanitized}">
-    ${changedDataSanitized}
-  </td>`;
-				const recordType = `<td>${recordTypeFormatted}</td>`;
-				const displayValue = objectIdFormattedSanitized;
-				const recordName = `<td class="d-none d-xl-table-cell" ${displayValue !== '-' ? `style="text-decoration: underline; cursor: pointer;"` : ''}>${displayValue}</td>`;
-				let changedBy = `<td class="d-none d-xl-table-cell">${userName}</td>`;
-				if (actionFormatted === 'User Access via Web') { changedBy = `<td class="d-none d-xl-table-cell">${displayValue}</td>`; }
-
-				if (appplyButton) {
-					row.innerHTML = menu + createdOnCell + actionCell + changedBy + recordType + recordName + "changedDataCell";
-				} else {
-					row.innerHTML = createdOnCell + actionCell + changedBy + recordType + recordName + changedDataCell;
+				// Adjust the badge color based on the action type
+				if (actionFormatted === 'Update') {
+					success = "warning"; // Warning for update action
 				}
-				// Combine all cells into a single row and append it to the table body
+				if (actionFormatted === 'Delete') {
+					success = "danger"; // Danger for delete action
+				}
+
+				// Create the "Created On" cell with formatted date and a clickable link
+				const createdOnCell = `<td><a class="text-heading font-semibold">${createdOnFormatted}</a></td>`;
+
+				// Create the action cell, showing the action type (e.g., Create, Update, Delete) 
+				// with the corresponding badge and background color (success, warning, danger)
+				const actionCell = `
+<td>
+    <span class="badge badge-lg badge-dot">
+        <i class="bg-${success}"></i>${actionFormatted}
+    </span>
+</td>`;
+
+				// Function to handle the click event for the View button
+				function handleViewClick() {
+						document.getElementById('auditform_id').textContent = `Audit Details: ${auditId}`;
+						document.getElementById('auditform_createdon').textContent = createdOnFormatted;
+						document.getElementById('auditform_event').textContent = actionFormatted;
+						document.getElementById('auditform_record').textContent = `${objectTypeCode} : ${objectIdFormatted}`;
+						document.getElementById('auditform_recordid').textContent = objectId;
+						document.getElementById('auditform_record_openincrm').setAttribute('href', record_openincrm);
+						document.getElementById('auditform_user').textContent = userName;
+						document.getElementById('auditform_userid').textContent = userId;
+						document.getElementById('auditform_user_openincrm').setAttribute('href', user_openincrm);
+						document.getElementById('auditform_changeddata').textContent = changeDataJSON;
+						document.getElementById('auditform').style.display = 'block';
+						document.getElementById('auditform_openinwebapi').setAttribute('href', auditform_openinwebapi);			
+				}
+
+				// Create the actions cell with "View" and "Delete" buttons
+				const actions = `
+<td>
+    <a href="#" class="btn btn-sm btn-neutral" id="viewButton">View</a>
+    <button type="button" class="btn btn-sm btn-square btn-neutral text-danger-hover" disabled>
+        <i class="bi bi-trash"></i>
+    </button>
+</td>`;
+
+				// Create the "Object Type Code" cell, hidden on smaller screens
+				const objectTypeCodeCell = `<td class="d-none d-xl-table-cell">${objectTypeCodeFormatted}</td>`;
+
+				// Create the "Changed Data" cell, with text truncated if it exceeds a certain width
+				// Displays a tooltip with the full content on hover
+				const changedDataCell = `
+<td class="d-xl-table-cell" style="max-width: 1000px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${changedDataSanitized}">
+    ${changedDataSanitized}
+</td>`;
+
+				// Create the "Record Type" cell
+				const recordType = `<td>${recordTypeFormatted}</td>`;
+
+				// Format the record name, underline it and make it clickable if it's not a placeholder ('-')
+				const displayValue = objectIdFormattedSanitized;
+				const recordName = `
+<td class="d-xl-table-cell" ${displayValue !== '-' ? 'style="text-decoration: underline; cursor: pointer;"' : ''}>
+    ${displayValue}
+</td>`;
+
+				// Create the "Changed By" cell, displaying the username
+				// Special case: If the action was "User Access via Web," display the object instead of the username
+				let changedBy = `<td>${userName}</td>`;
+				if (actionFormatted === 'User Access via Web') {
+					changedBy = `<td class="d-xl-table-cell">${displayValue}</td>`;
+				}
+
+				// Combine all the cells into the row's inner HTML
+				row.innerHTML = createdOnCell + actionCell + actions + changedBy + recordType + recordName + changedDataCell;
+
+				// Append the new row to the table body
 				tableBody.appendChild(row);
+
+				// Add an event listener to the "View" button
+				const viewButton = row.querySelector('#viewButton');
+				viewButton.addEventListener('click', (event) => {
+					event.preventDefault(); // Prevent the default link behavior
+					handleViewClick(); // Call the function to handle the click
+				});
+
 			});
 		},
 
@@ -664,7 +730,8 @@ const XRMWebTools = {
 			let createsCount = 0;
 			let updatesCount = 0;
 			let deletesCount = 0;
-			let loginsCount = 0;
+			//let loginsCount = 0;
+			let total = 0;
 
 			// Categorize the audits
 			audits.forEach(audit => {
@@ -672,43 +739,68 @@ const XRMWebTools = {
 				switch (operation) {
 					case "Create":
 						createsCount++;
+						total++;
 						break;
 					case "Update":
 						updatesCount++;
+						total++;
 						break;
 					case "Delete":
 						deletesCount++;
+						total++;
 						break;
-					case "User Access via Web":
-						loginsCount++;
-						break;
+					//case "User Access via Web":
+					//	loginsCount++;
+					//	break;
 					default:
 						// Handle unexpected operation types if needed
 						break;
 				}
 			});
 
-			// Update the HTML elements with the counts
-			document.getElementById('card_creates_today_account').textContent = `Count: ${createsCount}`;
-			document.getElementById('card_updates_today_account').textContent = `Count: ${updatesCount}`;
-			document.getElementById('card_deletes_today_account').textContent = `Count: ${deletesCount}`;
-			document.getElementById('card_logins_today_count').textContent = `Count: ${loginsCount}`;
+			function updateProgressBar(progressBarID, count, total) {
+				// Calculate the percentage based on count and total
+				let percentage = (count / total) * 100;
 
-			// Update badges to indicate loading status
-			const badgeElements = [
-				'card_creates_today_badge',
-				'card_updates_today_badge',
-				'card_deletes_today_badge',
-				'card_logins_today_badge'
-			];
+				// Get the progress bar element by its ID
+				let progressBar = document.getElementById(progressBarID);
 
-			badgeElements.forEach(elementId => {
-				const badgeElement = document.getElementById(elementId);
-				if (badgeElement) {
-					badgeElement.textContent = 'Loaded';
-					badgeElement.className = 'badge bg-success bg-opacity-25 text-success';
+				// Update the width style of the progress bar
+				if (progressBar) {
+					progressBar.style.width = percentage + '%';
 				}
-			});
+			}
+
+			// Update the HTML elements with the counts
+			document.getElementById('card_creates_today_account').textContent = `${createsCount}`;
+			updateProgressBar('card_creates_today_account_progress', createsCount, total);
+
+
+
+			document.getElementById('card_updates_today_account').textContent = `${updatesCount}`;
+			updateProgressBar('card_updates_today_account_progress', updatesCount, total);
+
+
+			document.getElementById('card_deletes_today_account').textContent = `${deletesCount}`;
+			updateProgressBar('card_deletes_today_account_progress', deletesCount, total);
+
+			//// Update badges to indicate loading status
+			//const badgeElements = [
+			//	'card_creates_today_badge',
+			//	'card_updates_today_badge',
+			//	'card_deletes_today_badge',
+			////	'card_logins_today_badge'
+			//];
+
+			//badgeElements.forEach(elementId => {
+			//	const badgeElement = document.getElementById(elementId);
+			//	if (badgeElement) {
+			//		badgeElement.textContent = 'Loaded';
+			//		badgeElement.className = 'badge bg-success bg-opacity-25 text-success';
+			//	}
+			//});
+
+
 		},
 	},
 	Panel2: {
@@ -1622,14 +1714,14 @@ const XRMWebTools = {
 			const button = tempDiv.querySelector('.load-imports-btn');
 			button.addEventListener('click', async () => {
 
-				console.log("auditengine generatehtml data", data);
+				console.log("XWT: generatehtml data", data);
 
 				alert(data.createdon)
 				//api/data/v9.2/importjobs?$filter=solutionname%20eq%20%27NextRelease%27%20and%20name%20eq%20%27Customizations%27and%20createdon%20gt%202024-09-30T22:00:00.000Z&$orderby=startedon%20desc#plusplus
 
 
 				const importjobs = await XRMWebTools.WebApi.RetrieveWithCustomFilter(`importjobs?$filter=solutionname eq '${data.msdyn_name}' and name eq 'Customizations'&$orderby=startedon desc`);
-				console.log("auditengine generatehtml importjobs all", importjobs.value);
+				console.log("XWT: generatehtml importjobs all", importjobs.value);
 				alert(importjobs.value[0].importjobid);
 
 
@@ -1663,7 +1755,7 @@ const XRMWebTools = {
 	},
 	RegisterEvents: function () {
 
-		console.log("auditengine: RegisterEvents");
+		console.log("XWT: RegisterEvents");
 
 		// Panel 1
 		document.getElementById("id_pane1_searchauditsfromtoday").addEventListener("click", async function (event) {
@@ -1781,6 +1873,26 @@ const XRMWebTools = {
 
 XRMWebTools.ManageTabs();
 XRMWebTools.RegisterEvents();
+
+if (window.location.href.endsWith("/today")) {
+	document.getElementById("id_audit_today_link").click();
+	document.getElementById("id_pane1_searchauditsfromtoday").click();
+}
+
+if (window.location.href.endsWith("/plugins")) {
+	document.getElementById("id_plugintraces_link").click();
+	document.getElementById("pane4_plugintraces").click();
+}
+
+if (window.location.href.endsWith("/solutions")) {
+	document.getElementById("id_solutions_link").click();
+	document.getElementById("pane6_solutions").click();
+}
+
+if (window.location.href.endsWith("/users")) {
+	document.getElementById("id_users_last_login_link").click();
+	document.getElementById("Load_views").click();
+}
 
 
 

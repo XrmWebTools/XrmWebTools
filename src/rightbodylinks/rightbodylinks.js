@@ -2557,6 +2557,26 @@ try {
 					window.open(`${Xrm.Page.context.getClientUrl()}/xrmwebtools`, '_blank');
 				});
 
+				$("#openxrmwebtools_today").click(function (e) {
+					e.preventDefault();
+					window.open(`${Xrm.Page.context.getClientUrl()}/xrmwebtools/today`, '_blank');
+				});
+
+				$("#openxrmwebtools_plugins").click(function (e) {
+					e.preventDefault();
+					window.open(`${Xrm.Page.context.getClientUrl()}/xrmwebtools/plugins`, '_blank');
+				});
+
+				$("#openxrmwebtools_solutions").click(function (e) {
+					e.preventDefault();
+					window.open(`${Xrm.Page.context.getClientUrl()}/xrmwebtools/solutions`, '_blank');
+				});
+
+				$("#openxrmwebtools_users").click(function (e) {
+					e.preventDefault();
+					window.open(`${Xrm.Page.context.getClientUrl()}/xrmwebtools/users`, '_blank');
+				});
+
 
 
 
