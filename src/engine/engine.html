@@ -5,15 +5,24 @@
 	<title>XrmWebTools</title>
 	<style>
 		@keyframes rotate {
-			0% {stroke-dashoffset: 471;}
-			50% {stroke-dashoffset: 0;}
-			100% {stroke-dashoffset: -471;}
+			0% {
+				stroke-dashoffset: 471;
+			}
+
+			50% {
+				stroke-dashoffset: 0;
+			}
+
+			100% {
+				stroke-dashoffset: -471;
+			}
 		}
 	</style>
-	<style >
+	<style>
 		@import url(https://unpkg.com/@webpixels/css@1.1.5/dist/index.css);
 		@import url("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.4.0/font/bootstrap-icons.min.css");
 	</style>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
 <body id="XrmWebTools" style="display:none">
 	<div id="overlay" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; display:none">
@@ -97,7 +106,6 @@
 		</div>
 	</div>
 	<!--#endregion Model Audit Form -->
-
 	<!-- Dashboard -->
 	<div class="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
 
@@ -215,10 +223,11 @@
 									</div>-->
 									<div>
 										<button type="button" class="btn btn-sm px-3 btn-neutral d-flex align-items-center">
-											<span class="text-xs text-primary">⚡</span>
+											<!--<span class="text-xs text-primary">⚡</span>-->
+											<img id="dataverse_icon" alt="custom emoji" style="width: 15px; height: 15px; vertical-align: middle;">
 											<span class="vr opacity-20 mx-3"></span>
 
-											<span id="connect">Not Connected</span>
+											<span id="connect" style="display: inline-block; width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Not Connected</span>
 										</button>
 									</div>
 
@@ -291,6 +300,10 @@
 						<li class="nav-item">
 							<a id="id_users_last_login_link" href="#" class="nav-link font-semibold">Users Last Login</a>
 						</li>
+
+						<!--<li class="nav-item">
+							<a id="id_timeline2_link" href="#" class="nav-link font-semibold">Pretty Timeline for accounts</a>
+						</li>-->
 					</ul>
 				</div>
 			</header>
@@ -460,7 +473,7 @@
 								</div>
 							</div>
 						</div>
-					</div>			
+					</div>
 				</div>
 			</main>
 
@@ -626,7 +639,7 @@
 									<th scope="col">Changed Data</th>
 								</tr>
 							</thead>
-							<tbody id="id_audits_from_today">				
+							<tbody id="id_audits_from_today">
 							</tbody>
 						</table>
 					</div>
@@ -635,7 +648,7 @@
 						<span id="ID_logs" class="text-muted text-sm"></span>
 					</div>
 				</div>
-				
+
 			</main>
 
 			<main id="id_users_last_login" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8" style="display:none">
@@ -739,7 +752,7 @@
 							<div class="col-auto d-none d-md-block">
 								<div class="hstack gap-2 justify-content-end">
 									<!--<a href="#" class="text-sm text-muted text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Need help?</span> </a>
-						<button type="button" class="btn btn-sm btn-neutral"><span id="pane3_webapi">Open results in WebApi</span></button>-->
+									<button type="button" class="btn btn-sm btn-neutral"><span id="pane3_webapi">Open results in WebApi</span></button>-->
 								</div>
 							</div>
 						</div>
@@ -911,7 +924,7 @@
 				<hr class="my-6">
 
 
-			
+
 
 			</main>
 
@@ -1138,7 +1151,7 @@
 						<div class="vstack gap-6">
 							<div class="card">
 								<div id="pane5_allentities" class="card-body">
-									<h5 class="mb-6">All entities in your CRM</h5>
+									<h5 class="mb-6">All audited entities</h5>
 									<hr class="my-6">
 
 
@@ -1152,22 +1165,26 @@
 					<div class="col-lg-6 vstack gap-5">
 						<div class="vstack gap-6">
 							<div class="card">
-								<div class="card-body">
-									<h5 id="allfieldsfor" class="mb-3">
-										All fields for selected entity in left pane
-									</h5>
-									<hr class="my-6">
-									<div id="container_attr">
 
+
+								<div class="card">
+									<div  class="card-body">
+										<h5 id="allfieldsfor" class="mb-6">All fields for selected entity in left pane</h5>
+										<hr class="my-6">
+
+
+
+										<div class="vstack gap-4" id="container_attr">
+										</div>
 									</div>
 								</div>
+
+
 							</div>
 						</div>
 					</div>
 				</div>
-				<hr class="my-6" style="color:transparent">
-				<hr class="my-6" style="color:transparent">
-				<hr class="my-6" style="color:transparent">
+			
 			</main>
 
 			<main id="id_solutions" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8" style="display:none">
@@ -1190,12 +1207,12 @@
 							<div class="col-auto d-none d-md-block">
 								<div class="hstack gap-2 justify-content-end">
 
-									<button type="button" class="btn btn-sm btn-neutral hidden" aria-label="Open in new window">
+									<button type="button" class="btn btn-sm btn-neutral " aria-label="Open in new window" disabled>
 										<i class="bi bi-box-arrow-up-right"></i>
 										<span>Open All Solutions</span>
 
 									</button>
-									<button type="button" class="btn btn-sm btn-neutral hidden">
+									<button type="button" class="btn btn-sm btn-neutral " disabled>
 										<i class="bi bi-save"> </i>
 										<span>Open All Solutions Histories</span>
 									</button>
@@ -1352,8 +1369,146 @@
 				<hr class="my-6" style="color:transparent">
 				<hr class="my-6" style="color:transparent">
 			</main>
-			
 
+			<main id="id_timeline2" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8" style="display:none">
+
+				<div class="container-fluid">
+					<div class="row g-6">
+						<div class="col-xl-12">
+							<div class="vstack gap-6">
+							
+								<div class="card">
+									<div class="card-body">
+										<h5 class="mb-6">Pretty Timeline for Accounts</h5>
+										<div class="list-group list-group-flush list-group-borderless ms-4">
+											<div class="list-group-item px-2 py-0" style="border-bottom:none">
+												<div class="border-start">
+													<div class="d-flex ms-n6 pb-6">
+														<div class="flex-none me-3">
+															<div class="icon icon-shape text-base w-12 h-12 bg-soft-primary text-primary rounded-circle"><i class="bi bi-file-earmark-pdf-fill"></i></div>
+														</div>
+														<div>
+															<small class="d-block mb-1 text-muted">2 hrs ago</small>
+															<div>You've uploaded <span class="font-bold">documentation.pdf</span> to <span class="font-bold">[Account Name]</span>.</div>
+															<div class="d-flex gap-2 mt-2">
+																<div class="position-relative bg-light border border-dashed border-warning-hover rounded-pill">
+																	<div class="py-2 px-3 d-flex align-items-center">
+																		<div class="me-2"><i class="bi bi-image text-warning"></i></div>
+																		<div class="flex-fill"><a href="#" class="d-block font-semibold text-xs text-muted text-warning-hover stretched-link">documentation.pdf</a></div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="list-group-item px-2 py-0" style="border-bottom:none">
+												<div class="border-start">
+													<div class="d-flex ms-n6 pb-6">
+														<div class="flex-none me-3">
+															<div class="icon icon-shape text-base w-12 h-12 bg-soft-primary text-primary rounded-circle"><i class="bi bi-file-earmark-pdf-fill"></i></div>
+														</div>
+														<div class="flex-fill">
+															<small class="d-block mb-1 text-muted">4 hrs ago</small>
+															<div class="text-sm"><span class="text-heading text-sm font-bold">Mike</span> added a new comment to your task:</div>
+															<div class="mt-2">
+																<p class="text-sm text-muted">On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee.</p>
+																<p class="text-sm text-muted">On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee.</p>
+																<p class="text-sm text-muted">On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee.</p>
+																<p class="text-sm text-muted">On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee.</p>
+
+
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="list-group-item px-2 py-0" style="border-bottom:none">
+												<div class="border-start">
+													<div class="d-flex ms-n6 pb-6">
+														<div class="flex-none me-3">
+															<div class="icon icon-shape text-base w-12 h-12 bg-soft-primary text-primary rounded-circle"><i class="bi bi-file-earmark-pdf-fill"></i></div>
+														</div>
+														<div class="flex-fill">
+															<small class="d-block mb-1 text-muted">4 hrs ago</small>
+															<div class="text-sm">Heather added <span class="font-bold">4 images</span> to the <span class="font-bold">Team</span> album:</div>
+															<div class="mt-2 d-flex gap-2 scrollable-x">
+																<div class="col-auto"><img alt="..." src="/img/media/img-3.jpg" class="rounded w-auto h-16"></div>
+																<div class="col-auto"><img alt="..." src="/img/media/img-4.jpg" class="rounded w-auto h-16"></div>
+																<div class="col-auto"><img alt="..." src="/img/media/img-5.jpg" class="rounded w-auto h-16"></div>
+																<div class="col-auto"><img alt="..." src="/img/media/img-6.jpg" class="rounded w-auto h-16"></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="list-group-item px-2 py-0" style="border-bottom:none">
+												<div class="border-start">
+													<div class="d-flex ms-n6 pb-6">
+														<div class="flex-none me-3">
+															<div class="icon icon-shape text-base w-12 h-12 bg-soft-primary text-primary rounded-circle"><i class="bi bi-file-earmark-pdf-fill"></i></div>
+														</div>
+														<div class="flex-fill">
+															<small class="d-block mb-1 text-muted">4 hrs ago</small>
+															<div class="text-sm">Heather added <span class="font-bold">Anna</span> to the <span class="font-bold">Clever</span> team.</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="list-group-item px-2 py-0" style="border-bottom:none">
+												<div class="border-start">
+													<div class="d-flex ms-n6 pb-6">
+														<div class="flex-none me-3">
+															<div class="icon icon-shape text-base w-12 h-12 bg-soft-primary text-primary rounded-circle"><i class="bi bi-file-earmark-pdf-fill"></i></div>
+														</div>
+														<div class="flex-fill">
+															<small class="d-block mb-1 text-muted">4 hrs ago</small>
+															<div class="text-sm">
+																Heather created the tags
+																<div class="d-inline-block mx-1"><a href="#" class="badge rounded-pill bg-danger bg-opacity-20 bg-opacity-100-hover text-danger text-white-hover">Bugs</a> <a href="#" class="badge rounded-pill bg-success bg-opacity-20 bg-opacity-100-hover text-success text-white-hover">Showcase</a></div>
+																for the <span class="font-bold">Clever</span> project
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="list-group-item px-2 py-0" style="border-bottom:none">
+												<div>
+													<div class="d-flex ms-n6 pb-6">
+														<div class="flex-none me-3">
+															<div class="icon icon-shape text-base w-12 h-12 bg-soft-primary text-primary rounded-circle"><i class="bi bi-file-earmark-pdf-fill"></i></div>
+														</div>
+														<div class="flex-fill">
+															<small class="d-block mb-1 text-muted">2 hrs ago</small>
+															<div>You've uploaded <span class="font-bold">documentation.pdf</span> to the <span class="font-bold">Webpixels</span> project</div>
+															<div class="mt-2 scrollable-x overflow-hidden">
+																<div class="d-inline-block position-relative bg-light border border-dashed border-tertiary-hover rounded-pill">
+																	<div class="py-2 px-3 d-flex align-items-center">
+																		<div class="me-2"><i class="bi bi-image text-tertiary"></i></div>
+																		<div class="flex-fill"><a href="#" class="d-block font-semibold text-xs text-muted text-tertiary-hover stretched-link">design.fig</a></div>
+																	</div>
+																</div>
+																<div class="d-inline-block position-relative bg-light border border-dashed border-warning-hover rounded-pill">
+																	<div class="py-2 px-3 d-flex align-items-center">
+																		<div class="me-2"><i class="bi bi-image text-warning"></i></div>
+																		<div class="flex-fill"><a href="#" class="d-block font-semibold text-xs text-muted text-warning-hover stretched-link">readme.md</a></div>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</main>
 		</div>
 	</div>
 	<script src="engine.js"></script>

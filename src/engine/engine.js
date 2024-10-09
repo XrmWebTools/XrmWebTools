@@ -3,7 +3,13 @@ console.clear();
 console.info("XWT: Hi!");
 setTimeout(() => { document.getElementById("XrmWebTools").style.display = "block" }, 50);
 document.getElementById("connect").innerHTML = `Connected to: ${window.location.origin}`;
+// Add click event to open Google in a new tab
+document.getElementById("connect").addEventListener("click", function () {
+	window.open(`${window.location.origin}/main.aspx?forceUCI=1&pagetype=apps`, "_blank");
+});
+
 document.getElementById("url").innerHTML = `<i class="bi bi-house"></i> ${window.location.origin}`;
+
 const XRMWebTools = {
 
 	WebApi: {
@@ -236,7 +242,7 @@ const XRMWebTools = {
 		openAttribute(attributeId, entityId) {
 			const url = `${window.location.origin}/tools/systemcustomization/attributes/manageAttribute.aspx?attributeId=%7b${attributeId}%7d&entityId=%7b${entityId}%7d&appSolutionId=%7bFD140AAF-4DF4-11DD-BD17-0019B9312238%7d`;
 
-			xrmw.UI.openPopup(url);
+			XRMWebTools.CONFIG.openPopup(url);
 		},
 
 		openPopup(url, popupWidth = 800, popupHeight = 600) {
@@ -252,6 +258,19 @@ const XRMWebTools = {
 			const popupFeatures = `width=${popupWidth},height=${popupHeight},left=${left},top=${top},scrollbars=yes,resizable=yes`;
 
 			window.open(url, '_blank', popupFeatures);
+		},
+		openInDefaultSolution(entityName) {
+			if (!entityName || entityName.trim() === "") return;
+			alert("entityName")
+			//const entityTypeCode = Xrm.Internal.getEntityCode(entityName);
+			//if (!entityTypeCode) return;
+
+			//const defaultSolutionId = "{FD140AAF-4DF4-11DD-BD17-0019B9312238}";
+			//const entityDetail = `&def_category=9801&def_type=${entityTypeCode}`;
+
+			//AuditApp.UI.openPopup(
+			//	`${Xrm.Page.context.getClientUrl()}/tools/solution/edit.aspx?id=${defaultSolutionId}${entityDetail}`
+			//);
 		},
 	},
 	Sidebar: {
@@ -473,6 +492,9 @@ const XRMWebTools = {
 			{ buttonId: "id_plugintraces_link", contentId: "id_plugintraces" },
 			{ buttonId: "id_solutions_link", contentId: "id_solutions" },
 			{ buttonId: "id_auditcenter_link", contentId: "id_auditcenter" },
+			//{ buttonId: "id_timeline2_link", contentId: "id_timeline2" },
+
+			//
 		];
 		// Function to handle tab switching
 		function handleTabClick(event, selectedTab) {
@@ -658,18 +680,18 @@ const XRMWebTools = {
 
 				// Function to handle the click event for the View button
 				function handleViewClick() {
-						document.getElementById('auditform_id').textContent = `Audit Details: ${auditId}`;
-						document.getElementById('auditform_createdon').textContent = createdOnFormatted;
-						document.getElementById('auditform_event').textContent = actionFormatted;
-						document.getElementById('auditform_record').textContent = `${objectTypeCode} : ${objectIdFormatted}`;
-						document.getElementById('auditform_recordid').textContent = objectId;
-						document.getElementById('auditform_record_openincrm').setAttribute('href', record_openincrm);
-						document.getElementById('auditform_user').textContent = userName;
-						document.getElementById('auditform_userid').textContent = userId;
-						document.getElementById('auditform_user_openincrm').setAttribute('href', user_openincrm);
-						document.getElementById('auditform_changeddata').textContent = changeDataJSON;
-						document.getElementById('auditform').style.display = 'block';
-						document.getElementById('auditform_openinwebapi').setAttribute('href', auditform_openinwebapi);			
+					document.getElementById('auditform_id').textContent = `Audit Details: ${auditId}`;
+					document.getElementById('auditform_createdon').textContent = createdOnFormatted;
+					document.getElementById('auditform_event').textContent = actionFormatted;
+					document.getElementById('auditform_record').textContent = `${objectTypeCode} : ${objectIdFormatted}`;
+					document.getElementById('auditform_recordid').textContent = objectId;
+					document.getElementById('auditform_record_openincrm').setAttribute('href', record_openincrm);
+					document.getElementById('auditform_user').textContent = userName;
+					document.getElementById('auditform_userid').textContent = userId;
+					document.getElementById('auditform_user_openincrm').setAttribute('href', user_openincrm);
+					document.getElementById('auditform_changeddata').textContent = changeDataJSON;
+					document.getElementById('auditform').style.display = 'block';
+					document.getElementById('auditform_openinwebapi').setAttribute('href', auditform_openinwebapi);
 				}
 
 				// Create the actions cell with "View" and "Delete" buttons
@@ -1354,22 +1376,19 @@ const XRMWebTools = {
 			try {
 				// Retrieve entity definitions with specific fields: LogicalName and IsAuditEnabled
 				const entityDef = await XRMWebTools.WebApi.RetrieveWithCustomFilter(
-					`EntityDefinitions?$select=LogicalName,IsAuditEnabled`
+					`EntityDefinitions?$select=LogicalName,IsAuditEnabled,ObjectTypeCode`
 				);
 				const allEntities = entityDef.value;
 				console.log("panel 5 allEntities", allEntities);
 
-				// Sort entities: first by audited entities (IsAuditEnabled = true), then the rest
-				allEntities.sort((a, b) => (b.IsAuditEnabled.Value === true) - (a.IsAuditEnabled.Value === true));
+				//// Sort entities: first by audited entities (IsAuditEnabled = true), then the rest
+				//allEntities.sort((a, b) => (b.IsAuditEnabled.Value === true) - (a.IsAuditEnabled.Value === true));
 
 				// Filter entities by ensuring they have a valid entityTypeCode
-				//const filteredEntities = allEntities.filter(entity => {
-				//	const entityTypeCode = Xrm.Internal.getEntityCode(entity.LogicalName);
-				//	return entityTypeCode !== null && entityTypeCode !== undefined;
-				//});
+				const auditedEntities = allEntities.filter(entity => entity.IsAuditEnabled.Value === true);
 
 				// Display the filtered and sorted entities in the panel
-				XRMWebTools.Panel5.displayEntities(allEntities);
+				XRMWebTools.Panel5.displayEntities(auditedEntities);
 
 				document.getElementById("pane5_loadauditcenter").innerHTML = "Refresh Audit Center";
 			} catch (e) {
@@ -1392,11 +1411,10 @@ const XRMWebTools = {
 				tempDiv.className = "d-flex align-items-center"
 				tempDiv.innerHTML = `
                         <i class="bi bi-database me-2 text-muted"></i>
-                        <a href="#" class="text-sm text-heading text-primary-hover">${entity.LogicalName} </a>
+                        <a href="#" class="text-sm text-heading text-primary-hover">${entity.LogicalName}</a>
 						<a class="text-sm text-heading text-primary-hover"></a>
 						<span class="badge bg-${successORdANGER}-subtle text-${successORdANGER}" style="margin-left:5px">${text}</span>
                         <div class="ms-auto text-end">
-						     <a href="#" class="btn btn-sm px-3 py-1 btn-primary text-white">Edit Entity</a>
 
                             <a href="#" class="btn btn-sm px-3 py-1 btn-neutral text-muted">Load Fields</a>
 
@@ -1414,15 +1432,6 @@ const XRMWebTools = {
 					//alert(); // Show an alert with the entity name
 				});
 
-				// Get the "Load Attributes" button
-				const EDIT = tempDiv.querySelector('a.btn-primary');
-
-				// Attach a click event listener
-				EDIT.addEventListener('click', async (event) => {
-					event.preventDefault(); // Prevent the default link behavior
-					XRMWebTools.CONFIG.openInDefaultSolution(entity.LogicalName)
-					//alert(); // Show an alert with the entity name
-				});
 
 				container.appendChild(tempDiv);
 			});
@@ -1433,7 +1442,7 @@ const XRMWebTools = {
 
 			XRMWebTools.toggleOverlay(true, "Retrieving", "Attributes for " + entityname);
 			const entityDefentityname = await XRMWebTools.WebApi.RetrieveWithCustomFilter(`EntityDefinitions(LogicalName='${entityname}')/Attributes`);
-			console.log("panel 5 attr", entityDefentityname.value)
+			console.log("panel 5 attributes", entityDefentityname.value)
 			XRMWebTools.Panel5.displayAttributes(entityDefentityname.value, entity_MetadataId);
 
 			document.getElementById("allfieldsfor").innerHTML = `All fields for ${entityname}`;
@@ -1442,67 +1451,117 @@ const XRMWebTools = {
 		},
 
 		displayAttributes: (attributes, entity_MetadataId) => {
-			const container = document.getElementById('container_attr');
-
-			// Clear the container's current content
-			while (container.firstChild) {
-				container.removeChild(container.firstChild);
-			}
-
-			// Sort attributes so that those with IsAuditEnabled.Value === true come first
+			//// Sort attributes so that those with IsAuditEnabled.Value === true come first
 			attributes.sort((a, b) => {
 				const auditA = a.IsAuditEnabled?.Value ? 1 : 0;
 				const auditB = b.IsAuditEnabled?.Value ? 1 : 0;
 				return auditB - auditA; // Sort in descending order
 			});
 
+			const container = document.getElementById('container_attr');
+			// Clear the container's current content
+			while (container.firstChild) {
+				container.removeChild(container.firstChild);
+			}
+
+			
 			attributes.forEach(attr => {
+
 				const attr_MetadataId = attr.MetadataId;
-				const logicalName = attr.LogicalName || '';
-				const auditEnabled = attr.IsAuditEnabled?.Value === true;
-				const text = auditEnabled ? "Audit ON" : "Audit OFF";
-				const successORdANGER = auditEnabled ? "success" : "danger";
+					const logicalName = attr.LogicalName || '';
+					const auditEnabled = attr.IsAuditEnabled?.Value === true;
+					const text = auditEnabled ? "Audit ON" : "Audit OFF";
+					const successORdANGER = auditEnabled ? "success" : "danger";
 
-				// Create the outer div for each attribute
-				const attributeDiv = document.createElement('div');
+				const tempDiv = document.createElement('div');
+				tempDiv.className = "d-flex align-items-center"
+				tempDiv.innerHTML = `
+                        <i class="bi bi-database me-2 text-muted"></i>
+                        <a href="#" class="text-sm text-heading text-primary-hover">${logicalName}</a>
+						<a class="text-sm text-heading text-primary-hover"></a>
+						<span class="badge bg-${successORdANGER}-subtle text-${successORdANGER}" style="margin-left:5px">${text}</span>
+                        <div class="ms-auto text-end">
 
-				// Create the inner HTML structure as a string
-				const htmlContent = `
-            <div class="row align-items-center">
-                <div class="col-md-2">
-                    <label class="form-label">LogicalName</label>
-                </div>
-                <div class="col-md-10 col-xl-10">
-                    <div>
-                        <input type="text" class="form-control" value="${logicalName}" disabled>
-                    </div>
-                </div>
-            </div>
-            <div class="row align-items-center mt-2">
-                <div class="col-md-2">
-                    <label class="form-label"></label>
-                </div>
-                <div class="col-md-10 col-xl-10">
-                    <span class="badge text-bg-primary edit-attribute">Edit attribute</span>
-                    <span class="badge bg-${successORdANGER}-subtle text-${successORdANGER}">${text}</span>
-                </div>
-            </div>
-            <hr class="my-3">
-        `;
+                            <a href="#" class="btn btn-sm px-3 py-1 btn-neutral text-muted">Customize</a>
 
-				// Set the innerHTML of the div
-				attributeDiv.innerHTML = htmlContent;
+                        </div>
+                `;
 
-				// Append the div to the container
-				container.appendChild(attributeDiv);
+				//// Get the "Load Attributes" button
+				const loadAttributesButton = tempDiv.querySelector('a.btn-neutral');
 
-				// Add event listener to "Edit attribute" badge
-				const editBadge = attributeDiv.querySelector('.edit-attribute');
-				editBadge.addEventListener('click', () => {
-					XRMWebTools.CONFIG.openAttribute(attr_MetadataId, entity_MetadataId);
+				// Attach a click event listener
+				loadAttributesButton.addEventListener('click', async (event) => {
+					event.preventDefault(); // Prevent the default link behavior
 
+					XRMWebTools.CONFIG.openAttribute(attr_MetadataId, entity_MetadataId)
+					//alert("jojo"); // Show an alert with the entity name
 				});
+
+
+				container.appendChild(tempDiv);
 			});
+			//const container = document.getElementById('container_attr');
+
+			//// Clear the container's current content
+			//while (container.firstChild) {
+			//	container.removeChild(container.firstChild);
+			//}
+
+			//// Sort attributes so that those with IsAuditEnabled.Value === true come first
+			//attributes.sort((a, b) => {
+			//	const auditA = a.IsAuditEnabled?.Value ? 1 : 0;
+			//	const auditB = b.IsAuditEnabled?.Value ? 1 : 0;
+			//	return auditB - auditA; // Sort in descending order
+			//});
+
+			//attributes.forEach(attr => {
+			//	const attr_MetadataId = attr.MetadataId;
+			//	const logicalName = attr.LogicalName || '';
+			//	const auditEnabled = attr.IsAuditEnabled?.Value === true;
+			//	const text = auditEnabled ? "Audit ON" : "Audit OFF";
+			//	const successORdANGER = auditEnabled ? "success" : "danger";
+
+			//	// Create the outer div for each attribute
+			//	const attributeDiv = document.createElement('div');
+
+			//	// Create the inner HTML structure as a string
+			//	const htmlContent = `
+   //         <div class="row align-items-center">
+   //             <div class="col-md-2">
+   //                 <label class="form-label">LogicalName</label>
+   //             </div>
+   //             <div class="col-md-10 col-xl-10">
+   //                 <div>
+   //                     <input type="text" class="form-control" value="${logicalName}" disabled>
+   //                 </div>
+   //             </div>
+   //         </div>
+   //         <div class="row align-items-center mt-2">
+   //             <div class="col-md-2">
+   //                 <label class="form-label"></label>
+   //             </div>
+   //             <div class="col-md-10 col-xl-10">
+   //                 <span class="badge text-bg-primary edit-attribute">Edit attribute</span>
+   //                 <span class="badge bg-${successORdANGER}-subtle text-${successORdANGER}">${text}</span>
+   //             </div>
+   //         </div>
+   //         <hr class="my-3">
+   //     `;
+
+			//	// Set the innerHTML of the div
+			//	attributeDiv.innerHTML = htmlContent;
+
+			//	// Append the div to the container
+			//	container.appendChild(attributeDiv);
+
+			//	// Add event listener to "Edit attribute" badge
+			//	const editBadge = attributeDiv.querySelector('.edit-attribute');
+			//	editBadge.addEventListener('click', () => {
+			//		XRMWebTools.CONFIG.openAttribute(attr_MetadataId, entity_MetadataId);
+
+			//	});
+			//});
 		}
 
 	},
@@ -1714,9 +1773,11 @@ const XRMWebTools = {
 			const button = tempDiv.querySelector('.load-imports-btn');
 			button.addEventListener('click', async () => {
 
+				alert("Work In Progess.")
+
+				return;
 				console.log("XWT: generatehtml data", data);
 
-				alert(data.createdon)
 				//api/data/v9.2/importjobs?$filter=solutionname%20eq%20%27NextRelease%27%20and%20name%20eq%20%27Customizations%27and%20createdon%20gt%202024-09-30T22:00:00.000Z&$orderby=startedon%20desc#plusplus
 
 
@@ -1895,6 +1956,6 @@ if (window.location.href.endsWith("/users")) {
 }
 
 
-
-
-
+if (window.location.href.endsWith("/auditcenter")) {
+	document.getElementById("id_auditcenter_link").click();
+}
