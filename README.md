@@ -5,6 +5,12 @@ Welcome to **XrmWebTools**!
 This Chrome extension started as Audit Engine 365 which was more a Proof Of Concept to showcase 1 WEB version of a single XTB tool.
 Eventually more and more XTB tools will we available as a WEB version in XrmWebTools, so i want to make that clear from the beginning
 
+## Why ?
+
+I wanted to make a WEB version of XTB, and while doing that every tool is developed 'mobile first'
+The WEB version will never be as powerfull as XTB, but it might be usefull for less tech people like project managers, testers, analyst people.
+There is no need to authenticate as this is basicly just a webresource that can be opened at https://mydataverseorg123abc.crm4.dynamics.com/XrmWebTools.
+
 ## Features
 
 - **Audits Today**
@@ -39,7 +45,9 @@ For any questions, issues, or support, please visit our [GitHub Issues page](htt
 - **Solution Later Removal** (XTB)
 
 - **Export to CSV** (Custom)
-- **The ability to send an appnotification to all online users** (Custom)
+- **Unnamed** (The ability to send an appnotification to all online users)
+- **Unnamed** (Make a small chat app with appnotifications because why not)
+
 - This list is not complete and will be further updated
 
 Thanks for reading.
