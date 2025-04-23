@@ -1,0 +1,80 @@
+﻿<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+	<meta charset="UTF-8">
+	<title>XWT: Start Page</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+</head>
+<body id="XrmWebTools" style="display:none">
+	<div class="d-flex flex-column flex-lg-row h-lg-100 gap-1 ">
+		<div class="flex-lg-fill overflow-x-auto ps-lg-1 vstack vh-lg-100 position-relative ">
+			<div class="d-none d-lg-flex py-3 ">
+				<div class="d-lg-none d-xxl-flex align-items-center gap-4 px-4 scrollable-x">
+					<div class="d-flex gap-2 text-xs"><span class="text-heading fw-semibold">Tool:</span> <span class="text-muted">Start Page</span></div>
+					<div class="d-flex gap-2 text-xs"><span class="text-heading fw-semibold">Connected To:</span> <span title="Open Apps" style="cursor:pointer" id="connect" class="text-muted"></span></div>
+				</div>
+			</div>
+			<div class="flex-fill overflow-y-lg-auto scrollbar   border-top border-lg shadow-2">
+				<main id="id_start_page" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8">
+					<div class="mb-6 mb-xl-10">
+						<div class="row g-3 align-items-center">
+							<div class="col">
+								<h1 class="ls-tight">Start Page</h1>
+							</div>
+						</div>
+					</div>
+					<div class="mt-6">
+						<div class="row align-items-center g-6 mt-0 mb-6">
+							<div class="col-sm-6">
+								<div class="d-flex flex-wrap gap-2">
+									<div class="input-group input-group-sm input-group-inline w-100 w-md-50"><span class="input-group-text"><i class="bi bi-search me-2"></i> </span><input id="search" type="search" class="form-control ps-0" placeholder="Search all webtools" aria-label="Search"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="list-group list-group-flush gap-2">
+						<div class="list-group-item border rounded d-flex gap-3 p-4 bg-primary-hover border-primary bg-primary-soft" onclick="event.preventDefault(); window.location.href = `${window.location.origin}/xrmwebtools/auditengine`;">
+							<div class="icon flex-none"><img id="toolbox_auditengine" src="" class="w-rem-8 h-rem-8" alt="..."></div>
+							<div class="d-flex align-items-center flex-fill">
+								<div><a href="#" class="stretched-link text-heading text-sm fw-bold">Audit Engine 365</a></div>
+								<div class="ms-auto"><span class="badge badge-sm rounded-pill me-n2 bg-warning-subtle text-warning ms-auto">🔥 Hot</span></div>
+							</div>
+						</div>
+						<div class="list-group-item border rounded d-flex gap-3 p-4 bg-primary-hover border-primary bg-primary-soft" onclick="event.preventDefault(); window.location.href = `${window.location.origin}/xrmwebtools/pluginregistration`;">
+							<div class="icon flex-none"><img id="toolbox_pluginregistration" src="" class="w-rem-8 h-rem-8" alt="..."></div>
+							<div class="d-flex align-items-center flex-fill">
+								<div><a href="#" class="stretched-link text-heading text-sm fw-bold">Plugin Registration tool</a></div>
+								<div class="ms-auto"><span class="badge bg-success-subtle text-success rounded-pill">Preview</span></div>
+
+							</div>
+						</div>
+						<div class="list-group-item border rounded d-flex gap-3 p-4 bg-primary-hover border-primary bg-primary-soft" onclick="event.preventDefault(); window.location.href = `${window.location.origin}/xrmwebtools/plugintraces`;">
+							<div class="icon flex-none"><img id="toolbox_plugintracewebviewer" src="" class="w-rem-8 h-rem-8" alt="..."></div>
+							<div class="d-flex align-items-center flex-fill">
+								<div><a href="#" class="stretched-link text-heading text-sm fw-bold">Plugin Trace Webviewer</a></div>
+							</div>
+						</div>
+						<div class="list-group-item border rounded d-flex gap-3 p-4 bg-primary-hover border-primary bg-primary-soft" onclick="event.preventDefault(); window.location.href = `${window.location.origin}/xrmwebtools/solutionhistory`;">
+							<div class="icon flex-none"><img id="toolbox_solutionhistory" src="" class="w-rem-8 h-rem-8" alt="..."></div>
+							<div class="d-flex align-items-center flex-fill">
+								<div><a href="#" class="stretched-link text-heading text-sm fw-bold">Solution History</a></div>
+								<div class="ms-auto"><span class="badge bg-danger-subtle text-danger rounded-pill">Under construction</span></div>
+							</div>
+						</div>
+						<div class="list-group-item border rounded d-flex gap-3 p-4 bg-primary-hover border-primary bg-primary-soft" onclick="event.preventDefault(); window.location.href = `${window.location.origin}/xrmwebtools/userslastlogin`;">
+							<div class="icon flex-none"><img id="toolbox_userslastlogin" src="" class="w-rem-8 h-rem-8" alt="..."></div>
+							<div class="d-flex align-items-center flex-fill">
+								<div><a href="#" class="stretched-link text-heading text-sm fw-bold">Users Last Login</a></div>
+							</div>
+						</div>
+
+					</div>
+					<div class="text-xs text-muted mt-6" style="cursor:default">
+						A lightweight, open source and powerful toolbox for <a onclick="event.preventDefault()" style="cursor:default" href="#" class="fw-bold">Dynamics 365</a>
+					</div>
+				</main>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

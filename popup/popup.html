@@ -1,0 +1,616 @@
+﻿<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+	<meta charset="UTF-8">
+	<title>XrmWebTools</title>
+	<link rel="stylesheet" href="popup.css">
+
+	<style>
+		.card {
+			cursor: pointer;
+		}
+
+		.nav-tabs .nav-link.active, .nav-tabs .nav-item.show .nav-link {
+			background-color: transparent;
+		}
+	</style>
+</head>
+<body id="XrmWebTools" style="min-width: 430px; max-width: 430px;">
+
+	<div id="overlay" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000;">
+		<svg width="300" height="300" viewBox="0 0 300 300">
+			<circle cx="150" cy="150" r="75" style="stroke: #8957ff; stroke-width: 7.5; fill: none; animation-iteration-count: infinite; animation-duration: 2s; stroke-dasharray: 471; animation-name: rotate; animation-direction: reverse; animation-timing-function: cubic-bezier(.62, .06, .36, .94);"></circle>
+		</svg>
+	</div>
+
+	<div class="d-flex flex-column flex-lg-row h-lg-full bg-surface-secondary">
+
+		<div class="h-screen flex-grow-1 overflow-y-lg-auto">
+
+			<header class="bg-surface-secondary">
+				<div class="container-fluid">
+					<div class="row g-0">
+						<div class="col ps-4 pt-4">
+							<h6 class="text-xs  text-muted mb-1">XrmWebTools for Microsoft Dynamics 365 (2025.2)</h6>
+							<div class="d-flex flex-column flex-md-row gap-3 justify-content-between">
+								<div class="d-flex gap-3">
+									<div>
+										<button type="button" class="btn btn-sm px-3 btn-neutral d-flex align-items-center">
+											<img id="dataverse_icon" alt="custom emoji" style="width: 15px; height: 15px; vertical-align: middle;">
+											<span class="vr opacity-20 mx-3"></span>
+											<span id="connect" title="not connected" style="display: inline-block; width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Not Connected</span>
+										</button>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<ul class="nav nav-tabs nav-tabs-flush gap-8 overflow-x border-0 mt-3">
+						<li class="nav-item"><a id="id_page_toolbox_link" href="#" class="nav-link active">Toolbox</a></li>
+						<li class="nav-item"><a id="id_page_form_link" href="#" class="nav-link">Form</a></li>
+						<li class="nav-item"><a id="id_page_ribbon_link" href="#" class="nav-link">Ribbon</a></li>
+						<li class="nav-item"><a id="id_page_navigation_link" href="#" class="nav-link">Navigation</a></li>
+						<li class="nav-item"><a id="id_page_modheader_link" href="#" class="nav-link">Mods</a></li>
+					</ul>
+				</div>
+			</header>
+
+			<main id="id_page_toolbox" class="container-fluid mw-screen-lg py-3">
+				<div class="list-group list-group-flush gap-2">
+					<div id="click_auditengine" class="list-group-item border rounded d-flex gap-3 p-4 bg-primary-hover border-primary bg-primary-soft">
+						<div class="icon flex-none"><img id="toolbox_auditengine" src="" class="w-rem-8 h-rem-8" alt="..."></div>
+						<div class="d-flex align-items-center flex-fill">
+							<div><a href="#" class="stretched-link text-heading text-sm fw-bold">Audit Engine 365</a></div>
+							<div class="ms-auto"><span class="badge badge-sm rounded-pill me-n2 bg-warning-subtle text-warning ms-auto">🔥 Hot</span></div>
+						</div>
+					</div>
+					<div id="click_pluginregistration" class="list-group-item border rounded d-flex gap-3 p-4 bg-primary-hover border-primary bg-primary-soft">
+						<div class="icon flex-none"><img id="toolbox_pluginregistration" src="" class="w-rem-8 h-rem-8" alt="..."></div>
+						<div class="d-flex align-items-center flex-fill">
+							<div><a href="#" class="stretched-link text-heading text-sm fw-bold">Plugin Registration tool</a></div>
+							<div class="ms-auto"><span class="badge bg-success-subtle text-success rounded-pill">Preview</span></div>
+						</div>
+					</div>
+					<div id="click_plugintracewebviewer" class="list-group-item border rounded d-flex gap-3 p-4 bg-primary-hover border-primary bg-primary-soft">
+						<div class="icon flex-none"><img id="toolbox_plugintracewebviewer" src="" class="w-rem-8 h-rem-8" alt="..."></div>
+						<div class="d-flex align-items-center flex-fill">
+							<div><a href="#" class="stretched-link text-heading text-sm fw-bold">Plugin Trace Webviewer</a></div>
+						</div>
+					</div>
+					<div id="click_solutionhistory" class="list-group-item border rounded d-flex gap-3 p-4 bg-primary-hover border-primary bg-primary-soft">
+						<div class="icon flex-none"><img id="toolbox_solutionhistory" src="" class="w-rem-8 h-rem-8" alt="..."></div>
+						<div class="d-flex align-items-center flex-fill">
+							<div><a href="#" class="stretched-link text-heading text-sm fw-bold">Solution History</a></div>
+							<div class="ms-auto"><span class="badge bg-danger-subtle text-danger rounded-pill">Under construction</span></div>
+						</div>
+					</div>
+					<div id="click_userslastlogin" class="list-group-item border rounded d-flex gap-3 p-4 bg-primary-hover border-primary bg-primary-soft">
+						<!--bg-body-secondary-hover-->
+						<div class="icon flex-none"><img id="toolbox_userslastlogin" src="" class="w-rem-8 h-rem-8" alt="..."></div>
+						<div class="d-flex align-items-center flex-fill">
+							<div><a href="#" class="stretched-link text-heading text-sm fw-bold">Users Last Login</a></div>
+						</div>
+					</div>
+				</div>
+				<div id="start_page_footertext" class="text-xs text-muted mt-6" style="cursor:default">
+					Please open this tool from a  <a style="cursor:default" href="#" class="fw-bold">*://*.dynamics.com/*</a> page to use it.
+				</div>
+				
+			</main>
+
+			<main id="id_page_form" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8" style="display:none">
+				<div class="row row-cols-2 g-3">
+
+					<!--FORM - GODMODE-->
+					<div class="col">
+						<button style="width:100%" id="popup_godmode" type="button" class="btn btn-sm px-3 bg-danger-hover   border-danger bg-danger-soft d-flex align-items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
+								<path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2M3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1z" />
+							</svg>
+							<span style="background-color: #FF3366;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>God Mode</span>
+						</button>
+					</div>
+
+					<!--FORM - LOGICAL NAMES-->
+					<div class="col">
+						<button style="width:100%" id="popup_logicalnames" type="button" class="btn btn-sm px-3  bg-primary-hover border-primary bg-primary-soft d-flex align-items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+								<path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8M1.173 8a13 13 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5s3.879 1.168 5.168 2.457A13 13 0 0 1 14.828 8q-.086.13-.195.288c-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5s-3.879-1.168-5.168-2.457A13 13 0 0 1 1.172 8z" />
+								<path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5M4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Logical Names</span>
+						</button>
+					</div>
+				</div>
+
+				<div class="row row-cols-2 g-3 mt-1">
+					<!--FORM - RECORD ID-->
+					<div class="col">
+						<button style="width:100%" id="popup_recordid" type="button" class="btn btn-sm px-3  bg-primary-hover border-primary bg-primary-soft d-flex align-items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-vcard" viewBox="0 0 16 16">
+								<path d="M5 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4m4-2.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5M9 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4A.5.5 0 0 1 9 8m1 2.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5" />
+								<path d="M2 2a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM1 4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H8.96q.04-.245.04-.5C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 1 1 12z" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Record ID</span>
+						</button>
+					</div>
+					<!--FORM - Web API-->
+					<div class="col">
+						<button style="width:100%" id="popup_webapi" type="button" class="btn btn-sm px-3  bg-primary-hover border-primary bg-primary-soft d-flex align-items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filetype-json" viewBox="0 0 16 16">
+								<path fill-rule="evenodd" d="M14 4.5V11h-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM4.151 15.29a1.2 1.2 0 0 1-.111-.449h.764a.58.58 0 0 0 .255.384q.105.073.25.114.142.041.319.041.245 0 .413-.07a.56.56 0 0 0 .255-.193.5.5 0 0 0 .084-.29.39.39 0 0 0-.152-.326q-.152-.12-.463-.193l-.618-.143a1.7 1.7 0 0 1-.539-.214 1 1 0 0 1-.352-.367 1.1 1.1 0 0 1-.123-.524q0-.366.19-.639.192-.272.528-.422.337-.15.777-.149.456 0 .779.152.326.153.5.41.18.255.2.566h-.75a.56.56 0 0 0-.12-.258.6.6 0 0 0-.246-.181.9.9 0 0 0-.37-.068q-.324 0-.512.152a.47.47 0 0 0-.185.384q0 .18.144.3a1 1 0 0 0 .404.175l.621.143q.326.075.566.211a1 1 0 0 1 .375.358q.135.222.135.56 0 .37-.188.656a1.2 1.2 0 0 1-.539.439q-.351.158-.858.158-.381 0-.665-.09a1.4 1.4 0 0 1-.478-.252 1.1 1.1 0 0 1-.29-.375m-3.104-.033a1.3 1.3 0 0 1-.082-.466h.764a.6.6 0 0 0 .074.27.5.5 0 0 0 .454.246q.285 0 .422-.164.137-.165.137-.466v-2.745h.791v2.725q0 .66-.357 1.005-.355.345-.985.345a1.6 1.6 0 0 1-.568-.094 1.15 1.15 0 0 1-.407-.266 1.1 1.1 0 0 1-.243-.39m9.091-1.585v.522q0 .384-.117.641a.86.86 0 0 1-.322.387.9.9 0 0 1-.47.126.9.9 0 0 1-.47-.126.87.87 0 0 1-.32-.387 1.55 1.55 0 0 1-.117-.641v-.522q0-.386.117-.641a.87.87 0 0 1 .32-.387.87.87 0 0 1 .47-.129q.265 0 .47.129a.86.86 0 0 1 .322.387q.117.255.117.641m.803.519v-.513q0-.565-.205-.973a1.46 1.46 0 0 0-.59-.63q-.38-.22-.916-.22-.534 0-.92.22a1.44 1.44 0 0 0-.589.628q-.205.407-.205.975v.513q0 .562.205.973.205.407.589.626.386.217.92.217.536 0 .917-.217.384-.22.589-.626.204-.41.205-.973m1.29-.935v2.675h-.746v-3.999h.662l1.752 2.66h.032v-2.66h.75v4h-.656l-1.761-2.676z" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Web API</span>
+						</button>
+					</div>
+				</div>
+
+				<div class="row row-cols-2 g-3 mt-1">
+					<!--FORM - >Fill required fields-->
+					<div class="col">
+						<button disabled style="width:100%" id="popup_abc" type="button" class="btn btn-sm px-3  bg-primary-hover border-primary bg-primary-soft d-flex align-items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brush" viewBox="0 0 16 16">
+								<path d="M15.825.12a.5.5 0 0 1 .132.584c-1.53 3.43-4.743 8.17-7.095 10.64a6.1 6.1 0 0 1-2.373 1.534c-.018.227-.06.538-.16.868-.201.659-.667 1.479-1.708 1.74a8.1 8.1 0 0 1-3.078.132 4 4 0 0 1-.562-.135 1.4 1.4 0 0 1-.466-.247.7.7 0 0 1-.204-.288.62.62 0 0 1 .004-.443c.095-.245.316-.38.461-.452.394-.197.625-.453.867-.826.095-.144.184-.297.287-.472l.117-.198c.151-.255.326-.54.546-.848.528-.739 1.201-.925 1.746-.896q.19.012.348.048c.062-.172.142-.38.238-.608.261-.619.658-1.419 1.187-2.069 2.176-2.67 6.18-6.206 9.117-8.104a.5.5 0 0 1 .596.04M4.705 11.912a1.2 1.2 0 0 0-.419-.1c-.246-.013-.573.05-.879.479-.197.275-.355.532-.5.777l-.105.177c-.106.181-.213.362-.32.528a3.4 3.4 0 0 1-.76.861c.69.112 1.736.111 2.657-.12.559-.139.843-.569.993-1.06a3 3 0 0 0 .126-.75zm1.44.026c.12-.04.277-.1.458-.183a5.1 5.1 0 0 0 1.535-1.1c1.9-1.996 4.412-5.57 6.052-8.631-2.59 1.927-5.566 4.66-7.302 6.792-.442.543-.795 1.243-1.042 1.826-.121.288-.214.54-.275.72v.001l.575.575zm-4.973 3.04.007-.005zm3.582-3.043.002.001h-.002z" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Fill required fields</span>
+						</button>
+					</div>
+					<!--FORM - Changed Fields-->
+					<div class="col">
+						<button style="width:100%" id="popup_changedfields" type="button" class="btn btn-sm px-3  bg-primary-hover border-primary bg-primary-soft d-flex align-items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brush-fill" viewBox="0 0 16 16">
+								<path d="M15.825.12a.5.5 0 0 1 .132.584c-1.53 3.43-4.743 8.17-7.095 10.64a6.1 6.1 0 0 1-2.373 1.534c-.018.227-.06.538-.16.868-.201.659-.667 1.479-1.708 1.74a8.1 8.1 0 0 1-3.078.132 4 4 0 0 1-.562-.135 1.4 1.4 0 0 1-.466-.247.7.7 0 0 1-.204-.288.62.62 0 0 1 .004-.443c.095-.245.316-.38.461-.452.394-.197.625-.453.867-.826.095-.144.184-.297.287-.472l.117-.198c.151-.255.326-.54.546-.848.528-.739 1.201-.925 1.746-.896q.19.012.348.048c.062-.172.142-.38.238-.608.261-.619.658-1.419 1.187-2.069 2.176-2.67 6.18-6.206 9.117-8.104a.5.5 0 0 1 .596.04" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Changed Fields</span>
+						</button>
+					</div>
+				</div>
+
+
+				<!--<div class="row row-cols-2 g-3 mt-1">
+					<div class="col">
+						<div class="card bg-tertiary bg-opacity-10 border-tertiary border-opacity-40 h-lg-100 bg-body-secondary-hover">
+							<div class="card-body d-flex flex-column p-2">
+								<div class="d-flex align-items-center gap-2">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brush" viewBox="0 0 16 16">
+										<path d="M15.825.12a.5.5 0 0 1 .132.584c-1.53 3.43-4.743 8.17-7.095 10.64a6.1 6.1 0 0 1-2.373 1.534c-.018.227-.06.538-.16.868-.201.659-.667 1.479-1.708 1.74a8.1 8.1 0 0 1-3.078.132 4 4 0 0 1-.562-.135 1.4 1.4 0 0 1-.466-.247.7.7 0 0 1-.204-.288.62.62 0 0 1 .004-.443c.095-.245.316-.38.461-.452.394-.197.625-.453.867-.826.095-.144.184-.297.287-.472l.117-.198c.151-.255.326-.54.546-.848.528-.739 1.201-.925 1.746-.896q.19.012.348.048c.062-.172.142-.38.238-.608.261-.619.658-1.419 1.187-2.069 2.176-2.67 6.18-6.206 9.117-8.104a.5.5 0 0 1 .596.04M4.705 11.912a1.2 1.2 0 0 0-.419-.1c-.246-.013-.573.05-.879.479-.197.275-.355.532-.5.777l-.105.177c-.106.181-.213.362-.32.528a3.4 3.4 0 0 1-.76.861c.69.112 1.736.111 2.657-.12.559-.139.843-.569.993-1.06a3 3 0 0 0 .126-.75zm1.44.026c.12-.04.277-.1.458-.183a5.1 5.1 0 0 0 1.535-1.1c1.9-1.996 4.412-5.57 6.052-8.631-2.59 1.927-5.566 4.66-7.302 6.792-.442.543-.795 1.243-1.042 1.826-.121.288-.214.54-.275.72v.001l.575.575zm-4.973 3.04.007-.005zm3.582-3.043.002.001h-.002z" />
+									</svg>
+									<h6>Show All Fields</h6>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="col">
+						<div class="card bg-tertiary bg-opacity-10 border-tertiary border-opacity-40 h-lg-100 bg-body-secondary-hover">
+							<div class="card-body d-flex flex-column p-2">
+								<div class="d-flex align-items-center gap-2">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-brush-fill" viewBox="0 0 16 16">
+										<path d="M15.825.12a.5.5 0 0 1 .132.584c-1.53 3.43-4.743 8.17-7.095 10.64a6.1 6.1 0 0 1-2.373 1.534c-.018.227-.06.538-.16.868-.201.659-.667 1.479-1.708 1.74a8.1 8.1 0 0 1-3.078.132 4 4 0 0 1-.562-.135 1.4 1.4 0 0 1-.466-.247.7.7 0 0 1-.204-.288.62.62 0 0 1 .004-.443c.095-.245.316-.38.461-.452.394-.197.625-.453.867-.826.095-.144.184-.297.287-.472l.117-.198c.151-.255.326-.54.546-.848.528-.739 1.201-.925 1.746-.896q.19.012.348.048c.062-.172.142-.38.238-.608.261-.619.658-1.419 1.187-2.069 2.176-2.67 6.18-6.206 9.117-8.104a.5.5 0 0 1 .596.04" />
+									</svg>
+									<h6>OptionSet Values</h6>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>-->
+
+
+
+				<div class="row row-cols-2 g-3 mt-1">
+					<!--FORM - Refresh Data-->
+					<div class="col">
+						<button style="width:100%" id="popup_refreshform" type="button" class="btn btn-sm px-3  bg-primary-hover border-primary bg-primary-soft d-flex align-items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+								<path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z" />
+								<path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Refresh Data</span>
+						</button>
+
+					</div>
+					<!--FORM - AutoSave off-->
+					<div class="col">
+						<button style="width:100%" id="popup_refresh_autosaveoff" type="button" class="btn btn-sm px-3  bg-primary-hover border-primary bg-primary-soft d-flex align-items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pause-circle" viewBox="0 0 16 16">
+								<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+								<path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0zm3.5 0a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0z" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>AutoSave off</span>
+						</button>
+					</div>
+				</div>
+
+				<div class="row row-cols-2 g-3 mt-1">
+					<!--FORM - Meta Data-->
+					<div class="col">
+						<button style="width:100%" id="popup_metadata" type="button" class="btn btn-sm px-3  bg-primary-hover border-primary bg-primary-soft d-flex align-items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+								<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+								<path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Meta Data</span>
+						</button>
+					</div>
+
+					<!--FORM - Rollback changes-->
+					<div class="col">
+						<button disabled style="width:100%" id="popup_metadata" type="button" class="btn btn-sm px-3  bg-primary-hover border-primary bg-primary-soft d-flex align-items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-stopwatch" viewBox="0 0 16 16">
+								<path d="M8.5 5.6a.5.5 0 1 0-1 0v2.9h-3a.5.5 0 0 0 0 1H8a.5.5 0 0 0 .5-.5z" />
+								<path d="M6.5 1A.5.5 0 0 1 7 .5h2a.5.5 0 0 1 0 1v.57c1.36.196 2.594.78 3.584 1.64l.012-.013.354-.354-.354-.353a.5.5 0 0 1 .707-.708l1.414 1.415a.5.5 0 1 1-.707.707l-.353-.354-.354.354-.013.012A7 7 0 1 1 7 2.071V1.5a.5.5 0 0 1-.5-.5M8 3a6 6 0 1 0 .001 12A6 6 0 0 0 8 3" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Rollback changes</span>
+						</button>
+					</div>
+				</div>
+
+				<div class="row row-cols-2 g-3 mt-1">
+					<!--FORM - Old Form Editor-->
+					<div class="col">
+						<button style="width:100%" id="popup_oldformeditor" type="button" class="btn btn-sm px-3  bg-primary-hover border-primary bg-primary-soft d-flex align-items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+								<path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Old Form Editor</span>
+						</button>
+					</div>
+					<!--FORM - New Form Editor-->
+					<div class="col">
+						<button style="width: 100%;" id="popup_newformeditor" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+								<path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>New Form Editor</span>
+						</button>
+					</div>
+				</div>
+
+				<!--<div class="row row-cols-1 g-3 mt-1">
+					<div class="col">
+						<div class="card bg-tertiary bg-opacity-10 border-tertiary border-opacity-40 h-lg-100 bg-body-secondary-hover">
+							<div class="card-body d-flex flex-column p-2">
+								<div class="d-flex align-items-center gap-2">
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-history" viewBox="0 0 16 16">
+										<path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z" />
+										<path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z" />
+										<path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5" />
+									</svg>
+									<h6>Audit History for current record with rollback option</h6>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>-->
+
+			</main>
+
+			<main id="id_page_ribbon" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8" style="display:none">
+
+				<div class="row row-cols-2 g-3">
+					<!--RIBBON - Save-->
+					<div class="col">
+						<button style="width: 100%;" id="popup_savechanges" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<img style="width:16px;height:16px" src="https://content.powerapps.com/resource/uci-infra-bus/resources/images/Save.c3e8b193ccb83c8b1f680b864b3a3109.svg" class="w-rem-5 flex-none" alt="...">
+
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Save</span>
+						</button>
+					</div>
+
+					<!--RIBBON - Save & Close-->
+					<div class="col">
+						<button style="width: 100%;" id="popup_saveandclose" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<img style="width:16px;height:16px" src="https://content.powerapps.com/resource/uci-infra-bus/resources/images/SaveAndClose.e82681ff628c2256468da70776efb231.svg" class="w-rem-5 flex-none" alt="...">
+
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Save & Close</span>
+						</button>
+					</div>
+				</div>
+
+				<!--<div class="row row-cols-2 g-3 mt-1">
+					<div class="col">
+						<div class="card bg-tertiary bg-opacity-10 border-tertiary border-opacity-40 h-lg-100 bg-body-secondary-hover">
+							<div class="card-body d-flex flex-column p-2">
+								<div class="d-flex align-items-center gap-2">
+									<img style="width:16px;height:16px" src="https://content.powerapps.com/resource/uci-infra-bus/resources/images/PageCompleted.d24ee447b0d35d084d4d4329bea30200.svg" class="w-rem-5 flex-none" alt="...">
+									<h6>Activate</h6>
+								</div>
+
+							</div>
+						</div>
+					</div>
+					<div class="col">
+						<div class="card bg-tertiary bg-opacity-10 border-tertiary border-opacity-40 h-lg-100 bg-body-secondary-hover">
+							<div class="card-body d-flex flex-column p-2">
+								<div class="d-flex align-items-center gap-2">
+									<img style="width:16px;height:16px" src="https://content.powerapps.com/resource/uci-infra-bus/resources/images/PageBlock.a0c742e10064ee8c30d58c111947f54f.svg" class="w-rem-5 flex-none" alt="...">
+
+									<h6>Deactivate</h6>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>-->
+
+
+				<div class="row row-cols-2 g-3  mt-1">
+					<!--RIBBON - New record-->
+					<div class="col">
+						<button style="width: 100%;" id="popup_newrecord" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<img style="width:16px;height:16px" src="https://content.powerapps.com/resource/uci-infra-bus/resources/images/Add.e3b9b5bbf4470fff2278314b571d3441.svg" class="w-rem-5 flex-none" alt="...">
+
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span id="newrecordlabel">New record</span>
+						</button>
+					</div>
+					<!--RIBBON - Delete record-->
+					<div class="col">
+						<button style="width: 100%;" id="popup_deleterecord" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-danger-hover border-danger bg-danger-soft">
+							<img style="width:16px;height:16px" src="https://content.powerapps.com/resource/uci-infra-bus/resources/images/Delete.2713f7a803a36d57dcc050874401427f.svg" class="w-rem-5 flex-none" alt="...">
+
+							<span style="background-color: #FF3366;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span id="deleterecordlabel">Delete record</span>
+						</button>
+					</div>
+				</div>
+
+				<div class="row row-cols-2 g-3 mt-1">
+					<!--RIBBON - Refresh Ribbon-->
+					<div class="col">
+						<button style="width: 100%;" id="popup_refreshribbon" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<img style="width:16px;height:16px" src="https://content.powerapps.com/resource/uci-infra-bus/resources/images/Refresh.b68f8f8104b01abf8aa068d43e0d1417.svg" class="w-rem-5 flex-none" alt="...">
+
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Refresh Ribbonn</span>
+						</button>
+					</div>
+					<!--RIBBON - Debug Ribbon-->
+					<div class="col">
+						<button style="width: 100%;" id="popup_debugribbon" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bug" viewBox="0 0 16 16">
+								<path d="M4.355.522a.5.5 0 0 1 .623.333l.291.956A5 5 0 0 1 8 1c1.007 0 1.946.298 2.731.811l.29-.956a.5.5 0 1 1 .957.29l-.41 1.352A5 5 0 0 1 13 6h.5a.5.5 0 0 0 .5-.5V5a.5.5 0 0 1 1 0v.5A1.5 1.5 0 0 1 13.5 7H13v1h1.5a.5.5 0 0 1 0 1H13v1h.5a1.5 1.5 0 0 1 1.5 1.5v.5a.5.5 0 1 1-1 0v-.5a.5.5 0 0 0-.5-.5H13a5 5 0 0 1-10 0h-.5a.5.5 0 0 0-.5.5v.5a.5.5 0 1 1-1 0v-.5A1.5 1.5 0 0 1 2.5 10H3V9H1.5a.5.5 0 0 1 0-1H3V7h-.5A1.5 1.5 0 0 1 1 5.5V5a.5.5 0 0 1 1 0v.5a.5.5 0 0 0 .5.5H3c0-1.364.547-2.601 1.432-3.503l-.41-1.352a.5.5 0 0 1 .333-.623M4 7v4a4 4 0 0 0 3.5 3.97V7zm4.5 0v7.97A4 4 0 0 0 12 11V7zM12 6a4 4 0 0 0-1.334-2.982A3.98 3.98 0 0 0 8 2a3.98 3.98 0 0 0-2.667 1.018A4 4 0 0 0 4 6z" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Debug Ribbon</span>
+						</button>
+					</div>
+				</div>
+
+
+
+			</main>
+
+			<main id="id_page_navigation" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8" style="display:none">
+
+				<div class="row row-cols-2 g-3">
+
+
+
+					<div class="col">
+
+						<button disabled style="width: 100%;" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-bounding-box" viewBox="0 0 16 16">
+								<path d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5" />
+								<path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>My user record</span>
+						</button>
+
+
+					</div>
+					<div class="col">
+
+						<button style="width: 100%;" id="popup_advancedfind" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+								<path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Advanced Find</span>
+						</button>
+
+					</div>
+				</div>
+
+				<div class="row row-cols-2 g-3 mt-1">
+					<div class="col">
+
+						<button style="width: 100%;" id="popup_systemsettings" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+								<path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0" />
+								<path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>System Settings</span>
+						</button>
+
+					</div>
+					<div class="col">
+
+						<button style="width: 100%;" id="popup_legacysecuritysettings" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shield-check" viewBox="0 0 16 16">
+								<path d="M5.338 1.59a61 61 0 0 0-2.837.856.48.48 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.7 10.7 0 0 0 2.287 2.233c.346.244.652.42.893.533q.18.085.293.118a1 1 0 0 0 .101.025 1 1 0 0 0 .1-.025q.114-.034.294-.118c.24-.113.547-.29.893-.533a10.7 10.7 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.8 11.8 0 0 1-2.517 2.453 7 7 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7 7 0 0 1-1.048-.625 11.8 11.8 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 63 63 0 0 1 5.072.56" />
+								<path d="M10.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Security Roles</span>
+						</button>
+
+					</div>
+				</div>
+
+				<div class="row row-cols-2 g-3 mt-1">
+					<div class="col">
+
+						<button style="width: 100%;" id="popup_allsolutions" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-boxes" viewBox="0 0 16 16">
+								<path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434zM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567zM7.5 9.933l-2.75 1.571v3.134l2.75-1.571zm1 3.134 2.75 1.571v-3.134L8.5 9.933zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567zm2.242-2.433V3.504L8.5 5.076V8.21zM7.5 8.21V5.076L4.75 3.504v3.134zM5.258 2.643 8 4.21l2.742-1.567L8 1.076zM15 9.933l-2.75 1.571v3.134L15 13.067zM3.75 14.638v-3.134L1 9.933v3.134z" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>All solutions</span>
+						</button>
+
+					</div>
+					<div class="col">
+
+						<button style="width: 100%;" id="popup_defaultsolution" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box" viewBox="0 0 16 16">
+								<path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Default Solution</span>
+						</button>
+
+					</div>
+				</div>
+
+
+				<div class="row row-cols-2 g-3 mt-1">
+					<!--NAVIGATION - Open create form-->
+					<div class="col">
+						<button style="width: 100%;" id="popup_opencreateform" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+								<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+								<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Open create form</span>
+						</button>
+					</div>
+					<!--NAVIGATION - Open record by Id-->
+					<div class="col">
+						<button style="width: 100%;" id="popup_openrecordbyid" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
+								<path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Open record by Id</span>
+						</button>
+					</div>
+				</div>
+
+				<div class="row row-cols-2 g-3 mt-1">
+					<!--NAVIGATION - Open create form-->
+					<div class="col">
+						<button style="width: 100%;" id="popup_openlist" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-list" viewBox="0 0 16 16">
+								<path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2z" />
+								<path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8m0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0m0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Open list</span>
+						</button>
+					</div>
+
+				</div>
+			</main>
+
+			<main id="id_page_modheader" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8" style="display:none">
+
+				<div class="form-check form-switch">
+					<input style="cursor:pointer" class="form-check-input" type="checkbox" name="switch_make_public" id="toggle_impersonation">
+
+					<label class="form-check-label ms-2">Impersonate as another user</label>
+				</div>
+
+				<div class="row row-cols-1 g-3">
+					<div class="row align-items-center g-3 mt-0">
+						<!--<div class="col-md-2"><label class="form-label mb-0">Impersonation</label></div>-->
+						<div class="col-md-8 col-xl-5 mt-6"><input disabled id="mscrm_caller_id" type="text" class="form-control" placeholder="Open from systemuser form"></div>
+					</div>
+				</div>
+
+				<hr class="my-6">
+
+
+
+
+
+				<div class="row row-cols-1 g-3">
+
+					<div class="row align-items-center g-3 ">
+						<div class="col-md-8 col-xl-5 ">
+							<div class="form-check form-switch">
+								<input style="cursor:pointer" class="form-check-input" type="checkbox" name="switch_make_public" id="toggle_bypass_custom_plugin_execution">
+
+								<label class="form-check-label ms-2" for="switch_make_public" id="toggletext">Bypass Custom Plugin execution</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row row-cols-1 g-3">
+
+					<div class="row align-items-center g-3 ">
+						<div class="col-md-8 col-xl-5 ">
+							<div class="form-check form-switch">
+								<input style="cursor:pointer" class="form-check-input" checked type="checkbox" name="switch_make_public" id="toggle_close_popup_on_button_click">
+
+								<label class="form-check-label ms-2" for="switch_make_public" id="toggletext">Close popup on button click</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="row row-cols-1 g-3">
+
+					<div class="row align-items-center g-3 ">
+						<div class="col-md-8 col-xl-5 ">
+							<div class="form-check form-switch">
+								<input style="cursor:pointer" class="form-check-input" type="checkbox" id="iamawizard">
+
+								<label class="form-check-label ms-2" for="switch_make_public" id="dsdqs">I am a wizard</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<hr class="my-6">
+				<div class="row row-cols-2 g-3 mt-1">
+					<div class="col">
+
+						<button style="width: 100%;" id="popup_darkmode" type="button" class="btn btn-sm px-3  d-flex align-items-center bg-primary-hover border-primary bg-primary-soft">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-moon-stars-fill" viewBox="0 0 16 16">
+								<path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278" />
+								<path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.73 1.73 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.73 1.73 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.73 1.73 0 0 0 1.097-1.097zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.16 1.16 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.16 1.16 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732z" />
+							</svg>
+							<span style="background-color: #8957ff;  opacity: 1" class="vr opacity-20 mx-3"></span>
+							<span>Dark Mode</span>
+						</button>
+
+					</div>
+
+				</div>
+				<!--<hr class="my-6">-->
+				<!--<div class="d-flex d-md-none justify-content-end gap-2"><button type="button" class="btn btn-sm btn-neutral">Cancel</button> <button type="submit" class="btn btn-sm btn-primary">Save</button></div>-->
+			</main>
+
+		</div>
+
+	</div>
+
+	<script src="popup.js"></script>
+	<script src="img.js"></script>
+	<script src="smoke.js"></script>
+
+</body>
+</html>

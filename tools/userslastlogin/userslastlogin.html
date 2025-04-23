@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+	<meta charset="UTF-8">
+	<title>XWT: Users Last Loginy</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+</head>
+<body id="XrmWebTools">
+	<div id="overlay" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; display:none">
+		<svg width="300" height="300" viewBox="0 0 300 300">
+			<circle cx="150" cy="150" r="75" style="stroke: #8957ff; stroke-width: 7.5; fill: none; animation-iteration-count: infinite; animation-duration: 2s; stroke-dasharray: 471; animation-name: rotate; animation-direction: reverse; animation-timing-function: cubic-bezier(.62, .06, .36, .94);"></circle>
+		</svg>
+	</div>
+
+
+
+	<div class="d-flex flex-column flex-lg-row h-lg-100 gap-1 ">
+
+		<div class="flex-lg-fill overflow-x-auto ps-lg-1 vstack vh-lg-100 position-relative ">
+
+
+			<!--TOPNAVBAR-->
+			<div class="d-none d-lg-flex py-3 ">
+
+				<div class="d-lg-none d-xxl-flex align-items-center gap-4 px-4 scrollable-x">
+
+					<button id="startpage" type="button" class="btn btn-sm px-3 btn-neutral d-flex align-items-center">
+						<i class="bi bi-arrow-left go-back-icon"></i>
+						<span class="vr opacity-20 mx-3"></span>
+
+						<span style="display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Start Page</span>
+					</button>
+					<div class="d-flex gap-2 text-xs"><span class="text-heading fw-semibold">Tool:</span> <span class="text-muted">Users Last Login</span></div>
+					<div class="d-flex gap-2 text-xs"><span class="text-heading fw-semibold">Connected To:</span> <span id="connect" class="text-muted"></span></div>
+				</div>
+			</div>
+			<!--TOPNAVBAR-->
+			<!--MAIN-->
+			<div class="flex-fill overflow-y-lg-auto scrollbar   border-top border-lg shadow-2">
+				<!--bg-body       rounded-top-4 rounded-top-start-lg-4 rounded-top-end-lg-0-->
+
+				<main id="id_users_last_login" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8" >
+					<div class="row g-5">
+						<div class="col-lg-4 vstack gap-5">
+							<div class="card">
+								<div class="card-body d-flex flex-column">
+									<div class="row align-items-center g-3 ">
+										<div class="col-md-4"><label class="form-label mb-0">1. Load User Views</label></div>
+										<div class="col-md-6 col-xl-5">
+											<button id="Load_views" type="submit" class="btn btn-sm btn-primary">Load views</button>
+										</div>
+									</div>
+									<hr class="my-6">
+									<div class="row align-items-center g-3">
+										<div class="col-md-4"><label class="form-label mb-0">2. Choose User View</label></div>
+										<div class="col-md-6 col-xl-5">
+											<div class="dropdown">
+												<button class="btn btn-neutral dropdown-toggle" type="button" id="userDropdownMenuButton" onclick="var dropdownMenu = document.getElementById('listofviews'); dropdownMenu.style.display = (dropdownMenu.style.display === 'block') ? 'none' : 'block';">
+													User Views not loaded
+												</button>
+												<div id="listofviews" class="dropdown-menu" style="display: none;" aria-labelledby="userDropdownMenuButton">
+													<a id="view_id" class="dropdown-item d-flex gap-3 align-items-center position-relative">
+														<span>Click Load User Views first</span>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+									<hr class="my-6">
+									<div class="row align-items-center g-3 ">
+										<div class="col-md-4"><label class="form-label mb-0">3. Add last login</label></div>
+										<div class="col-md-6 col-xl-5">
+											<button id="addlastlogin" type="submit" class="btn btn-sm btn-primary">Add Last Login</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-8 vstack gap-5">
+							<div class="card" style="display:none">
+								<div class="card-body py-4">
+									<div class="d-flex flex-wrap align-items-center justify-content-between mb-5">
+										<div class="flex-1">
+											<h6 class="h5 text-limit fw-semibold mb-1 text-muted">Users Last Login report</h6>
+											<p class="text-sm text-muted d-none d-sm-block">
+												It's easy as
+												1 2 3.
+											</p>
+										</div>
+										<div class="ms-sm-auto">
+											<div class="d-flex align-items-center mt-5 mb-3 lh-none text-heading d-block display-5 ls-tight mb-0"><span class="fw-semibold text-2xl align-self-start mt-1 me-1">0</span> <span>1</span> <span class="d-inline-block fw-normal text-muted text-lg mt-sm-3 ms-1">/ 0</span></div>
+										</div>
+									</div>
+									<div class="d-flex align-items-center justify-content-between mb-1"><span class="text-sm text-muted fw-semibold text-heading d-block">30 days</span> <span class="text-sm text-muted fw-semibold d-block">No activity last 3 months</span></div>
+									<div class="progress progress-sm shadow-none mb-6">
+										<div class="progress-bar bg-primary" role="progressbar" style="width:70%" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
+									<hr class="my-4">
+									<div class="d-flex flex-wrap gap-2 align-items-center justify-content-between"><a href="#" class="text-muted text-danger-hover text-sm fw-semibold">Last login is not mapped yet</a> <a href="#" class="btn btn-sm btn-neutral">Bulk update users with last login</a></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr class="my-6">
+					<div class="card shadow border-0 mb-7">
+						<div class="card-header">
+							<h5 id="ID_USERS" class="mb-0 text-muted">Users Last Login Report</h5>
+						</div>
+						<div class="table-responsive">
+							<table class="table table-hover table-striped table-nowrap">
+								<thead id="panel2_columns" class="thead-light">
+
+								</thead>
+								<tbody id="ID_USERS_MAINLIST">
+								</tbody>
+							</table>
+						</div>
+						<div class="card-footer border-0 py-5">
+							<span id="ID_Getting_Things_Ready" class="text-muted text-sm">No users retrieved yet.</span>
+						</div>
+					</div>
+
+				</main>
+			</div>
+			<!--MAIN-->
+		</div>
+	</div>
+</body>
+</html>

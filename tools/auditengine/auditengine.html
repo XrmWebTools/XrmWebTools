@@ -1,0 +1,654 @@
+﻿<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+	<meta charset="UTF-8">
+	<title>XWT: Audit Engine</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+</head>
+<body id="XrmWebTools" style="display:none">
+	<div id="overlay" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; display:none">
+		<svg width="300" height="300" viewBox="0 0 300 300">
+			<circle cx="150" cy="150" r="75" style="stroke: #8957ff; stroke-width: 7.5; fill: none; animation-iteration-count: infinite; animation-duration: 2s; stroke-dasharray: 471; animation-name: rotate; animation-direction: reverse; animation-timing-function: cubic-bezier(.62, .06, .36, .94);"></circle>
+		</svg>
+	</div>
+
+	<!--#region Model Audit Form -->
+	<div id="auditform" class="modal fade show" tabindex="-1" a aria-modal="true" role="dialog" style="display: none;">
+		<div class="modal-dialog modal-dialog-centered" style="max-width:80%">
+			<div class="modal-content overflow-hidden">
+				<div class="modal-header pb-0 border-0">
+					<h1 class="modal-title h4" id="auditform_id">Audit Details</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.getElementById('auditform').style.display='none';"></button>
+				</div>
+				<hr class="my-6" />
+				<div class="modal-body">
+					<div class="row row-cols-md-2 g-0 g-md-10 g-xl-16">
+						<div class="col">
+							<div class="list-group list-group-flush">
+								<div class="list-group-item d-flex align-items-center px-0">
+									<div class="flex-fill">
+										<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Created On</a>
+										<span id="auditform_createdon" class="d-block text-sm text-muted"></span>
+									</div>
+								</div>
+								<div class="list-group-item d-flex align-items-center px-0">
+									<div class="flex-fill">
+										<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Record</a>
+										<span id="auditform_record" class="d-block text-sm text-muted"></span>
+										<span id="auditform_recordid" class="d-block text-sm text-muted"></span>
+									</div>
+									<div class="ms-auto text-end">
+										<a id="auditform_record_openincrm" target="_blank" href="#" class="btn btn-sm btn-neutral">Open Record In CRM</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr class="my-0 d-md-none">
+						<div class="col">
+							<div class="list-group list-group-flush">
+								<div class="list-group-item d-flex align-items-center px-0">
+									<div class="flex-fill">
+										<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Event</a>
+										<span id="auditform_event" class="d-block text-sm text-muted"></span>
+										<div class="d-flex mx-n1"></div>
+									</div>
+								</div>
+
+								<div class="list-group-item d-flex align-items-center px-0">
+									<div class="flex-fill">
+										<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Changed By</a>
+										<span id="auditform_user" class="d-block text-sm text-muted"></span>
+										<span id="auditform_userid" class="d-block text-sm text-muted"></span>
+										<div class="d-flex mx-n1"></div>
+									</div>
+									<div class="ms-auto text-end">
+										<a id="auditform_user_openincrm" href="#" target="_blank" class="btn btn-sm btn-neutral">Open User In CRM</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="">
+						<label class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Changed Data</label>
+						<textarea id="auditform_changeddata" class="form-control" rows="8"></textarea>
+					</div>
+					<div class="text-xs text-muted mt-6">
+						Would you like to open this audit in the Web Api ?
+						<a id="auditform_openinwebapi" href="#" target="_blank" class="fw-bold">Open In WebApi</a>
+					</div>
+				</div>
+				<!--<div class="offcanvas-footer d-flex gap-2 justify-content-end py-4 px-6 border-top" style="display:none">
+					<button type="button" class="btn btn-sm btn-primary">Open all logs for this record</button>
+					<button type="button" class="btn btn-sm btn-primary">Open all logs for this record changed by this user</button>
+					<button type="button" class="btn btn-sm btn-primary">Open audit In Web Api</button>
+					<button type="button" class="btn btn-sm btn-neutral" data-bs-dismiss="offcanvas">Close</button>
+				</div>-->
+			</div>
+		</div>
+	</div>
+	<!--#endregion Model Audit Form -->
+
+	<div class="d-flex flex-column flex-lg-row h-lg-100 gap-1 ">
+
+		<div class="flex-lg-fill overflow-x-auto ps-lg-1 vstack vh-lg-100 position-relative ">
+
+
+			<!--TOPNAVBAR-->
+			<div class="d-none d-lg-flex py-3 ">
+
+				<div class="d-lg-none d-xxl-flex align-items-center gap-4 px-4 scrollable-x">
+
+					<button id="startpage" type="button" class="btn btn-sm px-3 btn-neutral d-flex align-items-center">
+						<i class="bi bi-arrow-left go-back-icon"></i>
+						<span class="vr opacity-20 mx-3"></span>
+
+						<span style="display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Start Page</span>
+					</button>
+					<div class="d-flex gap-2 text-xs"><span class="text-heading fw-semibold">Tool:</span> <span class="text-muted">Audit Engine</span></div>
+					<div class="d-flex gap-2 text-xs"><span class="text-heading fw-semibold">Connected To:</span> <span id="connect" class="text-muted"></span></div>
+				</div>
+			</div>
+			<!--TOPNAVBAR-->
+
+			<!--MAIN-->
+			<div class="flex-fill overflow-y-lg-auto scrollbar   border-top border-lg shadow-2">
+				<!--bg-body       rounded-top-4 rounded-top-start-lg-4 rounded-top-end-lg-0-->
+
+				<main class="container-fluid px-3 py-5 p-lg-6 p-xxl-8">
+
+					<header class="border-bottom mb-0">
+						<div class="row align-items-center">
+							<div class="col-sm-6 col-12">
+								<h1 class="ls-tight">Audit Engine 365</h1>
+							</div>
+						</div>
+						<ul class="nav nav-tabs nav-tabs-flush gap-6 overflow-x border-0 mt-4">
+							<li class="nav-item ">
+								<a id="id_audit_today_link" href="#" class="nav-link active font-semibold">Today</a>
+							</li>
+
+							<li class="nav-item">
+								<a id="id_advanced_audit_find_link" href="#" class="nav-link font-semibold">Adv Audit Find</a>
+							</li>
+							<li class="nav-item">
+								<a id="id_auditcenter_link" href="#" class="nav-link font-semibold">Audit Center</a>
+							</li>
+						</ul>
+					</header>
+
+					<div id="id_audit_today">
+
+
+
+						<div class="row row-cols-xl-3 row-cols-md-3 g-6 mt-0">
+							<div class="col">
+								<div class="card bg-success bg-opacity-10 border-success border-opacity-40">
+									<div class="p-5">
+										<div class="d-flex gap-3 mb-5">
+											<img id="create_logo" src="" class="avatar" alt="...">
+											<div class="">
+												<a class="d-inline-block text-sm text-heading fw-semibold" href="/pages/trade/details.html">
+													Create logs
+												</a><span class="d-block text-xs text-muted">today</span>
+											</div>
+										</div>
+
+										<div id="card_creates_today_account" class="text-lg fw-bold text-heading mt-2">0</div>
+
+										<div class="progress progress-sm shadow-none">
+											<div class="progress-bar bg-success" id="card_creates_today_account_progress" role="progressbar" style="width:0%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+							<div class="col">
+								<div class="card bg-warning bg-opacity-10 border-warning border-opacity-40">
+									<div class="p-5">
+										<div class="d-flex gap-3 mb-5">
+											<img id="update_logo" src="" class="avatar" alt="...">
+											<div class=""><a class="d-inline-block text-sm text-heading fw-semibold" href="/pages/trade/details.html">Update logs </a><span class="d-block text-xs text-muted">Today</span></div>
+										</div>
+
+										<div id="card_updates_today_account" class="text-lg fw-bold text-heading mt-2">0</div>
+
+										<div class="progress progress-sm shadow-none">
+											<div class="progress-bar bg-warning" id="card_updates_today_account_progress" role="progressbar" style="width:0%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="col">
+								<div class="card bg-danger bg-opacity-10 border-danger border-opacity-40">
+									<div class="p-5">
+										<div class="d-flex gap-3 mb-5">
+											<img id="delete_logo" src="" class="avatar" alt="...">
+											<div class=""><a class="d-inline-block text-sm text-heading fw-semibold" href="/pages/trade/details.html">Delete Logs </a><span class="d-block text-xs text-muted">Today</span></div>
+										</div>
+
+										<div id="card_deletes_today_account" class="text-lg fw-bold text-heading mt-2">0</div>
+
+										<div class="progress progress-sm shadow-none">
+											<div class="progress-bar bg-danger" id="card_deletes_today_account_progress" role="progressbar" style="width:00%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+
+						</div>
+
+
+
+						<div id="panel1_card_extrafilters" class="card mt-6 visually-hidden">
+							<div class="card-header py-3">
+								<div class="d-flex align-items-center">
+									<h5 class="text-main">Extra filters?</h5>
+									<div class="hstack gap-3 ms-auto"><a href="#" class="p-1 text-muted"><i class="bi bi-calendar-event"></i> </a><a href="#" class="p-1 text-muted"><i class="bi bi-three-dots"></i></a></div>
+								</div>
+							</div>
+							<div class="card-body py-0">
+								<div class="list-group list-group-flush mb-5">
+									<div class="list-group-item py-3">
+										<div class="row g-3 align-items-center">
+											<div class="col-sm-6 col-12 d-flex">
+												<div class="form-check form-check-linethrough d-flex align-items-center gap-1">
+													<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="topcountcheckbox" checked
+														   onclick="document.getElementById('topcountrequired').classList.toggle('hidden', !this.checked)">
+													<a href="#offcanvasCreate" class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas">Top Count: Only retrieve x latest audits of today</a>
+												</div>
+											</div>
+											<div class="col-sm-auto col-12 ms-sm-auto">
+												<div class="hstack gap-5 justify-content-end">
+													<input id="topcountinput" class="form-control" type="text" value="5000" />
+													<div>
+														<span id="topcountrequired" class="badge bg-success-subtle text-success hidden">Good for performance</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="list-group-item py-3">
+										<div class="row g-3 align-items-center">
+											<div class="col-sm-6 col-12 d-flex">
+												<div class="form-check form-check-linethrough d-flex align-items-center gap-1">
+													<input class="form-check-input w-rem-5 h-rem-5 mt-0 rounded-circle border-dashed flex-none" type="checkbox" id="today_showwebaccess"
+														   onclick="document.getElementById('today_showwebaccess_label').classList.toggle('hidden', !this.checked)">
+													<a class="form-check-label fw-normal text-heading text-primary-hover ms-2" data-bs-toggle="offcanvas"> Show Web Access</a>
+												</div>
+											</div>
+											<div class="col-sm-auto col-12 ms-sm-auto">
+												<div class="hstack gap-5 justify-content-end">
+													<div><span class="badge bg--subtle text-muted">Filter out Web Access audits from the underlying view</span></div>
+													<div>
+														<span id="today_showwebaccess_label" class="badge bg-warning-subtle text-warning hidden">Might impact performance</span>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="row g-5">
+
+
+
+
+							<div class="col-lg-4 vstack gap-5">
+
+
+								<div class="card mt-6">
+									<div ii class="card-body pb-3">
+										<div class="d-flex justify-content-between align-items-center">
+											<div><h5 id="onlineuserstoday">Online users today</h5></div>
+											<div class="hstack align-items-center"><a id="id_pane1_loadonlineusers" href="#" class="text-muted"><i class="bi bi-arrow-repeat"></i></a></div>
+										</div>
+										<div id="ID_USERLIST2" class="list-group list-group-flush">
+
+
+											<!--<div class="list-group-item d-flex align-items-center border-0 py-3">
+												<a class="avatar avatar-sm text-bg-dark rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+													<div class="position-relative d-inline-block text-white">
+														<span class="avatar bg-soft-warning text-warning rounded-circle">YR</span>
+														<span class="position-absolute bottom-2 end-2 transform translate-x-1/2 translate-y-1/2 border-2 border-solid border-current w-3 h-3 bg-success rounded-circle"></span>
+													</div>
+												</a>
+
+												<div class="flex-fill ms-4 text-limit">
+													<div class="d-flex align-items-center justify-content-between"><a href="#" class="d-block text-sm text-heading fw-bold">XNAMEX</a> <span class="text-muted text-xs fw-semibold">47%</span></div>
+													<div class="progress progress-sm my-1">
+														<div class="progress-bar bg-primary" role="progressbar" style="width:47%" aria-valuenow="47" aria-valuemin="0" aria-valuemax="100"></div>
+													</div>
+													<div class="d-flex justify-content-between text-xs text-muted text-end mt-1">
+														<div><span class="font-weight-bold text-muted">XFIRSTLOGIN</span></div>
+														<div>
+															<p class="card-text text-muted"><time datetime="2020-06-23">XLASTLOGIN</time></p>
+														</div>
+													</div>
+												</div>
+												<div class="text-end ms-7">
+													<div class="dropdown">
+														<a class="text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></a>
+														<div class="dropdown-menu dropdown-menu-end"><a href="#!" class="dropdown-item">Action </a><a href="#!" class="dropdown-item">Another action </a><a href="#!" class="dropdown-item">Something else here</a></div>
+													</div>
+												</div>
+											</div>-->
+
+
+
+										</div>
+									</div>
+								</div>
+
+
+
+
+							</div>
+							<div class="col-lg-8 vstack gap-5">
+
+								<div class="card mt-6">
+									<div class="card-header border-bottom">
+										<div class="row align-items-center g-6  ">
+											<div class="col-sm-6">
+												<div class="d-flex gap-2">
+													<div class="input-group input-group-sm input-group-inline w-100 w-md-50"><span class="input-group-text"><i class="bi bi-search me-2"></i> </span><input type="search" class="form-control ps-0" placeholder="Search all assets" aria-label="Search"></div>
+
+													<div class="d-flex align-items-center justify-content-end gap-2">
+														<div class="dropdown">
+															<button class="btn btn-sm btn-neutral flex-none d-flex align-items-center gap-2 p-1" data-bs-toggle="dropdown" aria-expanded="false"><span class="ms-2">24H</span> <i class="bi bi-chevron-down text-xs me-1"></i></button>
+															<ul class="dropdown-menu dropdown-menu-end dropdown-menu-sm">
+																<li><a class="dropdown-item gap-2" href="#">250</a></li>
+																<li><a class="dropdown-item gap-2" href="#">500</a></li>
+																<li><a class="dropdown-item gap-2" href="#">1000</a></li>
+																<li><a class="dropdown-item gap-2" href="#">2500</a></li>
+																<li><a class="dropdown-item gap-2" href="#">5000</a></li>
+															</ul>
+														</div>
+													</div>
+
+
+												</div>
+											</div>
+											<div class="col-sm-6">
+												<div class="hstack justify-content-end gap-2">
+
+													<a id="morefiltersclick" target="_blank" href="#" class="text-sm text-main text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">More filters</span> </a>
+
+													<div class="d-flex align-items-center justify-content-end gap-2">
+														<a id="id_pane1_searchauditsfromtoday" href="#" class="text-muted"><i class="bi bi-arrow-repeat"></i></a>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="table-responsive">
+										<table class="table table-hover table-striped table-nowrap">
+											<thead class="table-light">
+												<tr>
+
+													<th scope="col">Created On</th>
+													<th scope="col">Event</th>
+													<th>Actions</th>
+
+													<th scope="col">Changed By</th>
+													<th scope="col">Record Type</th>
+													<th scope="col">Record Name</th>
+													<th scope="col">Changed Data</th>
+												</tr>
+											</thead>
+											<tbody id="id_audits_from_today">
+											</tbody>
+										</table>
+									</div>
+
+									<div class="card-footer border-0 py-5">
+										<span id="ID_logs" class="text-muted text-sm"></span>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+
+
+					</div>
+
+					<div style="display:none" id="id_advanced_audit_find">
+						<div class="card container-fluid mt-6">
+
+							<header class="py-4 ">
+								<div class="row align-items-center">
+									<div class="col">
+										<div class="d-flex align-items-center gap-4">
+											<div>
+												<a id="pane3_advancedaudit" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
+											</div>
+											<div class="vr opacity-20 my-1"></div>
+											<h1 class="h4 ls-tight">Advanced Audit Find</h1>
+										</div>
+									</div>
+									<div class="col-auto d-none d-md-block">
+										<div class="hstack gap-2 justify-content-end">
+											<!--<a href="#" class="text-sm text-muted text-primary-hover fw-semibold me-2 d-none d-md-block"><i class="bi bi-question-circle-fill"></i> <span class="d-none d-sm-inline ms-2">Need help?</span> </a>
+											<button type="button" class="btn btn-sm btn-neutral"><span id="pane3_webapi">Open results in WebApi</span></button>-->
+										</div>
+									</div>
+								</div>
+							</header>
+						</div>
+
+						<div class="row g-5">
+							<div class="col-lg-4 ">
+								<div class="row align-items-center g-3 mt-6">
+									<div class="col-md-4"><label class="form-label mb-0 text-muted">Table</label></div>
+									<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_table" type="text" class="form-control" value="account"></div>
+								</div>
+								<hr class="my-6">
+								<div class="row align-items-center g-3 mt-6">
+									<div class="col-md-4"><label class="form-label mb-0 text-muted">Record ID</label></div>
+									<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_recordid" type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"></div>
+								</div>
+								<hr class="my-6">
+								<div class="row align-items-center g-3 mt-6">
+									<div class="col-md-4"><label class="form-label mb-0 text-muted">User ID</label></div>
+									<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_userid" type="text" class="form-control" placeholder="00000000-0000-0000-0000-000000000000"></div>
+								</div>
+							</div>
+							<div class="col-lg-4 ">
+								<div class="row align-items-center g-3 mt-6">
+									<div class="col-md-4"><label class="form-label mb-0 text-muted">From (00:00)</label></div>
+									<div class="col-md-8 col-xl-8"><input id="pane3_advancedaudit_from" type="date" class="form-control"></div>
+								</div>
+								<hr class="my-6">
+								<div class="row align-items-center g-3 mt-6">
+									<div class="col-md-4"><label class="form-label mb-0 text-muted">Until (23:59)</label></div>
+									<div class="col-md-8 col-xl-8">
+										<input id="pane3_advancedaudit_until" type="date" class="form-control" value="">
+									</div>
+								</div>
+								<hr class="my-6">
+								<div class="row align-items-center g-3 mt-6">
+									<div class="col-md-4"><label class="form-label mb-0 text-muted">Event</label></div>
+									<div class="col-md-8 col-xl-8">
+										<select id="pane3_advancedaudit_event" class="form-select" aria-label="Default select example">
+											<option selected="selected">All</option>
+											<option value="0">Unknown</option>
+											<option value="1">Create</option>
+											<option value="2">Update</option>
+											<option value="3">Delete</option>
+											<option value="4">Activate</option>
+											<option value="5">Deactivate</option>
+											<option value="6">Upsert</option>
+											<option value="11">Cascade</option>
+											<option value="12">Merge</option>
+											<option value="13">Assign</option>
+											<option value="14">Share</option>
+											<option value="15">Retrieve</option>
+											<option value="16">Close</option>
+											<option value="17">Cancel</option>
+											<option value="18">Complete</option>
+											<option value="20">Resolve</option>
+											<option value="21">Reopen</option>
+											<option value="22">Fulfill</option>
+											<option value="23">Paid</option>
+											<option value="24">Qualify</option>
+											<option value="25">Disqualify</option>
+											<option value="26">Submit</option>
+											<option value="27">Reject</option>
+											<option value="28">Approve</option>
+											<option value="29">Invoice</option>
+											<option value="30">Hold</option>
+											<option value="31">Add Member</option>
+											<option value="32">Remove Member</option>
+											<option value="33">Associate Entities</option>
+											<option value="34">Disassociate Entities</option>
+											<option value="35">Add Members</option>
+											<option value="36">Remove Members</option>
+											<option value="37">Add Item</option>
+											<option value="38">Remove Item</option>
+											<option value="39">Add Substitute</option>
+											<option value="40">Remove Substitute</option>
+											<option value="41">Set State</option>
+											<option value="42">Renew</option>
+											<option value="43">Revise</option>
+											<option value="44">Win</option>
+											<option value="45">Lose</option>
+											<option value="46">Internal Processing</option>
+											<option value="47">Reschedule</option>
+											<option value="48">Modify Share</option>
+											<option value="49">Unshare</option>
+											<option value="50">Book</option>
+											<option value="51">Generate Quote From Opportunity</option>
+											<option value="52">Add To Queue</option>
+											<option value="53">Assign Role To Team</option>
+											<option value="54">Remove Role From Team</option>
+											<option value="55">Assign Role To User</option>
+											<option value="56">Remove Role From User</option>
+											<option value="57">Add Privileges to Role</option>
+											<option value="58">Remove Privileges From Role</option>
+											<option value="59">Replace Privileges In Role</option>
+											<option value="60">Import Mappings</option>
+											<option value="61">Clone</option>
+											<option value="62">Send Direct Email</option>
+											<option value="63">Enabled for organization</option>
+											<option value="64">User Access via Web</option>
+											<option value="65">User Access via Web Services</option>
+											<option value="100">Delete Entity</option>
+											<option value="101">Delete Attribute</option>
+											<option value="102">Audit Change at Entity Level</option>
+											<option value="103">Audit Change at Attribute Level</option>
+											<option value="104">Audit Change at Org Level</option>
+											<option value="105">Entity Audit Started</option>
+											<option value="106">Attribute Audit Started</option>
+											<option value="107">Audit Enabled</option>
+											<option value="108">Entity Audit Stopped</option>
+											<option value="109">Attribute Audit Stopped</option>
+											<option value="110">Audit Disabled</option>
+											<option value="111">Audit Log Deletion</option>
+											<option value="112">User Access Audit Started</option>
+											<option value="113">User Access Audit Stopped</option>
+											<option value="115">Archive</option>
+											<option value="116">Retain</option>
+											<option value="117">RollbackRetain</option>
+											<option value="118">IPFirewallAcccesDenied</option>
+											<option value="119">IPFirewallAcccesAllowed</option>
+											<option value="120">Restore</option>
+											<option value="121">ApplicationBasedAccessDenied</option>
+											<option value="122">ApplicationBasedAccessAllowed</option>
+										</select>
+
+									</div>
+								</div>
+
+							</div>
+							<div class="col-lg-4 ">
+								<div class="row align-items-center g-3 mt-6">
+									<div class="col-md-4"><label class="form-label mb-0 text-muted">Top</label></div>
+									<div class="col-md-4 col-xl-4"><input id="pane3_advancedaudit_top" type="text" class="form-control" value="250"></div>
+								</div>
+							</div>
+						</div>
+						<hr class="my-6">
+
+
+						<div class="card mt-6">
+							<div class="card-header border-bottom">
+								<h5 class="mb-0">Advanced Audit Find</h5>
+							</div>
+							<div class="table-responsive">
+								<table class="table table-hover table-striped table-nowrap">
+									<thead class="table-light">
+										<tr>
+
+											<th scope="col">Created On</th>
+											<th scope="col">Event</th>
+											<th>Actions</th>
+
+											<th scope="col">Changed By</th>
+											<th scope="col">Record Type</th>
+											<th scope="col">Record Name</th>
+											<th scope="col">Changed Data</th>
+										</tr>
+									</thead>
+									<tbody id="id_audits_advanced_find">
+									</tbody>
+								</table>
+							</div>
+
+							<div class="card-footer border-0 py-5">
+								<span id="id_audits_advanced_find_logs" class="text-muted text-sm"></span>
+							</div>
+						</div>
+						<hr class="my-6">
+
+
+					</div>
+					<div style="display:none" id="id_auditcenter">
+						<div class="card container-fluid mt-6">
+
+							<header class="py-4 ">
+								<div class="row align-items-center">
+									<div class="col">
+										<div class="d-flex align-items-center gap-4">
+											<div>
+
+
+												<a id="pane5_loadauditcenter" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
+											</div>
+											<div class="vr opacity-20 my-1"></div>
+											<h1 class="h4 ls-tight">Audit Center</h1>
+										</div>
+									</div>
+									<div class="col-auto d-none d-md-block">
+										<div class="hstack gap-2 justify-content-end">
+
+											<button type="button" class="btn btn-sm btn-neutral visually-hidden" aria-label="Open in new window">
+												<i class="bi bi-box-arrow-up-right"></i>
+												<span>Full Window</span>
+
+											</button>
+											<button type="button" class="btn btn-sm btn-neutral visually-hidden">
+												<i class="bi bi-save"> </i>
+												<span>Dev button</span>
+											</button>
+										</div>
+									</div>
+								</div>
+							</header>
+						</div>
+
+
+						<div class="row g-5 mt-6">
+							<div class="col-lg-6 vstack gap-5">
+								<div class="vstack gap-6">
+									<div class="card">
+										<div id="pane5_allentities" class="card-body">
+											<h5 class="mb-6">All audited entities</h5>
+											<hr class="my-6">
+
+
+
+											<div class="vstack gap-4" id="entities-container">
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6 vstack gap-5">
+								<div class="vstack gap-6">
+									<div class="card">
+
+
+										<div class="card">
+											<div class="card-body">
+												<h5 id="allfieldsfor" class="mb-6">All fields for selected entity in left pane</h5>
+												<hr class="my-6">
+
+
+
+												<div class="vstack gap-4" id="container_attr">
+												</div>
+											</div>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+				</main>
+			</div>
+			<!--MAIN-->
+		</div>
+	</div>
+</body>
+</html>

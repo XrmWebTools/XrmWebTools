@@ -1,0 +1,228 @@
+﻿<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+	<meta charset="UTF-8">
+	<title>XWT: Plugin Trace Webviewer</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+</head>
+<body id="XrmWebTools" >
+	<div id="overlay" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; display:none">
+		<svg width="300" height="300" viewBox="0 0 300 300">
+			<circle cx="150" cy="150" r="75" style="stroke: #8957ff; stroke-width: 7.5; fill: none; animation-iteration-count: infinite; animation-duration: 2s; stroke-dasharray: 471; animation-name: rotate; animation-direction: reverse; animation-timing-function: cubic-bezier(.62, .06, .36, .94);"></circle>
+		</svg>
+	</div>
+
+
+
+	<div class="d-flex flex-column flex-lg-row h-lg-100 gap-1 ">
+
+		<div class="flex-lg-fill overflow-x-auto ps-lg-1 vstack vh-lg-100 position-relative ">
+
+
+			<!--TOPNAVBAR-->
+			<div class="d-none d-lg-flex py-3 ">
+
+				<div class="d-lg-none d-xxl-flex align-items-center gap-4 px-4 scrollable-x">
+
+					<button id="startpage" type="button" class="btn btn-sm px-3 btn-neutral d-flex align-items-center">
+						<i class="bi bi-arrow-left go-back-icon"></i>
+						<span class="vr opacity-20 mx-3"></span>
+
+						<span style="display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Start Page</span>
+					</button>
+					<div class="d-flex gap-2 text-xs"><span class="text-heading fw-semibold">Tool:</span> <span class="text-muted">Plugin Trace Webviewer</span></div>
+					<div class="d-flex gap-2 text-xs"><span class="text-heading fw-semibold">Connected To:</span> <span id="connect" class="text-muted"></span></div>
+				</div>
+			</div>
+			<!--TOPNAVBAR-->
+			<!--MAIN-->
+			<div class="flex-fill overflow-y-lg-auto scrollbar   border-top border-lg shadow-2">
+				<!--bg-body       rounded-top-4 rounded-top-start-lg-4 rounded-top-end-lg-0-->
+
+				<main id="id_plugintraces" class="container-fluid px-3 py-5 p-lg-6 p-xxl-8" >
+
+					<div class="card container-fluid ">
+
+						<header class="py-4 ">
+							<div class="row align-items-center">
+								<div class="col">
+									<div class="d-flex align-items-center gap-4">
+										<div>
+
+
+											<a id="pane4_plugintraces" href="#" class="btn px-3 py-1 btn-primary text-white">Load Data</a>
+										</div>
+										<div class="vr opacity-20 my-1"></div>
+										<h1 class="h4 ls-tight">Plugin Trace WebViewer</h1>
+									</div>
+								</div>
+								<div class="col-auto d-none d-md-block">
+									<div class="hstack gap-2 justify-content-end">
+
+										<button id="pane4_setting" type="button" class="btn btn-neutral">
+											<span>Setting</span>
+										</button>
+										<select class="form-select" id="pane4_settingddl">
+											<option>Not retrieved</option>
+											<option>Off</option>
+											<option>Exception</option>
+											<option>All</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</header>
+					</div>
+					<hr class="my-6 d-lg-none">
+
+					<div class="row g-5">
+						<!-- Filter Section -->
+						<div class="col-lg-8 vstack gap-5">
+							<!-- Date From -->
+							<div class="row align-items-center g-3 mt-6">
+								<div class="col-md-2">
+									<label class="form-label mb-0 text-main">Date From</label>
+								</div>
+								<div class="col-md-10">
+									<input id="plugintracelog_from" type="date" class="form-control">
+								</div>
+							</div>
+
+							<!-- Message Type -->
+							<div class="row align-items-center g-3">
+								<div class="col-md-2">
+									<label class="form-label mb-0 text-main">Message</label>
+								</div>
+								<div class="col-md-10">
+									<div class="d-flex gap-3 scrollable-x">
+										<div class="form-item-checkable">
+											<input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_all" checked>
+											<label class="form-item cursor-pointer" for="plugintracelog_message_all">
+												<span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted">
+													<i class="bi text-xl"></i>
+													<span class="fw-semibold text-xs">ALL</span>
+												</span>
+											</label>
+										</div>
+										<div class="form-item-checkable">
+											<input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_create">
+											<label class="form-item cursor-pointer" for="plugintracelog_message_create">
+												<span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted">
+													<i class="bi text-xl"></i>
+													<span class="fw-semibold text-xs">Create</span>
+												</span>
+											</label>
+										</div>
+										<div class="form-item-checkable">
+											<input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_update">
+											<label class="form-item cursor-pointer" for="plugintracelog_message_update">
+												<span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted">
+													<i class="bi text-xl"></i>
+													<span class="fw-semibold text-xs">Update</span>
+												</span>
+											</label>
+										</div>
+										<div class="form-item-checkable">
+											<input class="form-item-check" type="radio" name="asset-type" id="plugintracelog_message_associate">
+											<label class="form-item cursor-pointer" for="plugintracelog_message_associate">
+												<span class="form-item-click d-inline-flex flex-column gap-3 align-items-center justify-content-center form-control w-rem-24 h-rem-24 text-center text-muted">
+													<i class="bi text-xl"></i>
+													<span class="fw-semibold text-xs">Associate</span>
+												</span>
+											</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!-- Entity -->
+							<div class="row align-items-center g-3">
+								<div class="col-md-2">
+									<label class="form-label mb-0 text-main">Entity</label>
+								</div>
+								<div class="col-md-10">
+									<input id="plugintracelog_entity" type="text" class="form-control">
+								</div>
+							</div>
+						</div>
+
+						<!-- Additional Filters -->
+						<div class="col-lg-4 vstack gap-5">
+							<!-- Exception Only -->
+							<div class="d-flex g-3 mt-6">
+								<div class="me-3">
+									<input class="form-check-input" type="checkbox" id="plugintracelog_message_exceptiononly">
+								</div>
+								<div>
+									<label class="form-label mb-0 text-main">Exception Only</label>
+								</div>
+							</div>
+
+							<!-- Sync -->
+							<div class="d-flex">
+								<div class="me-3">
+									<input disabled checked class="form-check-input" type="checkbox" id="check_notification_sync">
+								</div>
+								<div>
+									<label class="form-label mb-0 text-main" for="check_notification_sync">Sync</label>
+								</div>
+							</div>
+
+							<!-- Async -->
+							<div class="d-flex">
+								<div class="me-3">
+									<input disabled checked class="form-check-input" type="checkbox" id="check_notification_async">
+								</div>
+								<div>
+									<label class="form-label mb-0 text-main" for="check_notification_async">Async</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<hr class="my-6">
+
+					<!-- Plugin Logs Table -->
+					<div class="card shadow border-0 mb-7">
+						<div class="card-header">
+							<h5 id="ID_PLUGINLOGS" class="mb-0 text-muted">Plugin Trace WebViewer</h5>
+						</div>
+						<div class="table-responsive">
+							<table class="table table-hover table-striped table-nowrap">
+								<thead>
+									<tr>
+										<th scope="col">
+											<div class="d-flex align-items-center gap-2 ps-1">
+												<span>Start</span>
+											</div>
+										</th>
+										<th scope="col">Duration</th>
+										<th scope="col" class="d-none d-xl-table-cell">Operation</th>
+										<th scope="col" class="d-none d-xl-table-cell">Plugin</th>
+										<th scope="col">Step</th>
+										<th scope="col">Depth</th>
+										<th scope="col">Mode</th>
+										<th scope="col">Entity</th>
+										<th scope="col">Exception</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody id="ID_PLUGINLOGS_MAINLIST">
+								</tbody>
+							</table>
+						</div>
+						<div class="card-footer border-0 py-5">
+							<span id="ID_PLUGINLOGS_COUNT" class="text-muted text-sm">No plugin logs retrieved yet.</span>
+						</div>
+					</div>
+
+					<hr class="my-6" style="color:transparent">
+					<hr class="my-6" style="color:transparent">
+					<hr class="my-6" style="color:transparent">
+				</main>
+			</div>
+			<!--MAIN-->
+		</div>
+	</div>
+</body>
+</html>

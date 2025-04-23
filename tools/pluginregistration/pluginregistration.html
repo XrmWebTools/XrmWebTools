@@ -1,0 +1,540 @@
+﻿<!doctype html>
+<html lang="en" data-bs-theme="dark">
+<head>
+	<meta charset="UTF-8">
+	<title>XWT: Plugin Registration</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+
+	<style>
+		@keyframes rotate {
+			0% {
+				stroke-dashoffset: 471;
+			}
+
+			50% {
+				stroke-dashoffset: 0;
+			}
+
+			100% {
+				stroke-dashoffset: -471;
+			}
+		}
+
+		/*	:root {
+					font-size: 14px;
+				}*/
+
+		.tree-view {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			width: max-content;
+			padding-left: 1rem;
+			user-select: none;
+			/*			// font-size: 1.25rem;
+				*/
+		}
+
+		.branch-node {
+			position: relative;
+			padding-left: 2rem;
+		}
+
+			.branch-node::before, .branches > ::before {
+				content: "";
+				position: absolute;
+				left: -0.5rem;
+				top: 1.5rem;
+				width: 3rem;
+				border-left: 2px solid black;
+				border-top: 2px solid black;
+			}
+
+			.branch-node:not(:last-child)::before, .branches > :not(:last-child)::before {
+				height: 100%;
+			}
+
+			.branch-node:last-child::before, .branches > :last-child::before {
+				border-top: 0;
+				border-bottom: 2px solid black;
+			}
+
+		:not(.tree-view) > .branch-node:first-child::after, .branches > :first-child::after {
+			content: "";
+			position: absolute;
+			left: -0.5rem;
+			top: -1.5rem;
+			height: 3rem;
+			border-left: 2px solid black;
+		}
+
+		.branch-title {
+			position: relative;
+			display: list-item;
+			list-style: none;
+			width: max-content;
+			height: 3rem;
+			line-height: 3rem;
+			padding-left: 3rem;
+			padding-right: 1rem;
+			padding-bottom: 1.5rem;
+			/*					color: #16192C;
+		*/
+		}
+
+			.branch-title::before {
+				content: "►";
+				position: absolute;
+				left: 1rem;
+				margin-right: 1rem;
+			}
+
+		.branch-node.open > .branch-title::before {
+			transform: rotate(90deg);
+		}
+
+		.branch-node.open > .branches {
+			display: initial;
+		}
+
+		.branches {
+			display: none;
+			padding: 0;
+			margin: 0;
+		}
+
+			.branches > .branch-node {
+				margin-left: 2rem;
+			}
+
+			.branches > li {
+				position: relative;
+				list-style: none;
+				width: fit-content;
+				min-height: 4rem;
+				line-height: 3rem;
+				margin-left: 2rem;
+				padding-left: 3rem;
+			}
+	</style>
+	<style>
+
+
+
+		/* Basic tree view styling */
+		.tree-view {
+			font-family: Arial, sans-serif;
+			list-style-type: none;
+			padding: 0;
+		}
+		/* When the .branch-title element has the selected class, the background will be blue */
+		.branch-title.selected {
+			background: linear-gradient(135deg, #4a90e2, #007bff); /* Modern gradient background */
+			color: #fff; /* Clean and vibrant text color */
+			border-radius: 8px; /* Soft rounded corners for a polished look */
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Subtle shadow for depth */
+			transition: all 0.3s ease; /* Smooth transition for hover effects */
+		}
+
+			.branch-title.selected:hover {
+				background: linear-gradient(135deg, #007bff, #0056b3);
+				box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+				transform: scale(1.02);
+			}
+
+		.branch-node {
+			/*margin-left: 10px;*/
+		}
+
+		.branch-title {
+			font-weight: bold;
+			cursor: pointer;
+		}
+
+		.branches {
+			display: none;
+		}
+
+		.branch-node.open > .branches {
+			display: block;
+		}
+
+		.test-branch {
+			/*color: blue;*/ /* Style for the test branch */
+			font-style: italic;
+		}
+
+		.image-branch {
+			color: green;
+			font-style: italic;
+		}
+	</style>
+</head>
+<body id="XrmWebTools" style="display:none">
+	<div id="overlay" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1000; display:none">
+		<svg width="300" height="300" viewBox="0 0 300 300">
+			<circle cx="150" cy="150" r="75" style="stroke: #8957ff; stroke-width: 7.5; fill: none; animation-iteration-count: infinite; animation-duration: 2s; stroke-dasharray: 471; animation-name: rotate; animation-direction: reverse; animation-timing-function: cubic-bezier(.62, .06, .36, .94);"></circle>
+		</svg>
+	</div>
+
+	<!--#region Model Audit Form -->
+	<div id="auditform" class="modal fade show" tabindex="-1" a aria-modal="true" role="dialog" style="display: none;">
+		<div class="modal-dialog modal-dialog-centered" style="max-width:80%">
+			<div class="modal-content overflow-hidden">
+				<div class="modal-header pb-0 border-0">
+					<h1 class="modal-title h4" id="auditform_id">Audit Details</h1>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="document.getElementById('auditform').style.display='none';"></button>
+				</div>
+				<hr class="my-6" />
+				<div class="modal-body">
+					<div class="row row-cols-md-2 g-0 g-md-10 g-xl-16">
+						<div class="col">
+							<div class="list-group list-group-flush">
+								<div class="list-group-item d-flex align-items-center px-0">
+									<div class="flex-fill">
+										<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Created On</a>
+										<span id="auditform_createdon" class="d-block text-sm text-muted"></span>
+									</div>
+								</div>
+								<div class="list-group-item d-flex align-items-center px-0">
+									<div class="flex-fill">
+										<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Record</a>
+										<span id="auditform_record" class="d-block text-sm text-muted"></span>
+										<span id="auditform_recordid" class="d-block text-sm text-muted"></span>
+									</div>
+									<div class="ms-auto text-end">
+										<a id="auditform_record_openincrm" target="_blank" href="#" class="btn btn-sm btn-neutral">Open Record In CRM</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<hr class="my-0 d-md-none">
+						<div class="col">
+							<div class="list-group list-group-flush">
+								<div class="list-group-item d-flex align-items-center px-0">
+									<div class="flex-fill">
+										<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Event</a>
+										<span id="auditform_event" class="d-block text-sm text-muted"></span>
+										<div class="d-flex mx-n1"></div>
+									</div>
+								</div>
+
+								<div class="list-group-item d-flex align-items-center px-0">
+									<div class="flex-fill">
+										<a href="#" class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Changed By</a>
+										<span id="auditform_user" class="d-block text-sm text-muted"></span>
+										<span id="auditform_userid" class="d-block text-sm text-muted"></span>
+										<div class="d-flex mx-n1"></div>
+									</div>
+									<div class="ms-auto text-end">
+										<a id="auditform_user_openincrm" href="#" target="_blank" class="btn btn-sm btn-neutral">Open User In CRM</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="">
+						<label class="h5 d-block fw-semibold text-heading text-primary-hover mb-1">Changed Data</label>
+						<textarea id="auditform_changeddata" class="form-control" rows="8"></textarea>
+					</div>
+					<div class="text-xs text-muted mt-6">
+						Would you like to open this audit in the Web Api ?
+						<a id="auditform_openinwebapi" href="#" target="_blank" class="fw-bold">Open In WebApi</a>
+					</div>
+				</div>
+				<!--<div class="offcanvas-footer d-flex gap-2 justify-content-end py-4 px-6 border-top" style="display:none">
+					<button type="button" class="btn btn-sm btn-primary">Open all logs for this record</button>
+					<button type="button" class="btn btn-sm btn-primary">Open all logs for this record changed by this user</button>
+					<button type="button" class="btn btn-sm btn-primary">Open audit In Web Api</button>
+					<button type="button" class="btn btn-sm btn-neutral" data-bs-dismiss="offcanvas">Close</button>
+				</div>-->
+			</div>
+		</div>
+	</div>
+	<!--#endregion Model Audit Form -->
+
+	<div class="d-flex flex-column flex-lg-row h-lg-100 gap-1 ">
+
+		<div class="flex-lg-fill overflow-x-auto ps-lg-1 vstack vh-lg-100 position-relative ">
+
+
+			<!--TOPNAVBAR-->
+			<div class="d-none d-lg-flex py-3 ">
+
+				<div class="d-lg-none d-xxl-flex align-items-center gap-4 px-4 scrollable-x">
+					<!--<div class="d-flex gap-2 text-xs"><span class="text-heading fw-semibold">XrmWebTools</span></div>-->
+
+					<button id="startpage" type="button" class="btn btn-sm px-3 btn-neutral d-flex align-items-center">
+						<!--<span class="text-xs text-primary">⚡</span>-->
+						<i class="bi bi-arrow-left go-back-icon"></i>
+						<span class="vr opacity-20 mx-3"></span>
+
+						<span style="display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Start Page</span>
+					</button>
+					<div class="d-flex gap-2 text-xs"><span class="text-heading fw-semibold">Tool:</span> <span class="text-muted">Plugin Registration tool</span></div>
+					<div class="d-flex gap-2 text-xs"><span class="text-heading fw-semibold">Connected To:</span> <span id="connect" class="text-muted"></span></div>
+				</div>
+				<!--<div class="hstack flex-fill justify-content-end flex-nowrap gap-6 ms-auto px-6 px-xxl-8">
+					<button type="button" class="btn btn-sm px-3 btn-neutral d-flex align-items-center" onclick="window.open('https://github.com/auditengine/auditengine/issues', '_blank');">
+						<span class="text-xs text-primary">ℹ️</span>
+						<span class="vr opacity-20 mx-3"></span>
+
+						<span>Help</span>
+					</button>
+					<button type="button" disabled="" class="btn btn-sm px-3 btn-neutral d-flex align-items-center">
+						<span class="text-xs text-primary">🛠️</span>
+						<span class="vr opacity-20 mx-3"></span>
+
+						<span>Configuration</span>
+					</button>
+
+					<button type="button" class="btn btn-xs btn-primary rounded-pill text-nowrap" data-bs-target="#connectWalletModal" data-bs-toggle="modal">Connect</button>
+					<div class="dropdown d-none">
+						<a href="#" class="nav-link" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-sun-fill"></i></a>
+						<div class="dropdown-menu"><button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light">Light</button> <button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="dark">Dark</button> <button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="auto">System</button></div>
+					</div>
+					<div class="dropdown">
+						<a href="#" class="nav-link" id="dropdown-notifications" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-bell"></i></a>
+						<div class="dropdown-menu dropdown-menu-end px-2" aria-labelledby="dropdown-notifications">
+							<div class="dropdown-item d-flex align-items-center">
+								<h6 class="dropdown-header px-0">Notifications</h6>
+								<a href="#" class="text-sm fw-semibold ms-auto">Clear all</a>
+							</div>
+							<div class="dropdown-item py-3 d-flex">
+								<div>
+									<div class="avatar bg-primary text-white rounded-circle">RF</div>
+								</div>
+								<div class="flex-fill ms-3">
+									<div class="text-sm lg-snug w-rem-64 text-wrap"><a href="#" class="fw-semibold text-heading text-primary-hover">Robert</a> sent a message to <a href="#" class="fw-semibold text-heading text-primary-hover">Webpixels</a></div>
+									<span class="text-muted text-xs">30 mins ago</span>
+								</div>
+							</div>
+							<div class="dropdown-item py-3 d-flex">
+								<div><img src="../../img/people/img-1.jpg" class="avatar rounded-circle" alt="..."></div>
+								<div class="flex-fill ms-3">
+									<div class="text-sm lg-snug w-rem-64 text-wrap"><a href="#" class="fw-semibold text-heading text-primary-hover">Robert</a> sent a message to <a href="#" class="fw-semibold text-heading text-primary-hover">Webpixels</a></div>
+									<span class="text-muted text-xs">30 mins ago</span>
+								</div>
+							</div>
+							<div class="dropdown-item py-3 d-flex">
+								<div><img src="../../img/people/img-2.jpg" class="avatar rounded-circle" alt="..."></div>
+								<div class="flex-fill ms-3">
+									<div class="text-sm lg-snug w-rem-64 text-wrap"><a href="#" class="fw-semibold text-heading text-primary-hover">Robert</a> sent a message to <a href="#" class="fw-semibold text-heading text-primary-hover">Webpixels</a></div>
+									<span class="text-muted text-xs">30 mins ago</span>
+								</div>
+							</div>
+							<div class="dropdown-item py-3 d-flex">
+								<div>
+									<div class="avatar bg-success text-white rounded-circle">KW</div>
+								</div>
+								<div class="flex-fill ms-3">
+									<div class="text-sm lg-snug w-rem-64 text-wrap"><a href="#" class="fw-semibold text-heading text-primary-hover">Robert</a> sent a message to <a href="#" class="fw-semibold text-heading text-primary-hover">Webpixels</a></div>
+									<span class="text-muted text-xs">30 mins ago</span>
+								</div>
+							</div>
+							<div class="dropdown-item py-3 d-flex">
+								<div><img src="../../img/people/img-4.jpg" class="avatar rounded-circle" alt="..."></div>
+								<div class="flex-fill ms-3">
+									<div class="text-sm lg-snug w-rem-64 text-wrap"><a href="#" class="fw-semibold text-heading text-primary-hover">Robert</a> sent a message to <a href="#" class="fw-semibold text-heading text-primary-hover">Webpixels</a></div>
+									<span class="text-muted text-xs">30 mins ago</span>
+								</div>
+							</div>
+							<div class="dropdown-divider"></div>
+							<div class="dropdown-item py-2 text-center"><a href="#" class="fw-semibold text-muted text-primary-hover">View all</a></div>
+						</div>
+					</div>
+					<div class="dropdown">
+						<a class="avatar avatar-sm text-bg-dark rounded-circle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
+
+
+
+							<div class="position-relative d-inline-block text-white">
+								<span class="avatar bg-soft-warning text-warning rounded-circle">YR</span>
+								<span class="position-absolute bottom-2 end-2 transform translate-x-1/2 translate-y-1/2 border-2 border-solid border-current w-3 h-3 bg-success rounded-circle"></span>
+							</div>
+
+
+
+						</a>
+						<div class="dropdown-menu dropdown-menu-end">
+							<div class="dropdown-header"><span class="d-block text-sm text-muted mb-1">Signed in as</span> <span class="d-block text-heading fw-semibold">Alexis Enache</span></div>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#"><i class="bi bi-house me-3"></i>Home </a><a class="dropdown-item" href="#"><i class="bi bi-pencil me-3"></i>Edit profile</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#"><i class="bi bi-gear me-3"></i>Settings </a><a class="dropdown-item" href="#"><i class="bi bi-image me-3"></i>Media </a><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-up me-3"></i>Share</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#"><i class="bi bi-person me-3"></i>Login</a>
+						</div>
+					</div>
+				</div>-->
+			</div>
+			<!--TOPNAVBAR-->
+			<!--MAIN-->
+			<div class="flex-fill overflow-y-lg-auto scrollbar   border-top border-lg shadow-2">
+				<!--bg-body       rounded-top-4 rounded-top-start-lg-4 rounded-top-end-lg-0-->
+
+				<main id="id_start_page" class="py-6 bg-surface-secondary">
+
+					<div class="container-fluid mt-3">
+						<div class="row g-6 mb-6">
+							<div class="col-xl-9">
+								<div class="card">
+
+									<div class="card-header">
+										<div class="d-flex justify-content-between align-items-center">
+											<div>
+												<h5 class="mb-0">
+													Registered Plugins & Custom Workflow Activities
+												</h5>
+											</div>
+											<div class="text-end mx-n1 d-flex align-items-center gap-2">
+
+												<div class="input-group input-group-sm input-group-inline"><span class="input-group-text pe-2"><i class="bi bi-search"></i> </span><input id="filterassemblies" value=""  class="form-control" placeholder="Filter Assemblies" aria-label="Search"></div>
+
+												<!--<div><button disabled type="button" class="btn btn-sm px-3 btn-neutral d-flex align-items-center"><i class="bi bi-funnel me-2"></i> <span>Filters</span> <span class="vr opacity-20 mx-3"></span> <span class="text-xs text-primary">1</span></button></div>-->
+
+												<a id="refreshplugins" href="#" class="px-2 text-muted">
+													<i class="bi bi-arrow-clockwise"></i>
+												</a>
+
+												<div class="dropdown">
+													<a onclick=" event.preventDefault()" id="toggleButton" class="text-muted" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="bi bi-three-dots-vertical"></i></a>
+													<div id="dropdown1" class="dropdown-menu" style="">
+
+														<a onclick="alert('not available during preview'); event.preventDefault()" href="#!" class="dropdown-item">Register New Assembly</a>
+														<a onclick="alert('not available during preview'); event.preventDefault()" href="#!" class="dropdown-item">Update Existing Assembly</a>
+														<a onclick="alert('not available during preview'); event.preventDefault()" href="#!" class="dropdown-item">Register New Step</a>
+														<a onclick="alert('not available during preview'); event.preventDefault()" href="#!" class="dropdown-item">Register New Image</a>
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+
+
+
+
+
+
+
+									<div class="card-body py-0 position-relative" style="min-height: 600px; max-height: 600px; overflow-y:auto">
+										<div id="tree-view-container"></div>
+
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-3">
+
+
+								<div id="card_assembly" class="card" style="display:block">
+									<div class="card-body">
+										<div class="mb-5">
+											<h4 class="mb-1">Update Assembly</h4>
+											<p id="assemblyname" class="text-sm text-muted">Select an assembly from the left pane first!</p>
+										</div>
+										<form class="vstack gap-5">
+
+											<div>
+												<label class="form-label">Content (.dll)</label>
+												<div class="d-flex align-items-center">
+													<div class="ms-5">
+														<label for="assembly-upload" class="btn btn-sm btn-neutral">
+															<span>Update Assembly with new DLL</span>
+															<!--<input type="file" name="assembly-upload" id="assembly-upload" class="visually-hidden" accept=".dll">-->
+														</label>
+
+														<a href="#" onclick="alert('not available during preview'); event.preventDefault()" class="btn d-inline-flex btn-sm btn-neutral ms-2 text-danger"><span class="pe-2"><i class="bi bi-trash"></i> </span><span>Unregister</span></a>
+													</div>
+												</div>
+											</div>
+											<div class="hstack gap-2 justify-content-end">
+												<!--<button type="button" class="btn btn-sm btn-neutral">Cancel</button>-->
+												<button id="registerplugin" onclick="alert('not available during preview');event.preventDefault()" type="submit" class="btn btn-sm btn-primary">Register new plugin</button>
+											</div>
+										</form>
+									</div>
+								</div>
+
+								<div id="card_plugin" class="card" style="display: none">
+									<div class="card-body">
+										<div class="mb-5">
+											<h4 class="mb-1">Plugin form</h4>
+											<p id="pluginname" class="text-sm text-muted">Select a Plugin from the left pane first!</p>
+										</div>
+										<form class="vstack gap-5">
+											<button onclick="alert('not available during preview'); event.preventDefault()" type="button" class="btn btn-sm btn-primary">REGISTER NEW STEP</button>
+											<button onclick="alert('not available during preview'); event.preventDefault()" id="unregisterplugintype" type="button" class="btn btn-sm btn-primary">Unregister Plugin</button>
+
+										</form>
+									</div>
+								</div>
+
+
+
+								<div id="card_pluginstep" class="card" style="display: none">
+									<div class="card-body">
+										<div class="mb-5">
+											<h4 class="mb-1">Update Existing Step</h4>
+											<p id="pluginstepname" class="text-sm text-muted">Select a Plugin Step from the left pane first!</p>
+										</div>
+										<form class="vstack gap-5">
+											<div><label class="form-label">Message</label> <input id="pluginstepmessage" type="text" class="form-control" value=""></div>
+											<div><label class="form-label">Primary Entity</label> <input id="pluginstepprimaryentity" type="text" class="form-control" value=""></div>
+											<div><label class="form-label">Execution Order</label> <input id="pluginsteprank" type="text" class="form-control" value=""></div>
+											<div><label class="form-label">Filtering Attributes</label> <input id="pluginstepfilteringattributes" type="text" class="form-control" value=""></div>
+											<div><label class="form-label">Statecode</label> <input id="pluginstepstatecode" type="text" class="form-control" value=""></div>
+
+
+											<!--<div><label class="form-label">Team name</label> <input type="text" class="form-control" value="Clever Team"></div>-->
+											<div class="hstack gap-2 justify-content-end">
+												<!--<button type="button" class="btn btn-sm btn-neutral">Cancel</button>-->
+												<button id="updatepluginstep" type="submit" class="btn btn-sm btn-primary">Update Plugin Step</button>
+											</div>
+										</form>
+									</div>
+								</div>
+
+
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="card-header border-bottom">
+								<h5 id="ID_PLUGINLOGS_TITLE" class="mb-0">Select a plugin step to see the plugin logs </h5>
+							</div>
+							<div class="table-responsive">
+								<table class="table table-hover table-nowrap">
+									<thead class="table-light">
+										<tr>
+											<th scope="col">Name</th>
+											<th scope="col">Due Date</th>
+											<th scope="col">Status</th>
+											<th scope="col">Team</th>
+											<th scope="col">Completion</th>
+											<th></th>
+										</tr>
+									</thead>
+									<tbody id="ID_PLUGINLOGS_MAINLIST">
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+
+
+
+				</main>
+			</div>
+			<!--MAIN-->
+		</div>
+	</div>
+
+	<!--FOOTER-->
+	<!--<div class="d-flex align-items-center gap-2 position-fixed bottom-0 end-0 mb-6 me-6 px-2 py-2 rounded-pill shadow-4 bg-white z-2"><img src="https://webpixels.s3.eu-central-1.amazonaws.com/public/brand/dark-sm.svg" class="avatar avatar-xs"> <a href="https://webpixels.io?ref=satoshi" class="me-1 text-heading fw-bold text-xs ls-tight stretched-link" target="_blank">Built by XrmWebTools</a></div>-->
+	<!--FOOTER-->
+
+
+</body>
+</html>
