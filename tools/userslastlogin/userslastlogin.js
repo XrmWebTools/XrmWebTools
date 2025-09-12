@@ -563,7 +563,7 @@ const XRMWebTools = {
 		});
 
 
-		
+		await XRMWebTools.Panel2.RetrieveSystemViews();
 	},
 }
 

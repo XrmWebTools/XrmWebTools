@@ -1,24 +1,4 @@
-/*******************************************************************************
- * 
-	XrmWebTools � Boost Productivity for Dynamics 365.
-	Copyright (C) 2024-present Yenthe Rossel
-
-	This program is free software: you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation, either version 3 of the License, or
-	(at your option) any later version.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-	GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program. If not, see <http://www.gnu.org/licenses/>.
-
-	Home: https://github.com/XrmWebTools
-	License: https://www.gnu.org/licenses/gpl-3.0.html
-*/
+﻿
 
 console.clear();
 console.info("XWT: Hi!");
@@ -1976,6 +1956,31 @@ const XRMWebTools = {
 			document.getElementById("id_advanced_audit_find_link").click();
 		});
 
+		const urlParams = new URLSearchParams(window.location.search);
+
+		const entityName = urlParams.get("entityname");
+		const entityId = urlParams.get("entityid");
+
+		
+		//update 12/09/2025
+		try {
+			if (entityName && entityId) {
+				console.log("Both params are present ✅");
+
+				document.getElementById("pane3_advancedaudit_table").value = entityName;
+				document.getElementById("pane3_advancedaudit_recordid").value = entityId;
+
+				document.getElementById("id_advanced_audit_find_link").click();
+				document.getElementById("pane3_advancedaudit").click();
+				//
+
+			} else {
+				console.warn("Missing required params ❌");
+			}
+		} catch (e) {
+
+		}
+
 		
 		return;
 		
@@ -2056,6 +2061,10 @@ const XRMWebTools = {
 			await XRMWebTools.Panel7.loadPluginRegistration();
 			XRMWebTools.toggleOverlay(false);
 		});
+
+	
+		
+
 	},
 	Switcher_Darkmode: function () { }
 }
