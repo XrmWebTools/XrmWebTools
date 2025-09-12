@@ -63,15 +63,25 @@ const SHARED = {
 
 	UI: {
 		startpage: function () {
+			
 			if (document.getElementById("startpage")) {
 				document.getElementById("startpage").addEventListener("click", function () {
 					window.location.href = `${window.location.origin}/xrmwebtools`;
+				});
+			}
+		},
 
-
-
-
-
-
+		toggleDarkMode: function () {
+			if (document.getElementById("toggledarkmode")) {
+				document.getElementById("toggledarkmode").addEventListener("click", function () {
+				
+					var theme = localStorage.getItem("theme");
+					if (!theme) {//if null it will be dark
+						localStorage.setItem("theme", "light");
+					} else {
+						localStorage.setItem("theme", theme == "light" ? "dark" : "light");
+					}
+					SHARED.SWITCHER.DARKMODE();
 				});
 			}
 		}
@@ -81,4 +91,5 @@ const SHARED = {
 SHARED.TOPHEADER.CONNECT();
 SHARED.SWITCHER.DARKMODE();
 SHARED.UI.startpage();
+SHARED.UI.toggleDarkMode();
 

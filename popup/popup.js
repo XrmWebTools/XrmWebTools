@@ -210,11 +210,22 @@ const popup = {
 	},
 	Buttons: {
 		initToolBoxRedirects: function (url) {
+			const data = popup.Helpers.GetEntityNameAndId(url);
+
+			if (data.entityname && data.entityid) {
+				document.getElementById("id_titel_auditengine365").textContent = `Audit Engine 365 for ${data.entityname}(${data.entityid})`;
+			}
+		
 
 
 			document.getElementById("click_auditengine").addEventListener('click', () => {
-				window.open(`${url.origin}/xrmwebtools/auditengine`, '_blank');
-
+			
+				if (data.entityname && data.entityid) {
+					window.open(`${url.origin}/xrmwebtools/auditengine?entityname=${data.entityname}&entityid=${data.entityid}`, '_blank');
+				} else {
+					window.open(`${url.origin}/xrmwebtools/auditengine`, '_blank');
+				}
+			
 			});
 
 			document.getElementById("click_pluginregistration").addEventListener('click', () => {
